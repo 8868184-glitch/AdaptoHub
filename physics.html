@@ -1,0 +1,791 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Level Physics Pathway | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="background-customizer.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}window.addEventListener('load',()=>{updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});});
+    </script>
+    <style>
+        body {
+            margin: 0;
+            background: #f4f7fb;
+            font-family: 'Bai Jamjuree', sans-serif;
+            color: #0f1724;
+        }
+        .physics-shell {
+            max-width: 1200px;
+            margin: 100px auto 60px;
+            padding: 0 24px;
+        }
+        .hero-card {
+            background: linear-gradient(135deg, #002f6c 0%, #0077c8 60%, #00b8d4 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0, 64, 128, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%),
+                        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%),
+                        radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%);
+            pointer-events: none;
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        .hero-title { margin: 0 0 10px 0; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #e3f2fd; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #e3f2fd; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #c8e6ff; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #c8e6ff; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.18); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #a5ffce 0%, #54e1ff 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #e7edf3; position: relative; overflow: visible; }
+        .unit-card.locked::after { display: none; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #e8f1ff; color: #0b3d91; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #1b5e20; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #0f1724; }
+        .unit-desc { margin: 0 0 12px; color: #4b5563; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #f4f7fb; border-radius: 10px; border: 1px solid #e7edf3; font-size: 0.95rem; color: #111827; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #0b3d91; color: #e3f2fd; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #0f1724; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #0b3d91; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #0b3d91; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #094085; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #0b3d91; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #4b5563; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #0b3d91; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #d7e3f5; border-radius: 10px; background: #f8fbff; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #1b5e20; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+
+        /* Dark Mode Styles */
+        [data-theme="dark"] body { background: #1a1d23; color: #e6ebf1; }
+        [data-theme="dark"] .shell { background: transparent; }
+        [data-theme="dark"] .unit-card { background: #242830; border-color: #3a4150; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .unit-title { color: #e6ebf1; }
+        [data-theme="dark"] .unit-desc { color: #b8c5d6; }
+        [data-theme="dark"] .lesson-point { background: #2d333e; border-color: #3a4150; color: #e6ebf1; }
+        [data-theme="dark"] .quiz-block { background: #2d333e; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-title { color: #e6ebf1; }
+        [data-theme="dark"] .quiz-option { background: #1a1d23; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-option:hover { border-color: #3b82f6; }
+        [data-theme="dark"] .secondary-btn { background: #2d333e; color: #93c5fd; border-color: #3a4150; }
+        [data-theme="dark"] .secondary-btn:hover { background: #3a4150; }
+        [data-theme="dark"] .reset-section { background: rgba(180, 35, 24, 0.1); border-color: rgba(180, 35, 24, 0.3); }
+        [data-theme="dark"] .reset-section p { color: #b8c5d6; }
+        [data-theme="dark"] .ghost-link { background: rgba(59, 130, 246, 0.1); border-color: #1e40af; color: #93c5fd; }
+    </style>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+            <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+            <div class="account-avatar" id="accountAvatar"></div>
+            
+            <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+              <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+                <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+              </div>
+              <div style="padding: 16px;">
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+                  <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+                  <div id="detailsDropdownEmail" style="color: #1f2933; font-weight: 500; font-size: 0.95rem; word-break: break-all;">8868184@student.triamudom.ac.th</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+                  <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+                  <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+                </div>
+                <div style="margin-bottom: 0;">
+                  <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+                  <div id="detailsDropdownLoginTime" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">7/2/2569 17:27:10</div>
+                </div>
+              </div>
+            </div>
+            
+            <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+              <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+                <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+              </div>
+              <div style="padding: 16px;">
+                <div style="margin-bottom: 20px;">
+                  <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+                  <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+                  <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+                    <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+                  </label>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+                  <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                    <option value="auto">Auto (System)</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                  <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+                  <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 0;">
+                  <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+                </div>
+              </div>
+            </div>
+            
+            <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+              <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+                <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+              </div>
+              <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+                <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+                  </div>
+                  <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+                    <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+          <div class="account-dropdown-header">
+            <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+            <div class="user-info">
+              <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+              <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+              <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+            </div>
+          </div>
+          <div class="account-dropdown-divider"></div>
+          <div class="account-dropdown-body">
+            <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">⚙️ จัดการโปรไฟล์</a>
+            <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">📋 ข้อมูลบัญชี</a>
+            <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">📚 ประวัติการเรียน</a>
+          </div>
+          <div class="account-dropdown-divider"></div>
+          <div class="account-dropdown-footer">
+            <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+          </div>
+        </div>
+        </header>
+
+    <main class="physics-shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="science.html">← Back to Science dashboard</a>
+            <span style="color:#4b5563; font-weight:600;">A-Level Physics • Lessons + Quizzes after every unit</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">A-Level Physics Learning Path</h1>
+                    <p class="hero-subtitle">Sequential units with immediate mastery checks. Build measurement foundations, then advance through motion, forces, energy, momentum, and complex motions.</p>
+                    <div class="tag-row">
+                        <span class="pill">SI units & vectors</span>
+                        <span class="pill">Kinematics → Dynamics</span>
+                        <span class="pill">Energy & momentum</span>
+                        <span class="pill">Projectile • Circular • SHM</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 7</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="physicsProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #0f1724;">Start Over?</p>
+            <p>Reset your progress on all three science subjects (Physics, Chemistry, Biology).</p>
+            <button class="danger-btn" onclick="resetAllProgress()">Reset All Science Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const physicsUnits = [
+            {
+                id: 'intro',
+                title: 'Introduction to Physics (Measurements & Vectors)',
+                description: 'Establish A-level precision: SI base units, significant figures, uncertainty, scalars vs vectors, and vector resolution.',
+                points: [
+                    'Use SI base units, keep significant figures consistent with measured data.',
+                    'Quantify uncertainty: percent uncertainty = (absolute error / measured value) × 100%.',
+                    'Vectors add tip-to-tail; resolve into perpendicular components using sin and cos.',
+                    'Resultant magnitude uses the Pythagorean theorem when vectors are perpendicular.'
+                ],
+                formulas: [
+                    '|A| = \u221a(A_x^2 + A_y^2)',
+                    'Percent uncertainty = (\u0394x / x) \u00d7 100%' ,
+                    'Component form: A_x = A cos\u03b8, A_y = A sin\u03b8'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'Which pairing lists a correct SI base unit?',
+                        options: [
+                            { text: 'Kelvin for temperature', correct: true },
+                            { text: 'Newton for mass', correct: false },
+                            { text: 'Coulomb for time', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'A student walks 5 m east then 12 m north. What is the magnitude of the displacement?',
+                        options: [
+                            { text: '13 m', correct: true },
+                            { text: '12 m', correct: false },
+                            { text: '17 m', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'A measurement is 2.40 m with an uncertainty of \u00b10.02 m. What is the percent uncertainty?',
+                        options: [
+                            { text: '0.83%', correct: true },
+                            { text: '2.0%', correct: false },
+                            { text: '8.3%', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'kinematics',
+                title: 'Motion Along a Straight Line & Relative Motion',
+                description: 'Model 1D motion with displacement, velocity, and acceleration; connect reference frames for relative velocity.',
+                points: [
+                    'Use kinematic equations only under constant acceleration.',
+                    'Average velocity for constant acceleration: v_avg = (v_0 + v) / 2.',
+                    'Relative velocity adds vectorially: v_AG = v_A/B + v_B/G.',
+                    'Signs matter: acceleration opposite velocity means slowing down.'
+                ],
+                formulas: [
+                    'v = v<sub>0</sub> + a t',
+                    'x = x<sub>0</sub> + v<sub>0</sub> t + 0.5 a t<sup>2</sup>',
+                    'v<sup>2</sup> = v<sub>0</sub><sup>2</sup> + 2 a \u0394x',
+                    'v<sub>avg</sub> = (v<sub>0</sub> + v) / 2',
+                    'v<sub>AG</sub> = v<sub>A/B</sub> + v<sub>B/G</sub>'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A car speeds up from 10 m/s to 20 m/s in 4 s with constant acceleration. What is the displacement during those 4 s?',
+                        options: [
+                            { text: '60 m', correct: true },
+                            { text: '80 m', correct: false },
+                            { text: '120 m', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'If +x is east, which signs correspond to motion east while slowing down?',
+                        options: [
+                            { text: 'v > 0, a < 0', correct: true },
+                            { text: 'v < 0, a < 0', correct: false },
+                            { text: 'v > 0, a > 0', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'A boat moves 5 m/s east relative to water while the river flows 2 m/s north. The speed relative to the ground is closest to:',
+                        options: [
+                            { text: '5.4 m/s', correct: true },
+                            { text: '7.0 m/s', correct: false },
+                            { text: '3.0 m/s', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'forces',
+                title: 'Force and Newton\'s Law of Motion (Free Body Diagrams & Gravitational Force)',
+                description: 'Translate situations into free-body diagrams, apply \u2211F = ma, and connect weight to gravitational fields.',
+                points: [
+                    'Free-body diagrams isolate the object; show every real force with correct direction.',
+                    'Weight: W = mg points toward the planet\'s center; normal is perpendicular to the surface.',
+                    'Action-reaction pairs act on different objects but share equal magnitude and opposite direction.',
+                    'Net force is the vector sum; unbalanced forces produce acceleration.'
+                ],
+                formulas: [
+                    'Newton\'s 2nd Law: \u2211F = ma (Net force equals mass times acceleration)',
+                    'Weight: W = mg (Gravitational force)',
+                    'Universal Gravity: F_g = G m_1 m_2 / r^2'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A 3 kg block has 15 N right and 9 N left acting on it. What is the net force and direction?',
+                        options: [
+                            { text: '6 N to the right', correct: true },
+                            { text: '24 N to the right', correct: false },
+                            { text: '6 N to the left', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'Why draw a free-body diagram before using \u2211F = ma?',
+                        options: [
+                            { text: 'To ensure every external force and its direction is identified', correct: true },
+                            { text: 'To avoid using Newton\'s third law', correct: false },
+                            { text: 'To change masses into weights automatically', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'Which pair correctly shows Newton\'s third law interaction?',
+                        options: [
+                            { text: 'Earth pulls an apple downward; the apple pulls Earth upward', correct: true },
+                            { text: 'Table pushes book up; table pushes Earth down', correct: false },
+                            { text: 'Car pushes road forward; road pushes road backward', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'equilibrium',
+                title: 'Equilibrium & Center of Gravity and Mass',
+                description: 'Balance forces and torques for static equilibrium; locate the center of mass to predict stability.',
+                points: [
+                    'Static equilibrium requires \u2211F = 0 in all directions and \u2211\u03c4 = 0 about any pivot.',
+                    'Torque magnitude: \u03c4 = rF sin\u03b8; maximize leverage with perpendicular force and larger moment arm.',
+                    'Center of mass is the weighted average position of all mass elements.',
+                    'A body tips when its center of gravity moves outside the base of support.'
+                ],
+                formulas: [
+                    'Net Force: \u2211F_x = 0, \u2211F_y = 0',
+                    'Net Torque: \u2211\u03c4 = 0',
+                    'Torque: \u03c4 = rF sin\u03b8'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A 4 m beam is pivoted at its center. A 200 N load is 1 m to the left of the pivot. What upward force at 1 m to the right balances it?',
+                        options: [
+                            { text: '200 N', correct: true },
+                            { text: '100 N', correct: false },
+                            { text: '400 N', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'Which condition set must both hold for static equilibrium?',
+                        options: [
+                            { text: '\u2211F = 0 and \u2211\tau = 0', correct: true },
+                            { text: '\u2211F = 0 only', correct: false },
+                            { text: '\u2211\tau = 0 only', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'Two point masses are on a line: 3 kg at 0 m and 5 kg at 4 m. Where is x_cm?',
+                        options: [
+                            { text: '2.5 m', correct: true },
+                            { text: '2.0 m', correct: false },
+                            { text: '4.0 m', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'energy',
+                title: 'Work & Energy',
+                description: 'Connect work to energy changes, track mechanical energy, and quantify power output.',
+                points: [
+                    'Work by a constant force: W = Fd cos\u03b8; only the component along displacement counts.',
+                    'Kinetic energy: K = (1/2)mv^2; gravitational potential near Earth: U = mgh.',
+                    'Mechanical energy changes when non-conservative work is done.',
+                    'Power is the rate of energy transfer: P = W/t.'
+                ],
+                formulas: [
+                    'W = F d cos\u03b8',
+                    'K = 0.5 m v<sup>2</sup>',
+                    'U = m g h',
+                    'P = W / t'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A 50 N force pulls a crate 8 m along a floor at 30\u00b0 above horizontal. Approximate work done by the force.',
+                        options: [
+                            { text: '3.5 \u00d7 10^2 J', correct: true },
+                            { text: '2.0 \u00d7 10^2 J', correct: false },
+                            { text: '4.0 \u00d7 10^1 J', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'What is the kinetic energy of a 1.5 kg object moving at 12 m/s?',
+                        options: [
+                            { text: '108 J', correct: true },
+                            { text: '72 J', correct: false },
+                            { text: '216 J', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'Lifting a 40 kg box straight up by 5 m in 4 s requires an average power of about:',
+                        options: [
+                            { text: '490 W', correct: true },
+                            { text: '200 W', correct: false },
+                            { text: '980 W', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'momentum',
+                title: 'Momentum & Collision (Impulse, 1D, 2D Collisions)',
+                description: 'Use impulse to change momentum and conserve momentum for isolated systems in one and two dimensions.',
+                points: [
+                    'Momentum: p = mv; impulse changes momentum: J = F\u0394t = \u0394p.',
+                    'Total momentum is conserved in isolated systems (elastic or inelastic).',
+                    'In perfectly inelastic collisions, objects stick and share a common final velocity.',
+                    'Resolve momentum components independently in 2D problems.'
+                ],
+                formulas: [
+                    'p = m v',
+                    'J = F \u0394t = \u0394p',
+                    'p_initial = p_final (isolated system)'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A 0.6 kg puck moving at 4 m/s sticks to a 1.4 kg puck at rest. What is their shared speed right after impact?',
+                        options: [
+                            { text: '1.2 m/s', correct: true },
+                            { text: '2.4 m/s', correct: false },
+                            { text: '0.6 m/s', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'A 20 N force acts for 0.25 s. What impulse is delivered?',
+                        options: [
+                            { text: '5.0 N·s', correct: true },
+                            { text: '50 N·s', correct: false },
+                            { text: '80 N·s', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'A 3 kg cart moving east at 6 m/s glances off a 3 kg cart initially at rest. Afterward the first cart moves east at 2 m/s. What is the second cart\'s eastward speed?',
+                        options: [
+                            { text: '4 m/s', correct: true },
+                            { text: '2 m/s', correct: false },
+                            { text: '6 m/s', correct: false }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'motion-types',
+                title: 'Types of Motion (Projectile, Circular, Simple Harmonic)',
+                description: 'Blend vector motion: projectile trajectories, uniform circular motion, and oscillations that follow simple harmonic motion.',
+                points: [
+                    'Projectile motion splits into independent horizontal (constant v) and vertical (constant g) components.',
+                    'Uniform circular motion requires centripetal acceleration a_c = v^2/r toward the center.',
+                    'Simple harmonic motion obeys x = A cos(\u03c9t + \u03c6) with \u03c9 = \u221a(k/m) for springs.',
+                    'Period-frequency links: T = 1/f; for SHM on a spring, T = 2\u03c0\u221a(m/k).'
+                ],
+                formulas: [
+                    'T<sub>projectile</sub> = (2 v<sub>0</sub> sin\u03b8) / g',
+                    'a<sub>c</sub> = v<sup>2</sup> / r',
+                    'x = A cos(\u03c9 t + \u03c6)',
+                    'T = 1 / f',
+                    'T = 2\u03c0 \u221a(m/k)',
+                    'f = \u03c9 / (2\u03c0) = (1/2\u03c0) \u221a(k/m)'
+                ],
+                quiz: [
+                    {
+                        id: 'q1',
+                        prompt: 'A projectile is launched at 20 m/s, 30\u00b0 above horizontal. Neglecting air, what is its time of flight?',
+                        options: [
+                            { text: 'About 2.0 s', correct: true },
+                            { text: 'About 1.0 s', correct: false },
+                            { text: 'About 4.0 s', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q2',
+                        prompt: 'A 1.2 kg object moves at 15 m/s in a circle of radius 25 m. Its centripetal acceleration is:',
+                        options: [
+                            { text: '9 m/s^2', correct: true },
+                            { text: '0.6 m/s^2', correct: false },
+                            { text: '25 m/s^2', correct: false }
+                        ]
+                    },
+                    {
+                        id: 'q3',
+                        prompt: 'A 1.0 kg mass on a spring (k = 200 N/m) oscillates in SHM. What is the oscillation frequency?',
+                        options: [
+                            { text: 'About 2.25 Hz', correct: true },
+                            { text: 'About 0.70 Hz', correct: false },
+                            { text: 'About 14 Hz', correct: false }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_physics_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = physicsUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = physicsUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const percent = Math.round((completed / physicsUnits.length) * 100);
+
+            const unitsCompletedEl = document.getElementById('unitsCompleted');
+            const averageScoreEl = document.getElementById('averageScore');
+            const progressPercentEl = document.getElementById('progressPercent');
+            const progressFillEl = document.getElementById('physicsProgressFill');
+
+            if (unitsCompletedEl) unitsCompletedEl.textContent = `${completed} / ${physicsUnits.length}`;
+            if (averageScoreEl) averageScoreEl.textContent = `${avg}%`;
+            if (progressPercentEl) progressPercentEl.textContent = `${percent}%`;
+            if (progressFillEl) progressFillEl.style.width = `${percent}%`;
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetAllProgress() {
+            if (confirm('Reset progress on ALL three science subjects (Physics, Chemistry, Biology)? This cannot be undone.')) {
+                localStorage.removeItem('adaptohub_physics_units');
+                localStorage.removeItem('adaptohub_chemistry_units');
+                localStorage.removeItem('adaptohub_biology_units');
+                unitProgress = {};
+                renderSummary();
+                renderUnits();
+                alert('All science progress has been reset.');
+            }
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/(\w)_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^(\d+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            physicsUnits.forEach((unit, index) => {
+                const prevUnit = physicsUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed • ${progress.score || 0}%` : 'Quiz ready';
+
+                const lessonList = unit.points.map(point => `<div class="lesson-point">${point}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+
+                const questionsHtml = unit.quiz.map(q => `
+                    <div class="quiz-question" style="margin-bottom:10px;">
+                        <p class="quiz-title">${q.prompt}</p>
+                        ${q.options.map((opt, idx) => `
+                            <label class="quiz-option">
+                                <input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked || progress.completed ? 'disabled' : ''}>
+                                <span>${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `).join('');
+                const actionButtons = progress.completed
+                    ? `<button class=\"secondary-btn\" onclick=\"retakeUnit('${unit.id}')\">Retake Unit</button><span class=\"quiz-result\" id=\"result-${unit.id}\" style=\"margin-left: 10px;\"></span>`
+                    : `<button class=\"primary-btn\" onclick=\"submitQuiz('${unit.id}')\" ${locked ? 'disabled' : ''}>Submit quiz</button><span class=\"quiz-result\" id=\"result-${unit.id}\"></span>`;
+
+                card.innerHTML = `
+                    <div class="unit-header">
+                        <div class="unit-label">Unit ${index + 1}</div>
+                        <div class="unit-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <h3 class="unit-title">${unit.title}</h3>
+                    <p class="unit-desc">${unit.description}</p>
+                    <div class="lesson-points">${lessonList}</div>
+                    <div class="formula-badges">${formulaList}</div>
+                    <div class="quiz-block" data-quiz="${unit.id}">
+                        <p style="margin:0 0 6px; font-weight:700; color:#0f1724;">Quick mastery quiz (3 questions)</p>
+                        ${locked ? `<p class="locked-note">Unlock by completing Unit ${index}</p>` : ''}
+                        ${questionsHtml}
+                        <div class="quiz-actions">${actionButtons}</div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = physicsUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+
+            let answered = 0;
+            let correct = 0;
+
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now(), completedDate: new Date().toISOString() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'physics');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

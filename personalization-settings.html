@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalization Settings - AdaptoHub</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+  <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+  <script defer src="dark-mode.js"></script>
+  <script defer src="avatar-system.js"></script>
+  <style>
+    .personalization-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      color: #ffffff;
+      padding: 48px 32px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 151, 178, 0.2);
+    }
+
+    .header-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .header-section p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .settings-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .settings-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 151, 178, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .settings-card h2 {
+      font-size: 1.5rem;
+      color: #0097b2;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-card .description {
+      color: #636d79;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .setting-group {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .setting-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .setting-label {
+      font-weight: 600;
+      color: #1f2933;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .option-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 2px solid #d4f1f4;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option input,
+    .checkbox-option input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: #0097b2;
+    }
+
+    .radio-option:hover,
+    .checkbox-option:hover {
+      border-color: #0097b2;
+      background-color: #f0f9fc;
+    }
+
+    .radio-option.selected,
+    .checkbox-option.selected {
+      border-color: #0097b2;
+      background-color: #e0f7fa;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: #d4f1f4;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #0097b2;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+      background: #0088a0;
+      transform: scale(1.2);
+    }
+
+    .slider-value {
+      min-width: 50px;
+      text-align: center;
+      font-weight: 600;
+      color: #0097b2;
+      padding: 6px 12px;
+      background: #f0f9fc;
+      border-radius: 6px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .save-btn,
+    .reset-btn,
+    .generate-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      color: #ffffff;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 151, 178, 0.3);
+    }
+
+    .reset-btn {
+      background: #f5f6f8;
+      color: #636d79;
+      border: 1px solid #d0d5db;
+    }
+
+    .reset-btn:hover {
+      background: #e6e9f1;
+    }
+
+    .generate-btn {
+      background: #2ca94f;
+      color: #ffffff;
+    }
+
+    .generate-btn:hover {
+      background: #229d3f;
+      transform: translateY(-2px);
+    }
+
+    .success-message {
+      padding: 12px 16px;
+      background: #d4edda;
+      border-left: 4px solid #2ca94f;
+      border-radius: 6px;
+      color: #155724;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .study-plan-preview {
+      background: #f8fafc;
+      border: 2px solid #d4f1f4;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .plan-item {
+      padding: 12px;
+      background: #ffffff;
+      border-left: 4px solid #0097b2;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .plan-time {
+      font-weight: 600;
+      color: #0097b2;
+    }
+
+    .plan-content {
+      color: #636d79;
+      margin-top: 4px;
+    }
+
+    .content-main {
+      padding: 80px 20px 20px;
+      overflow-y: auto;
+      height: calc(100vh - 80px);
+      background-color: #f5f6f8;
+    }
+
+    @media (max-width: 768px) {
+      .header-section {
+        padding: 32px 20px;
+      }
+
+      .header-section h1 {
+        font-size: 1.75rem;
+      }
+
+      .option-group {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .save-btn,
+      .reset-btn,
+      .generate-btn {
+        width: 100%;
+      }
+    }
+  </style>
+  <script src="app.js"></script>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="logo">
+      <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+      <a class="site-title" href="index.html">AdaptoHub</a>
+    </div>
+    <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">⚙️ จัดการโปรไฟล์</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">📋 ข้อมูลบัญชี</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">📚 ประวัติการเรียน</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+    </header>
+
+  <div class="content-main">
+    <div class="personalization-container">
+      <div class="header-section">
+        <h1>⚙️ Personalization Settings</h1>
+        <p>ปรับแต่งประสบการณ์การเรียนรู้ของคุณให้เหมาะสมที่สุด</p>
+      </div>
+
+      <div class="success-message" id="successMessage">✓ บันทึกการตั้งค่าเรียบร้อย</div>
+
+      <div class="settings-card">
+        <h2>🎨 Learning Style Preferences</h2>
+        <p class="description">เลือกรูปแบบการเรียนรู้ที่เหมาะสมกับคุณที่สุด</p>
+
+        <div class="setting-group">
+          <div class="setting-label">🎯 Content Preference</div>
+          <div class="option-group" id="learningStyleGroup">
+            <label class="radio-option">
+              <input type="radio" name="learningStyle" value="visual" />
+              <span>Visual (ภาพ)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="learningStyle" value="auditory" />
+              <span>Auditory (เสียง)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="learningStyle" value="kinesthetic" />
+              <span>Kinesthetic (ปฏิบัติ)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">📊 Difficulty Level</div>
+          <div class="slider-container">
+            <input type="range" id="difficultySlider" min="1" max="5" value="3">
+            <span class="slider-value" id="difficultyValue">ปานกลาง</span>
+          </div>
+          <small style="color: #636d79;">1 = ง่ายมาก | 5 = ยากมาก</small>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">❓ Quiz Format Preference</div>
+          <div class="option-group" id="quizFormatGroup">
+            <label class="checkbox-option">
+              <input type="checkbox" name="quizFormat" value="multiple-choice" />
+              <span>Multiple Choice</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="quizFormat" value="fill-blank" />
+              <span>Fill Blank</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="quizFormat" value="essay" />
+              <span>Essay</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="quizFormat" value="matching" />
+              <span>Matching</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h2>📚 Custom Study Plans</h2>
+        <p class="description">AI สร้างแผนการเรียนตามเป้าหมายของคุณ</p>
+
+        <div class="setting-group">
+          <div class="setting-label">🎯 Learning Goal</div>
+          <div class="option-group" id="goalGroup">
+            <label class="radio-option">
+              <input type="radio" name="studyGoal" value="general" />
+              <span>General Learning</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="studyGoal" value="exam" />
+              <span>Exam Prep</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="studyGoal" value="skill" />
+              <span>Skill Building</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="studyGoal" value="competition" />
+              <span>Competition Prep</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">⏰ Daily Study Time</div>
+          <div class="slider-container">
+            <input type="range" id="studyTimeSlider" min="15" max="240" value="60" step="15">
+            <span class="slider-value" id="studyTimeValue">60 นาที</span>
+          </div>
+          <small style="color: #636d79;">15 นาที - 4 ชั่วโมง</small>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">📅 Study Mode</div>
+          <div class="option-group">
+            <label class="checkbox-option">
+              <input type="checkbox" id="spacedRepetition" name="studyMode" value="spaced-repetition" />
+              <span>Spaced Repetition</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="reviewMode" name="studyMode" value="review-mode" />
+              <span>Review Sessions</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <button class="generate-btn" id="generatePlanBtn">📋 Generate Study Plan</button>
+          <div class="study-plan-preview" id="studyPlanPreview" style="display: none;">
+            <h3 style="margin-bottom: 12px; color: #0097b2;">Your AI-Generated Study Plan:</h3>
+            <div id="planContent"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h2>🔔 Notification Preferences</h2>
+        <p class="description">ตั้งค่าการแจ้งเตือนตามความต้องการของคุณ</p>
+
+        <div class="setting-group">
+          <div class="setting-label">⏰ Optimal Learning Times</div>
+          <div class="option-group" id="optimalTimeGroup">
+            <label class="radio-option">
+              <input type="radio" name="optimalTime" value="morning" />
+              <span>Morning (6-12)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="optimalTime" value="afternoon" />
+              <span>Afternoon (12-6)</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="optimalTime" value="evening" />
+              <span>Evening (6-10)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">💌 Notification Types</div>
+          <div class="option-group">
+            <label class="checkbox-option">
+              <input type="checkbox" id="reminderNotif" name="notifications" value="reminders" checked />
+              <span>Study Reminders</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="motivationalNotif" name="notifications" value="motivational" checked />
+              <span>Motivational Messages</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="streakNotif" name="notifications" value="streak" checked />
+              <span>Streak Reminders</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="feedbackNotif" name="notifications" value="feedback" />
+              <span>Progress Feedback</span>
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" id="goalNotif" name="notifications" value="goals" />
+              <span>Goal Updates</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">📞 Reminder Frequency</div>
+          <div class="slider-container">
+            <input type="range" id="reminderFreqSlider" min="1" max="7" value="3">
+            <span class="slider-value" id="reminderFreqValue">3 times/day</span>
+          </div>
+          <small style="color: #636d79;">1 time/day - 7 times/day</small>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-label">🔕 Do Not Disturb</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+            <div>
+              <label style="display: block; color: #636d79; font-weight: 500; margin-bottom: 6px;">From:</label>
+              <input type="time" id="dndFrom" value="22:00" style="width: 100%; padding: 8px; border: 1px solid #d0d5db; border-radius: 6px;">
+            </div>
+            <div>
+              <label style="display: block; color: #636d79; font-weight: 500; margin-bottom: 6px;">To:</label>
+              <input type="time" id="dndTo" value="08:00" style="width: 100%; padding: 8px; border: 1px solid #d0d5db; border-radius: 6px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group" style="margin-top: 32px;">
+        <button class="save-btn" id="saveBtn">💾 Save All Settings</button>
+        <button class="reset-btn" id="resetBtn">↻ Reset to Defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PersonalizationSettings = {
+      storageKey: 'adaptohub_personalization',
+      
+      defaultSettings: {
+        learningStyle: 'visual',
+        difficulty: 3,
+        quizFormats: ['multiple-choice'],
+        studyGoal: 'general',
+        studyTime: 60,
+        studyModes: ['spaced-repetition'],
+        optimalTime: 'afternoon',
+        notifications: {
+          reminders: true,
+          motivational: true,
+          streak: true,
+          feedback: false,
+          goals: false
+        },
+        reminderFreq: 3,
+        dndFrom: '22:00',
+        dndTo: '08:00'
+      },
+
+      init() {
+        this.loadSettings();
+        this.setupEventListeners();
+        this.applySettings();
+      },
+
+      loadSettings() {
+        const saved = localStorage.getItem(this.storageKey);
+        const settings = saved ? JSON.parse(saved) : this.defaultSettings;
+        
+        document.querySelector(`input[name="learningStyle"][value="${settings.learningStyle}"]`).checked = true;
+        document.getElementById('difficultySlider').value = settings.difficulty;
+        this.updateDifficultyLabel(settings.difficulty);
+        
+        settings.quizFormats.forEach(format => {
+          const el = document.querySelector(`input[name="quizFormat"][value="${format}"]`);
+          if (el) el.checked = true;
+        });
+
+        document.querySelector(`input[name="studyGoal"][value="${settings.studyGoal}"]`).checked = true;
+        document.getElementById('studyTimeSlider').value = settings.studyTime;
+        this.updateStudyTimeLabel(settings.studyTime);
+
+        settings.studyModes.forEach(mode => {
+          const el = document.getElementById(mode.replace('-', ''));
+          if (el) el.checked = true;
+        });
+
+        document.querySelector(`input[name="optimalTime"][value="${settings.optimalTime}"]`).checked = true;
+
+        Object.entries(settings.notifications).forEach(([key, value]) => {
+          const el = document.getElementById(key + 'Notif');
+          if (el) el.checked = value;
+        });
+
+        document.getElementById('reminderFreqSlider').value = settings.reminderFreq;
+        this.updateReminderFreqLabel(settings.reminderFreq);
+
+        document.getElementById('dndFrom').value = settings.dndFrom;
+        document.getElementById('dndTo').value = settings.dndTo;
+
+        return settings;
+      },
+
+      saveSettings() {
+        const settings = {
+          learningStyle: document.querySelector('input[name="learningStyle"]:checked').value,
+          difficulty: parseInt(document.getElementById('difficultySlider').value),
+          quizFormats: Array.from(document.querySelectorAll('input[name="quizFormat"]:checked')).map(el => el.value),
+          studyGoal: document.querySelector('input[name="studyGoal"]:checked').value,
+          studyTime: parseInt(document.getElementById('studyTimeSlider').value),
+          studyModes: Array.from(document.querySelectorAll('input[name="studyMode"]:checked')).map(el => el.value),
+          optimalTime: document.querySelector('input[name="optimalTime"]:checked').value,
+          notifications: {
+            reminders: document.getElementById('reminderNotif').checked,
+            motivational: document.getElementById('motivationalNotif').checked,
+            streak: document.getElementById('streakNotif').checked,
+            feedback: document.getElementById('feedbackNotif').checked,
+            goals: document.getElementById('goalNotif').checked
+          },
+          reminderFreq: parseInt(document.getElementById('reminderFreqSlider').value),
+          dndFrom: document.getElementById('dndFrom').value,
+          dndTo: document.getElementById('dndTo').value
+        };
+
+        localStorage.setItem(this.storageKey, JSON.stringify(settings));
+        this.showSuccess();
+        this.applySettings();
+      },
+
+      resetSettings() {
+        localStorage.removeItem(this.storageKey);
+        location.reload();
+      },
+
+      updateDifficultyLabel(value) {
+        const labels = ['', 'ง่ายมาก', 'ง่าย', 'ปานกลาง', 'ยาก', 'ยากมาก'];
+        document.getElementById('difficultyValue').textContent = labels[value] || 'ปานกลาง';
+      },
+
+      updateStudyTimeLabel(value) {
+        document.getElementById('studyTimeValue').textContent = `${value} นาที`;
+      },
+
+      updateReminderFreqLabel(value) {
+        document.getElementById('reminderFreqValue').textContent = `${value} times/day`;
+      },
+
+      generateStudyPlan() {
+        const goal = document.querySelector('input[name="studyGoal"]:checked').value;
+        const studyTime = parseInt(document.getElementById('studyTimeSlider').value);
+        const difficulty = parseInt(document.getElementById('difficultySlider').value);
+
+        const plans = {
+          general: this.generateGeneralPlan(studyTime, difficulty),
+          exam: this.generateExamPlan(studyTime, difficulty),
+          skill: this.generateSkillPlan(studyTime, difficulty),
+          competition: this.generateCompetitionPlan(studyTime, difficulty)
+        };
+
+        const plan = plans[goal];
+        const html = plan.map(item => `
+          <div class="plan-item">
+            <div class="plan-time">${item.time}</div>
+            <div class="plan-content">${item.content}</div>
+          </div>
+        `).join('');
+
+        document.getElementById('planContent').innerHTML = html;
+        document.getElementById('studyPlanPreview').style.display = 'block';
+      },
+
+      generateGeneralPlan(minutes, difficulty) {
+        const warmup = Math.floor(minutes * 0.1);
+        const learn = Math.floor(minutes * 0.5);
+        const practice = Math.floor(minutes * 0.3);
+        const review = minutes - warmup - learn - practice;
+
+        return [
+          { time: `00:00 - ${warmup} นาที`, content: '🔥 Warm-up: Review previous concepts' },
+          { time: `${warmup} - ${warmup + learn} นาที`, content: `📚 New Content: Learn at ${['ง่าย', 'ปานกลาง', 'ยาก'][difficulty - 1]} level` },
+          { time: `${warmup + learn} - ${warmup + learn + practice} นาที`, content: '✏️ Practice: Solve problems and exercises' },
+          { time: `${warmup + learn + practice} - ${minutes} นาที`, content: '📋 Review: Summarize and identify weak areas' }
+        ];
+      },
+
+      generateExamPlan(minutes, difficulty) {
+        const mockExam = Math.floor(minutes * 0.4);
+        const review = Math.floor(minutes * 0.35);
+        const practice = Math.floor(minutes * 0.25);
+
+        return [
+          { time: `00:00 - ${mockExam} นาที`, content: '📝 Mock Exam: Full practice test under time pressure' },
+          { time: `${mockExam} - ${mockExam + review} นาที`, content: '🔍 Review Mistakes: Analyze errors and solutions' },
+          { time: `${mockExam + review} - ${minutes} นาที`, content: '⚡ Quick Practice: Focus on weak topics' }
+        ];
+      },
+
+      generateSkillPlan(minutes, difficulty) {
+        const theory = Math.floor(minutes * 0.2);
+        const hands_on = Math.floor(minutes * 0.6);
+        const reflection = minutes - theory - hands_on;
+
+        return [
+          { time: `00:00 - ${theory} นาที`, content: '📖 Theory: Understand concepts' },
+          { time: `${theory} - ${theory + hands_on} นาที`, content: '👐 Hands-on Practice: Build and experiment' },
+          { time: `${theory + hands_on} - ${minutes} นาที`, content: '💭 Reflection: Document learning insights' }
+        ];
+      },
+
+      generateCompetitionPlan(minutes, difficulty) {
+        const strategy = Math.floor(minutes * 0.15);
+        const problems = Math.floor(minutes * 0.6);
+        const technique = minutes - strategy - problems;
+
+        return [
+          { time: `00:00 - ${strategy} นาที`, content: '🎯 Strategy: Learn competition techniques' },
+          { time: `${strategy} - ${strategy + problems} นาที`, content: '🧩 Past Problems: Solve competition-level questions' },
+          { time: `${strategy + problems} - ${minutes} นาที`, content: '⚙️ Optimization: Improve speed and accuracy' }
+        ];
+      },
+
+      showSuccess() {
+        const msg = document.getElementById('successMessage');
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 3000);
+      },
+
+      setupEventListeners() {
+        document.getElementById('saveBtn').addEventListener('click', () => this.saveSettings());
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (confirm('Reset all settings to defaults?')) this.resetSettings();
+        });
+        document.getElementById('generatePlanBtn').addEventListener('click', () => this.generateStudyPlan());
+
+        document.getElementById('difficultySlider').addEventListener('input', (e) => this.updateDifficultyLabel(e.target.value));
+        document.getElementById('studyTimeSlider').addEventListener('input', (e) => this.updateStudyTimeLabel(e.target.value));
+        document.getElementById('reminderFreqSlider').addEventListener('input', (e) => this.updateReminderFreqLabel(e.target.value));
+
+        document.querySelectorAll('.radio-option input, .checkbox-option input').forEach(input => {
+          input.addEventListener('change', (e) => {
+            const group = e.target.name;
+            if (input.type === 'radio') {
+              document.querySelectorAll(`input[name="${group}"]`).forEach(el => {
+                el.parentElement.classList.remove('selected');
+              });
+              e.target.parentElement.classList.add('selected');
+            } else {
+              e.target.parentElement.classList.toggle('selected');
+            }
+          });
+        });
+      },
+
+      applySettings() {
+        const settings = JSON.parse(localStorage.getItem(this.storageKey) || JSON.stringify(this.defaultSettings));
+        window.dispatchEvent(new CustomEvent('personalizationUpdated', { detail: settings }));
+      }
+    };
+
+    window.addEventListener('load', () => {
+      PersonalizationSettings.init();
+    });
+  </script>
+</body>
+</html>

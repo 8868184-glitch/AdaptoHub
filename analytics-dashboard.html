@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & Progress | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    
+    <script defer src="app.js"></script>
+    <script defer src="adaptive-learning.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="mastery-timeline.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="learning-path.js"></script>
+    <script defer src="analytics.js"></script>
+    <script defer src="analytics-dashboard.js"></script>
+    <script defer src="mastery-timeline-embed.js"></script>
+    <script defer src="time-tracker.js"></script>
+    <script defer src="time-spent-visualization.js"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #f5f6f8;
+            font-family: "Bai Jamjuree", sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            padding-top: 64px;
+        }
+
+        .analytics-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 60px;
+            overflow-y: auto;
+            flex: 1;
+            width: 100%;
+        }
+
+        .analytics-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .analytics-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .analytics-container::-webkit-scrollbar-thumb {
+            background: #0097b2;
+            border-radius: 10px;
+        }
+
+        .analytics-container::-webkit-scrollbar-thumb:hover {
+            background: #0088a0;
+        }
+
+        .analytics-header {
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 151, 178, 0.2);
+        }
+
+        .analytics-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+
+        .analytics-header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .analytics-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: "Bai Jamjuree", sans-serif;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #0097b2;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .skill-tree-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .skill-tree-section h2 {
+            color: #0097b2;
+            margin: 0 0 20px 0;
+            font-size: 1.8rem;
+        }
+
+        .module-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .module-btn {
+            padding: 8px 16px;
+            background: #f0f4f8;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .module-btn:hover {
+            border-color: #0097b2;
+            color: #0097b2;
+        }
+
+        .module-btn.active {
+            background: #0097b2;
+            color: white;
+            border-color: #0097b2;
+        }
+
+        .skill-tree {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .unit-node {
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: white;
+        }
+
+        .unit-node:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .unit-node.unlocked {
+            border-color: #0097b2;
+            background: linear-gradient(135deg, rgba(0, 151, 178, 0.1), rgba(0, 151, 178, 0.05));
+        }
+
+        .unit-node.unlocked:hover {
+            border-color: #00b8d4;
+            background: linear-gradient(135deg, rgba(0, 184, 212, 0.2), rgba(0, 184, 212, 0.1));
+            box-shadow: 0 8px 16px rgba(0, 151, 178, 0.3);
+        }
+
+        .unit-node.locked {
+            opacity: 0.6;
+            border-color: #ccc;
+            background: #f9f9f9;
+        }
+
+        .unit-node.locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .unit-node.completed {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+        }
+
+        .unit-node.completed:hover {
+            border-color: #66bb6a;
+            background: linear-gradient(135deg, rgba(102, 187, 106, 0.2), rgba(102, 187, 106, 0.1));
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+        }
+
+        .unit-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .unit-name {
+            font-weight: 600;
+            color: #1f2933;
+            margin-bottom: 4px;
+        }
+
+        .unit-level {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .unit-status {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        .unit-node.locked .unit-status::before {
+            content: "🔒 Locked";
+            color: #c62828;
+        }
+
+        .unit-node.unlocked:not(.completed) .unit-status::before {
+            content: "🎯 Ready";
+            color: #0097b2;
+        }
+
+        .unit-node.completed .unit-status::before {
+            content: "✓ Completed";
+            color: #4caf50;
+        }
+
+        .analytics-charts {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .time-period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            background: #f0f4f8;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .period-btn:hover {
+            background: #e0e8f0;
+        }
+
+        .period-btn.active {
+            background: #0097b2;
+            color: white;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            height: 300px;
+            position: relative;
+        }
+
+        .trend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .trend-card {
+            background: #f8fafc;
+            border: 1px solid #e6edf2;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .trend-card h3 {
+            margin: 0 0 12px 0;
+            color: #005b6c;
+            font-size: 1rem;
+        }
+
+        .heat-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .heat-cell {
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .heat-cell:hover {
+            transform: scale(1.05);
+        }
+
+        .heat-strength {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+        }
+
+        .heat-weakness {
+            background: linear-gradient(135deg, #ef5350 0%, #c62828 100%);
+            color: white;
+        }
+
+        .heat-neutral {
+            background: linear-gradient(135deg, #ffc107 0%, #f57f17 100%);
+            color: white;
+        }
+
+
+
+        .goal-card {
+            padding: 20px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            border-left: 4px solid #0097b2;
+            transition: all 0.3s ease;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .goal-card.completed {
+            border-left-color: #4caf50;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        }
+
+        .goal-card.failed {
+            border-left-color: #ef5350;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .goal-title {
+            font-weight: 600;
+            color: #1f2933;
+            font-size: 1rem;
+        }
+
+        .goal-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0097b2, #00b8d4);
+            transition: width 0.3s ease;
+        }
+
+        .goal-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #636d79;
+        }
+
+        .goal-reward {
+            margin-top: 12px;
+            padding: 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            color: #f39c12;
+            font-size: 0.9rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            padding: 20px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0097b2;
+            margin: 10px 0;
+        }
+
+        .summary-label {
+            color: #636d79;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recommendations {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0097b2;
+            margin-top: 20px;
+        }
+
+        .recommendations h3 {
+            margin: 0 0 12px 0;
+            color: #0097b2;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recommendation-item {
+            padding: 8px 0;
+            color: #1976d2;
+            font-size: 0.95rem;
+        }
+
+        .recommendation-item a {
+            transition: all 0.2s ease;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .recommendation-item a:hover {
+            background: rgba(0, 151, 178, 0.1);
+            transform: translateX(4px);
+        }
+
+        .recommendation-item::before {
+            content: "→ ";
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .section-highlight {
+            animation: highlight-pulse 2s ease-in-out;
+        }
+
+        @keyframes highlight-pulse {
+            0% {
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 151, 178, 0.4), 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            100% {
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        .new-item {
+            animation: slide-in 0.5s ease-out;
+        }
+
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .analytics-charts, .skill-tree-section {
+            position: relative;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-charts:hover, .skill-tree-section:hover {
+            border-left-color: #0097b2;
+            transform: translateX(5px);
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 151, 178, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 1500;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 151, 178, 0.6);
+        }
+
+        .scroll-to-top.visible {
+            display: flex;
+            animation: fade-in 0.3s ease;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .analytics-header {
+                padding: 20px;
+            }
+
+            .analytics-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .skill-tree {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+        }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+                </header>
+
+    <div class="analytics-container">
+        <div class="analytics-header">
+            <h1>📊 Analytics & Progress</h1>
+            <p>Track your learning journey with detailed insights and visualizations</p>
+            <div class="analytics-nav">
+                <button class="tab-btn active" data-tab="skill-tree">🎯 Skill Tree</button>
+                <button class="tab-btn" data-tab="analytics">📈 Analytics</button>
+            </div>
+        </div>
+
+        <div id="skill-tree" class="tab-content active">
+            <div class="skill-tree-section section-highlight">
+                <h2>Learning Path & Skill Tree</h2>
+                
+                <div class="module-selector" id="moduleSelector">
+                </div>
+
+                <div class="skill-tree" id="skillTree">
+                </div>
+
+                <div class="recommendations" id="skillRecommendations">
+                </div>
+            </div>
+        </div>
+
+        <div id="analytics" class="tab-content">
+            <div class="summary-grid" id="analyticsSummary">
+            </div>
+
+            <div class="analytics-charts section-highlight">
+                <h2 style="color: #0097b2; margin: 0 0 20px 0;">⏱️ Time Spent Analysis</h2>
+                
+                <div class="time-period-selector">
+                    <button class="period-btn active" data-period="week">This Week</button>
+                    <button class="period-btn" data-period="month">This Month</button>
+                    <button class="period-btn" data-period="all">All Time</button>
+                </div>
+
+                <div id="timeSpentVisualization" style="margin-top: 20px;">
+                </div>
+            </div>
+
+            <div class="analytics-charts section-highlight">
+                <h2 style="color: #0097b2; margin: 0 0 20px 0;">🎯 Strength & Weakness Map</h2>
+                
+                <div class="heat-map" id="heatMap">
+                </div>
+            </div>
+
+            <div class="analytics-charts section-highlight">
+                <h2 style="color: #0097b2; margin: 0 0 20px 0;">🚀 Mastery Timeline</h2>
+                <div id="masteryTimeline">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTop" title="Back to Top">↑</button>
+
+    <script src="analytics-dashboard.js"></script>
+    <script>
+        // Scroll to Top functionality
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        const analyticsContainer = document.querySelector('.analytics-container');
+
+        analyticsContainer.addEventListener('scroll', () => {
+            if (analyticsContainer.scrollTop > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            analyticsContainer.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

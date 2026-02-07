@@ -1,0 +1,700 @@
+﻿<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Learning - Science | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="adaptive-learning.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="background-customizer.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .top-banner {
+            flex-shrink: 0;
+            z-index: 1000;
+        }
+
+        .adaptive-content {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .adaptive-content::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .adaptive-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .adaptive-content::-webkit-scrollbar-thumb {
+            background: #0097b2;
+            border-radius: 5px;
+        }
+
+        .adaptive-content::-webkit-scrollbar-thumb:hover {
+            background: #0088a0;
+        }
+
+        .adaptive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            padding: 30px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .adaptive-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .student-progress {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            min-width: 300px;
+        }
+
+        .progress-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50 0%, #45a049 100%);
+            transition: width 0.3s ease;
+        }
+
+        .learning-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid #0097b2;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .module-card h3 {
+            margin: 0 0 12px 0;
+            color: #0097b2;
+            font-size: 1.3rem;
+        }
+
+        .module-card p {
+            margin: 0 0 16px 0;
+            color: #636d79;
+            line-height: 1.6;
+        }
+
+        .difficulty-indicator {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .difficulty-easy {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .difficulty-medium {
+            background-color: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .difficulty-hard {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .adaptive-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0097b2;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            color: #636d79;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .adaptive-recommendation {
+            background: #e3f2fd;
+            border-left: 4px solid #0097b2;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .adaptive-recommendation h3 {
+            margin: 0 0 12px 0;
+            color: #0097b2;
+        }
+
+        .adaptive-recommendation p {
+            margin: 0;
+            color: #1976d2;
+            line-height: 1.6;
+        }
+
+        .module-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .module-content.active {
+            display: block;
+        }
+
+        .back-button {
+            background-color: #0097b2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Bai Jamjuree', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #0088a0;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 16px;
+            background: #f5f6f8;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border-left: 3px solid #0097b2;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: #1f2933;
+            margin-bottom: 8px;
+        }
+
+        .activity-description {
+            color: #636d79;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .check-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Bai Jamjuree', sans-serif;
+            margin-top: 12px;
+            transition: background-color 0.2s ease;
+        }
+
+        .check-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+                </header>
+
+    <div class="adaptive-content" style="margin-top: 80px;">
+        <div id="dashboard" class="dashboard-view">
+            <div class="adaptive-header">
+                <div>
+                    <h1>🧪 Adaptive Science Learning</h1>
+                    <p style="margin: 8px 0 0 0; font-size: 1.1rem;">Data-Driven Personalized Education</p>
+                </div>
+                <div class="student-progress">
+                    <div class="progress-metric">
+                        <span>Overall Progress</span>
+                        <span id="overallProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-metric">
+                        <span>Mastery Level</span>
+                        <span id="masteryLevel">Beginner</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="adaptive-recommendation">
+                <h3>🎯 Personalized Recommendation</h3>
+                <p id="recommendationText">Start with foundational concepts in Biology. You'll progress to more advanced topics once you demonstrate mastery.</p>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="color: #0097b2; margin: 0;">Your Learning Metrics</h2>
+                    <button onclick="resetAllScienceProgress()" style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 500;">Reset All Progress</button>
+                </div>
+                <div class="adaptive-metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="completionRate">0%</div>
+                        <div class="metric-label">Completion Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="averageScore">0%</div>
+                        <div class="metric-label">Average Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="streakDays">0</div>
+                        <div class="metric-label">Learning Streak</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="timeSpent">0h</div>
+                        <div class="metric-label">Time Spent</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="color: #0097b2; margin-bottom: 20px;">Adaptive Learning Modules</h2>
+            <div class="learning-modules" id="modulesContainer">
+            </div>
+        </div>
+
+        <div id="moduleView" class="module-content" style="display: none;">
+            <button class="back-button" onclick="goBackToDashboard()">← Back to Dashboard</button>
+            <div id="moduleDetails"></div>
+        </div>
+    </div>
+
+    <div id="loadingScreen" class="loading-screen" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Personalizing your learning path...</p>
+        </div>
+    </div>
+
+    <script>
+        function getSubjectProgress(storageKey, totalUnits) {
+            const progress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            const completedUnits = Object.values(progress).filter(u => u.completed);
+            const scores = completedUnits.map(u => u.score).filter(s => typeof s === 'number');
+            const avgScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const cappedCompletedCount = Math.min(completedUnits.length, totalUnits);
+            const completion = Math.round((cappedCompletedCount / totalUnits) * 100);
+            return { avgScore, completion, completedCount: cappedCompletedCount, totalUnits };
+        }
+
+        function updateModuleCardProgress() {
+            const physicsData = getSubjectProgress('adaptohub_physics_units', 7);
+            const chemistryData = getSubjectProgress('adaptohub_chemistry_units', 6);
+            const biologyData = getSubjectProgress('adaptohub_biology_units', 6);
+
+            const physicsCard = document.querySelector('[data-module-id="physics"]');
+            const chemistryCard = document.querySelector('[data-module-id="chemistry"]');
+            const biologyCard = document.querySelector('[data-module-id="biology"]');
+
+            if (physicsCard) {
+                const badge = physicsCard.querySelector('.module-badge');
+                if (badge) {
+                    if (physicsData.completedCount > 0) {
+                        badge.textContent = `${physicsData.avgScore}% avg • ${physicsData.completedCount}/${physicsData.totalUnits} units`;
+                        badge.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+                        badge.style.color = 'white';
+                    } else {
+                        badge.textContent = '0% avg • 0/7 units';
+                        badge.style.background = 'linear-gradient(135deg, #9e9e9e 0%, #757575 100%)';
+                        badge.style.color = 'white';
+                    }
+                }
+            }
+
+            if (chemistryCard) {
+                const badge = chemistryCard.querySelector('.module-badge');
+                if (badge) {
+                    if (chemistryData.completedCount > 0) {
+                        badge.textContent = `${chemistryData.avgScore}% avg • ${chemistryData.completedCount}/${chemistryData.totalUnits} units`;
+                        badge.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+                        badge.style.color = 'white';
+                    } else {
+                        badge.textContent = '0% avg • 0/6 units';
+                        badge.style.background = 'linear-gradient(135deg, #9e9e9e 0%, #757575 100%)';
+                        badge.style.color = 'white';
+                    }
+                }
+            }
+
+            if (biologyCard) {
+                const badge = biologyCard.querySelector('.module-badge');
+                if (badge) {
+                    if (biologyData.completedCount > 0) {
+                        badge.textContent = `${biologyData.avgScore}% avg • ${biologyData.completedCount}/${biologyData.totalUnits} units`;
+                        badge.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+                        badge.style.color = 'white';
+                    } else {
+                        badge.textContent = '0% avg • 0/6 units';
+                        badge.style.background = 'linear-gradient(135deg, #9e9e9e 0%, #757575 100%)';
+                        badge.style.color = 'white';
+                    }
+                }
+            }
+
+            const allScores = [
+                ...Array(physicsData.completedCount).fill(physicsData.avgScore),
+                ...Array(chemistryData.completedCount).fill(chemistryData.avgScore),
+                ...Array(biologyData.completedCount).fill(biologyData.avgScore)
+            ];
+            const overallAvg = allScores.length ? Math.round(allScores.reduce((a, b) => a + b, 0) / allScores.length) : 0;
+            const totalCompleted = physicsData.completedCount + chemistryData.completedCount + biologyData.completedCount;
+            const totalUnits = physicsData.totalUnits + chemistryData.totalUnits + biologyData.totalUnits;
+            const overallCompletion = Math.round((totalCompleted / totalUnits) * 100);
+
+            const averageScoreEl = document.getElementById('averageScore');
+            if (averageScoreEl) {
+                averageScoreEl.textContent = overallAvg > 0 ? overallAvg + '%' : '0%';
+            }
+
+            const completionRateEl = document.getElementById('completionRate');
+            if (completionRateEl) {
+                completionRateEl.textContent = overallCompletion + '%';
+            }
+
+            const progressFillEl = document.getElementById('progressFill');
+            if (progressFillEl) {
+                progressFillEl.style.width = overallCompletion + '%';
+            }
+
+            const overallProgressEl = document.getElementById('overallProgress');
+            if (overallProgressEl) {
+                overallProgressEl.textContent = overallCompletion + '%';
+            }
+        }
+
+        function resetAllScienceProgress() {
+            if (confirm('Are you sure you want to reset ALL progress for Physics, Chemistry, and Biology? This cannot be undone.')) {
+                localStorage.removeItem('adaptohub_physics_units');
+                localStorage.removeItem('adaptohub_chemistry_units');
+                localStorage.removeItem('adaptohub_biology_units');
+
+                localStorage.removeItem('adaptohub_science_data');
+                localStorage.removeItem('adaptohub_physics_data');
+                localStorage.removeItem('adaptohub_chemistry_data');
+                localStorage.removeItem('adaptohub_biology_data');
+
+                document.getElementById('averageScore').textContent = '0%';
+                document.getElementById('completionRate').textContent = '0%';
+                document.getElementById('progressFill').style.width = '0%';
+                document.getElementById('overallProgress').textContent = '0%';
+                document.getElementById('streakDays').textContent = '0';
+                document.getElementById('timeSpent').textContent = '0h';
+                document.getElementById('masteryLevel').textContent = 'Beginner';
+
+                const physicsCard = document.querySelector('[data-module-id="physics"]');
+                const chemistryCard = document.querySelector('[data-module-id="chemistry"]');
+                const biologyCard = document.querySelector('[data-module-id="biology"]');
+                
+                if (physicsCard) {
+                    const badge = physicsCard.querySelector('.module-badge');
+                    if (badge) badge.textContent = '0% avg • 0/7 units';
+                }
+                if (chemistryCard) {
+                    const badge = chemistryCard.querySelector('.module-badge');
+                    if (badge) badge.textContent = '0% avg • 0/6 units';
+                }
+                if (biologyCard) {
+                    const badge = biologyCard.querySelector('.module-badge');
+                    if (badge) badge.textContent = '0% avg • 0/6 units';
+                }
+                
+                document.querySelectorAll('.module-badge').forEach(badge => {
+                    badge.style.background = 'linear-gradient(135deg, #9e9e9e 0%, #757575 100%)';
+                });
+                
+                alert('All science learning progress has been reset!');
+                setTimeout(() => location.reload(), 500);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUser();
+            initializeAdaptiveLearning('science');
+            setTimeout(updateModuleCardProgress, 100);
+        });
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                updateModuleCardProgress();
+            }
+        });
+
+        window.addEventListener('focus', function() {
+            updateModuleCardProgress();
+        });
+
+        function goBackToDashboard() {
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('moduleView').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+
+        function openModule(moduleId) {
+            const moduleData = getModuleData('science', moduleId);
+            const moduleView = document.getElementById('moduleView');
+            const moduleDetails = document.getElementById('moduleDetails');
+            
+            if (!moduleData || !moduleData.activities) {
+                moduleDetails.innerHTML = '<p>Error loading module data</p>';
+                return;
+            }
+            
+            if (!adaptiveInstance.studentData.completedActivities) {
+                adaptiveInstance.studentData.completedActivities = {};
+            }
+            if (!adaptiveInstance.studentData.completedActivities[moduleId]) {
+                adaptiveInstance.studentData.completedActivities[moduleId] = {};
+            }
+            
+            moduleDetails.innerHTML = `
+                <h2>${moduleData.name}</h2>
+                <p>${moduleData.fullDescription}</p>
+                <div class="difficulty-indicator difficulty-${moduleData.difficulty}">${moduleData.difficulty.charAt(0).toUpperCase() + moduleData.difficulty.slice(1)} Level</div>
+                <h3 style="margin-top: 24px; color: #0097b2;">Learning Activities</h3>
+                <ul class="activity-list">
+                    ${moduleData.activities.map(activity => {
+                        const completed = adaptiveInstance.studentData.completedActivities[moduleId]?.[activity.id];
+                        const score = completed ? completed.score : null;
+                        
+                        return `
+                            <li class="activity-item" data-activity-id="${activity.id}">
+                                <div class="activity-title">${activity.title}</div>
+                                <div class="activity-description">${activity.description}</div>
+                                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                                    ${completed ? `
+                                        <div style="
+                                            flex: 1;
+                                            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+                                            color: white;
+                                            padding: 10px;
+                                            border-radius: 6px;
+                                            text-align: center;
+                                            font-weight: 600;
+                                            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+                                        ">✓ Finished ${score}%</div>
+                                        <button class="check-button" onclick="startActivity('${moduleId}', '${activity.id}')" style="background: #00897b;">🔄 Retake</button>
+                                    ` : `
+                                        <button class="check-button" onclick="startActivity('${moduleId}', '${activity.id}')" style="width: 100%;">▶ Start Activity</button>
+                                    `}
+                                </div>
+                            </li>
+                        `;
+                    }).join('')}
+                </ul>
+            `;
+            
+            document.getElementById('dashboard').style.display = 'none';
+            moduleView.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Authentication - AdaptoHub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Bai Jamjuree", sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-container {
+      text-align: center;
+      color: white;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+  </style>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="spinner"></div>
+    <h1>กำลังเชื่อมต่อ Google...</h1>
+    <p>กรุณารอสักครู่</p>
+  </div>
+
+  <script>
+    async function handleGoogleAuthCallback() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+
+        if (error) {
+          console.error('OAuth Error:', error);
+          window.location.href = 'login.html?error=auth_failed';
+          return;
+        }
+
+        if (!code) {
+          console.error('No authorization code received');
+          window.location.href = 'login.html?error=no_code';
+          return;
+        }
+
+        localStorage.setItem('googleAuthCode', code);
+        localStorage.setItem('googleAuthState', state || '');
+
+        const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('googleAccessToken')}`
+          }
+        }).catch(err => {
+          console.log('Getting access token...');
+          return null;
+        });
+
+        if (response && response.ok) {
+          const userInfo = await response.json();
+
+          const userData = {
+            fullName: userInfo.name,
+            email: userInfo.email,
+            studentId: userInfo.email.split('@')[0].substring(0, 6).toUpperCase(),
+            googleId: userInfo.id,
+            authProvider: 'google',
+            loginTime: new Date().toISOString(),
+            profilePicture: userInfo.picture,
+            authCode: code
+          };
+
+          localStorage.setItem('adaptohubUser', JSON.stringify(userData));
+          
+          const allProfiles = JSON.parse(localStorage.getItem('adaptohubProfiles')) || [];
+          const profileExists = allProfiles.find(p => p.email === userData.email);
+          if (!profileExists) {
+            allProfiles.push(userData);
+            localStorage.setItem('adaptohubProfiles', JSON.stringify(allProfiles));
+          }
+
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } else {
+          const userData = {
+            authCode: code,
+            authProvider: 'google',
+            pendingAuth: true,
+            loginTime: new Date().toISOString()
+          };
+
+          localStorage.setItem('googleAuthCode', code);
+          
+          setTimeout(() => {
+            window.location.href = 'login.html?auth=pending';
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Error handling OAuth callback:', error);
+        window.location.href = 'login.html?error=' + encodeURIComponent(error.message);
+      }
+    }
+
+    handleGoogleAuthCallback();
+  </script>
+</body>
+</html>

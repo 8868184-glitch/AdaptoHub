@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Level Mathematical Physics | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="background-customizer.js"></script>
+    <style>
+        body { margin: 0; background: #f6f8fc; font-family: 'Bai Jamjuree', sans-serif; color: #0f1724; }
+        .shell { max-width: 1200px; margin: 100px auto 60px; padding: 0 24px; }
+        .hero-card { background: linear-gradient(135deg, #0f172a 0%, #0b3d91 55%, #06b6d4 100%); color: #ffffff; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(11, 83, 148, 0.28); position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%), radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%); pointer-events: none; }
+        .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .hero-title { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #dbeafe; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #dbeafe; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #dbeafe; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #dbeafe; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.18); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #38bdf8 0%, #06b6d4 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #e7edf3; position: relative; overflow: hidden; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #dbeafe; color: #0b3d91; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #166534; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #0f1724; }
+        .unit-desc { margin: 0 0 12px; color: #4b5563; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #f4f7fb; border-radius: 10px; border: 1px solid #e7edf3; font-size: 0.95rem; color: #111827; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #0b3d91; color: #dbeafe; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #0f1724; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #0b3d91; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #0b3d91; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #0f172a; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #0b3d91; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #4b5563; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #0b3d91; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #bfdbfe; border-radius: 10px; background: #e0f2fe; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #166534; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+        /* Dark Mode Styles */
+        [data-theme="dark"] body { background: #1a1d23; color: #e6ebf1; }
+        [data-theme="dark"] .shell { background: transparent; }
+        [data-theme="dark"] .unit-card { background: #242830; border-color: #3a4150; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .unit-title { color: #e6ebf1; }
+        [data-theme="dark"] .unit-desc { color: #b8c5d6; }
+        [data-theme="dark"] .lesson-point { background: #2d333e; border-color: #3a4150; color: #e6ebf1; }
+        [data-theme="dark"] .quiz-block { background: #2d333e; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-title { color: #e6ebf1; }
+        [data-theme="dark"] .quiz-option { background: #1a1d23; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-option:hover { border-color: #f97316; }
+        [data-theme="dark"] .secondary-btn { background: #2d333e; color: #fdba74; border-color: #3a4150; }
+        [data-theme="dark"] .secondary-btn:hover { background: #3a4150; }
+        [data-theme="dark"] .reset-section { background: rgba(180, 35, 24, 0.1); border-color: rgba(180, 35, 24, 0.3); }
+        [data-theme="dark"] .reset-section p { color: #b8c5d6; }
+        [data-theme="dark"] .ghost-link { background: rgba(249, 115, 22, 0.1); border-color: #ea580c; color: #fdba74; }    </style>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <main class="shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="applied_mathematics.html">← Applied Mathematics</a>
+            <a class="ghost-link" href="mathematics.html">← Mathematics</a>
+            <span style="color:#4b5563; font-weight:600;">A-Level Mathematical Physics • Lessons + quizzes after every unit</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">A-Level Mathematical Physics</h1>
+                    <p class="hero-subtitle">Vector calculus, mechanics, waves, electromagnetism, relativity, and quantum basics with mastery checks.</p>
+                    <div class="tag-row">
+                        <span class="pill">Vector calculus</span>
+                        <span class="pill">Mechanics</span>
+                        <span class="pill">Waves</span>
+                        <span class="pill">Electromagnetism</span>
+                        <span class="pill">Relativity</span>
+                        <span class="pill">Quantum</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 6</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="mpProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #0f1724;">Start Over?</p>
+            <p>Reset your progress for the Mathematical Physics pathway.</p>
+            <button class="danger-btn" onclick="resetMPProgress()">Reset Mathematical Physics Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const mpUnits = [
+            {
+                id: 'vectors',
+                title: 'Vectors, Operators, and Fields',
+                description: 'Use vector calculus to describe fields and flux.',
+                points: [
+                    'Gradient gives direction of steepest increase for scalar fields.',
+                    'Divergence measures net outflow per volume; curl measures rotation.',
+                    'Line integrals accumulate work along a path; surface integrals accumulate flux through a surface.',
+                    'Conservative fields have zero curl and path-independent integrals.',
+                    'Green, Gauss, and Stokes connect integrals of derivatives to boundary integrals.'
+                ],
+                formulas: [
+                    'grad f = \nabla f',
+                    'div F = \nabla  b7 F',
+                    'curl F = \nabla  d7 F',
+                    'Gauss: \oint_S F \cdot n dS = \int_V \nabla \cdot F dV',
+                    'Stokes: \oint_C F \cdot dr = \int_S (\nabla \times F) \cdot n dS'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Divergence measures:', options: [ { text: 'Outflow density of a field', correct: true }, { text: 'Path length', correct: false }, { text: 'Time dilation', correct: false } ] },
+                    { id: 'q2', prompt: 'Curl of a field captures:', options: [ { text: 'Local rotation', correct: true }, { text: 'Average speed', correct: false }, { text: 'Potential energy', correct: false } ] },
+                    { id: 'q3', prompt: 'A conservative field has line integrals that are:', options: [ { text: 'Path independent', correct: true }, { text: 'Always zero', correct: false }, { text: 'Only radial', correct: false } ] }
+                ]
+            },
+            {
+                id: 'mechanics',
+                title: 'Classical Mechanics and Lagrangians',
+                description: 'Model motion with Newton, energy, and Lagrange/Euler-Lagrange tools.',
+                points: [
+                    'Newton second law: F = m a describes dynamics; net force drives acceleration.',
+                    'Energy methods track kinetic plus potential; conservation holds in closed systems.',
+                    'Generalized coordinates simplify constraints.',
+                    'Lagrangian L = T - V; Euler-Lagrange yields equations of motion.',
+                    'Noether links symmetries to conserved quantities (e.g., time -> energy).' 
+                ],
+                formulas: [
+                    'F = m a',
+                    'L = T - V',
+                    'd/dt(\partial L/\partial \dot q) - \partial L/\partial q = 0'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Lagrangian is defined as:', options: [ { text: 'Kinetic minus potential energy', correct: true }, { text: 'Potential minus kinetic', correct: false }, { text: 'Momentum squared', correct: false } ] },
+                    { id: 'q2', prompt: 'Euler-Lagrange equation outputs:', options: [ { text: 'Equations of motion', correct: true }, { text: 'Wave speed only', correct: false }, { text: 'Charge density', correct: false } ] },
+                    { id: 'q3', prompt: 'Time-translation symmetry conserves:', options: [ { text: 'Energy', correct: true }, { text: 'Charge', correct: false }, { text: 'Angular position', correct: false } ] }
+                ]
+            },
+            {
+                id: 'waves',
+                title: 'Oscillations and Waves',
+                description: 'Analyze SHM, superposition, and wave equations.',
+                points: [
+                    'Simple harmonic motion solves x" + (\omega^2) x = 0 with sinusoidal solutions.',
+                    'Amplitude and phase set the oscillation shape; energy trades between kinetic and potential.',
+                    'Superposition principle lets waves add; interference patterns depend on phase.',
+                    'Standing waves arise from boundary conditions and reflections.',
+                    '1D wave equation links second time and space derivatives with wave speed.'
+                ],
+                formulas: [
+                    'SHM: x(t) = A cos(\omega t + \phi)',
+                    'Wave equation: \partial^2 u/\partial t^2 = v^2 \partial^2 u/\partial x^2',
+                    'Angular frequency \omega = 2\pi f'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'SHM solution shape is:', options: [ { text: 'Sinusoidal', correct: true }, { text: 'Exponential growth', correct: false }, { text: 'Linear', correct: false } ] },
+                    { id: 'q2', prompt: 'Standing waves arise from:', options: [ { text: 'Interference of reflections', correct: true }, { text: 'Single traveling pulse only', correct: false }, { text: 'No boundaries', correct: false } ] },
+                    { id: 'q3', prompt: 'Wave speed in 1D equation is labeled:', options: [ { text: 'v', correct: true }, { text: 'm', correct: false }, { text: 'h', correct: false } ] }
+                ]
+            },
+            {
+                id: 'em',
+                title: 'Electromagnetism Foundations',
+                description: 'Work with Maxwell equations, fields, and potentials.',
+                points: [
+                    'Gauss law links electric flux to enclosed charge.',
+                    'Faraday law: changing magnetic flux induces EMF.',
+                    'Ampere-Maxwell law ties magnetic fields to current and changing electric flux.',
+                    'Magnetic flux through a surface depends on field and orientation.',
+                    'Potentials (V, A) can generate E and B fields via gradients and curls.'
+                ],
+                formulas: [
+                    'Gauss: \nabla \cdot E = \rho/\varepsilon_0',
+                    'Faraday: \nabla \times E = -\partial B/\partial t',
+                    'Ampere-Maxwell: \nabla \times B = \mu_0 J + \mu_0 \varepsilon_0 \partial E/\partial t',
+                    'E = -\nabla V - \partial A/\partial t',
+                    'B = \nabla \times A'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Changing magnetic flux induces:', options: [ { text: 'EMF/electric field', correct: true }, { text: 'Mass', correct: false }, { text: 'Charge conservation violation', correct: false } ] },
+                    { id: 'q2', prompt: 'Gauss law connects flux to:', options: [ { text: 'Enclosed charge', correct: true }, { text: 'Temperature', correct: false }, { text: 'Velocity', correct: false } ] },
+                    { id: 'q3', prompt: 'Magnetic field B relates to vector potential A by:', options: [ { text: 'B = curl A', correct: true }, { text: 'B = grad A', correct: false }, { text: 'B = div A', correct: false } ] }
+                ]
+            },
+            {
+                id: 'relativity',
+                title: 'Special Relativity Basics',
+                description: 'Use Lorentz transformations and invariants for high-speed physics.',
+                points: [
+                    'Events transform between inertial frames with Lorentz matrices.',
+                    'Time dilation: moving clocks run slower by gamma.',
+                    'Length contraction: moving objects shorten along motion direction.',
+                    'Spacetime interval remains invariant across inertial frames.',
+                    'Energy-momentum relation links rest mass and motion.'
+                ],
+                formulas: [
+                    'Lorentz factor \gamma = 1/\sqrt{1 - (v^2/c^2)}',
+                    "t' = \gamma (t - vx/c^2)",
+                    "x' = \gamma (x - vt)",
+                    '\Delta s^2 = c^2 \Delta t^2 - \Delta x^2 - \Delta y^2 - \Delta z^2',
+                    'E^2 = (pc)^2 + (m c^2)^2'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Gamma increases as speed:', options: [ { text: 'Approaches c', correct: true }, { text: 'Goes to zero', correct: false }, { text: 'Stays constant', correct: false } ] },
+                    { id: 'q2', prompt: 'Time dilation means moving clocks:', options: [ { text: 'Run slower', correct: true }, { text: 'Run faster', correct: false }, { text: 'Stop instantly', correct: false } ] },
+                    { id: 'q3', prompt: 'Spacetime interval is:', options: [ { text: 'Invariant', correct: true }, { text: 'Frame dependent', correct: false }, { text: 'Undefined', correct: false } ] }
+                ]
+            },
+            {
+                id: 'quantum',
+                title: 'Quantum Essentials',
+                description: 'Apply Schrodinger equation, probability density, and operators.',
+                points: [
+                    'Wavefunction magnitude squared gives probability density.',
+                    'Time-independent Schrodinger equation models stationary states.',
+                    'Operators act on states; observables use expectation values.',
+                    'Superposition allows linear combinations of states.',
+                    'Normalization keeps total probability at 1.'
+                ],
+                formulas: [
+                    'i \hbar \partial \psi/\partial t = \hat H \psi',
+                    '-(\hbar^2/2m) d^2\psi/dx^2 + V\psi = E\psi',
+                    '\langle A \rangle = \int \psi^* \hat A \psi dx',
+                    '\int |\psi|^2 dx = 1'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Probability density is given by:', options: [ { text: '|psi|^2', correct: true }, { text: 'psi only', correct: false }, { text: 'Derivative of psi', correct: false } ] },
+                    { id: 'q2', prompt: 'Schrodinger equation governs:', options: [ { text: 'Quantum state evolution', correct: true }, { text: 'Classical trajectories only', correct: false }, { text: 'Weather', correct: false } ] },
+                    { id: 'q3', prompt: 'Normalization ensures total probability equals:', options: [ { text: '1', correct: true }, { text: '0', correct: false }, { text: 'Depends on energy', correct: false } ] }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_mathematical_physics_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = mpUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = mpUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const cappedCompleted = Math.min(completed, physicsUnits.length);
+            const percent = Math.round((cappedCompleted / physicsUnits.length) * 100);
+            document.getElementById('unitsCompleted').textContent = `${cappedCompleted} / ${physicsUnits.length}`;
+            document.getElementById('averageScore').textContent = `${avg}%`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('mpProgressFill').style.width = `${percent}%`;
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/([A-Za-z])_\{([^}]+)\}/g, '$1<sub>$2</sub>')
+                .replace(/([A-Za-z])_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^\{([^}]+)\}/g, '<sup>$1</sup>')
+                .replace(/\^([0-9()+\-]+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetMPProgress() {
+            if (confirm('Reset progress for the Mathematical Physics pathway? This cannot be undone.')) {
+                unitProgress = {};
+                saveProgress();
+                renderSummary();
+                renderUnits();
+                alert('Mathematical Physics progress has been reset.');
+            }
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            grid.innerHTML = '';
+            mpUnits.forEach((unit, index) => {
+                const prevUnit = mpUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit?.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed - ${progress.score}%` : 'Quiz ready';
+                const lessonList = unit.points.map(p => `<div class="lesson-point">${formatFormula(p)}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+                const questionsHtml = unit.quiz.map(q => `<div class="quiz-question" style="margin-bottom:10px;"><p class="quiz-title">${formatFormula(q.prompt)}</p>${q.options.map((opt) => `<label class="quiz-option"><input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked ? 'disabled' : ''}><span>${formatFormula(opt.text)}</span></label>`).join('')}</div>`).join('');
+                const actionButtons = progress.completed ? `<button class="secondary-btn" onclick="retakeUnit('${unit.id}')">Retake Unit</button><span class="quiz-result" id="result-${unit.id}" style="margin-left: 10px;"></span>` : `<button class="primary-btn" onclick="submitQuiz('${unit.id}')" ${locked ? 'disabled' : ''}>Submit quiz</button><span class="quiz-result" id="result-${unit.id}"></span>`;
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+                card.innerHTML = `<div class="unit-header"><div class="unit-label">Unit ${index + 1}</div><div class="unit-status ${statusClass}">${statusText}</div></div><h3 class="unit-title">${unit.title}</h3><p class="unit-desc">${unit.description}</p><div class="lesson-points">${lessonList}</div><div class="formula-badges">${formulaList}</div><div class="quiz-block" data-quiz="${unit.id}"><p style=\"margin:0 0 6px; font-weight:700; color:#0f1724;\">Quick mastery quiz (3 questions)</p>${locked ? `<p class=\"locked-note\">Unlock by completing Unit ${index}</p>` : ''} ${questionsHtml}<div class="quiz-actions">${actionButtons}</div></div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = mpUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+            let answered = 0, correct = 0;
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now(), completedDate: new Date().toISOString() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'mathematical_physics');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

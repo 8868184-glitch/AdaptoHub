@@ -1,0 +1,520 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Level Combinatorics | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="background-customizer.js"></script>
+    <style>
+        body { margin: 0; background: #f4f7fb; font-family: 'Bai Jamjuree', sans-serif; color: #0f1724; }
+        .shell { max-width: 1200px; margin: 100px auto 60px; padding: 0 24px; }
+        .hero-card { background: linear-gradient(135deg, #134e4a 0%, #0f766e 55%, #14b8a6 100%); color: #ffffff; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(19, 78, 74, 0.3); position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%), radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%); pointer-events: none; }
+        .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .hero-title { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #ccfbf1; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #ccfbf1; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #ccfbf1; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #ccfbf1; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.18); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #5eead4 0%, #2dd4bf 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #e7edf3; position: relative; overflow: hidden; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #ccfbf1; color: #134e4a; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #166534; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #0f1724; }
+        .unit-desc { margin: 0 0 12px; color: #4b5563; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #f4f7fb; border-radius: 10px; border: 1px solid #e7edf3; font-size: 0.95rem; color: #111827; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #0f766e; color: #ccfbf1; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #0f1724; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #0f766e; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #0f766e; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #134e4a; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #0f766e; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #4b5563; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #0f766e; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #99f6e4; border-radius: 10px; background: #ccfbf1; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #166534; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+
+        /* Dark Mode Styles */
+        [data-theme="dark"] body { background: #1a1d23; color: #e6ebf1; }
+        [data-theme="dark"] .shell { background: transparent; }
+        [data-theme="dark"] .unit-card { background: #242830; border-color: #3a4150; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .unit-title { color: #e6ebf1; }
+        [data-theme="dark"] .unit-desc { color: #b8c5d6; }
+        [data-theme="dark"] .lesson-point { background: #2d333e; border-color: #3a4150; color: #e6ebf1; }
+        [data-theme="dark"] .quiz-block { background: #2d333e; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-title { color: #e6ebf1; }
+        [data-theme="dark"] .quiz-option { background: #1a1d23; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-option:hover { border-color: #14b8a6; }
+        [data-theme="dark"] .secondary-btn { background: #2d333e; color: #5eead4; border-color: #3a4150; }
+        [data-theme="dark"] .secondary-btn:hover { background: #3a4150; }
+        [data-theme="dark"] .reset-section { background: rgba(180, 35, 24, 0.1); border-color: rgba(180, 35, 24, 0.3); }
+        [data-theme="dark"] .reset-section p { color: #b8c5d6; }
+        [data-theme="dark"] .ghost-link { background: rgba(20, 184, 166, 0.1); border-color: #0f766e; color: #5eead4; }
+    </style>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <main class="shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="pure_mathematics.html">← Pure Mathematics</a>
+            <a class="ghost-link" href="mathematics.html">← Mathematics</a>
+            <span style="color:#4b5563; font-weight:600;">A-Level Combinatorics • Lessons + quizzes after every unit</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">A-Level Combinatorics</h1>
+                    <p class="hero-subtitle">Sequential units with mastery checks across counting principles, permutations, combinations, binomial theorem, and graph theory.</p>
+                    <div class="tag-row">
+                        <span class="pill">Counting principles</span>
+                        <span class="pill">Permutations & combinations</span>
+                        <span class="pill">Binomial theorem</span>
+                        <span class="pill">Graph theory</span>
+                        <span class="pill">Generating functions</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 6</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="combinatoricsProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #0f1724;">Start Over?</p>
+            <p>Reset your progress for the Combinatorics pathway.</p>
+            <button class="danger-btn" onclick="resetCombinatoricsProgress()">Reset Combinatorics Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const combinatoricsUnits = [
+            {
+                id: 'counting',
+                title: 'Fundamental Counting Principles',
+                description: 'Master addition and multiplication rules, factorial notation, and counting arrangements.',
+                points: [
+                    'Addition rule: If tasks can be done in m or n ways (mutually exclusive), total is m + n.',
+                    'Multiplication rule: If tasks are done in sequence with m then n ways, total is m × n.',
+                    'Factorial n! = n × (n−1) × ... × 2 × 1 counts arrangements of n distinct objects.',
+                    'For arrangements with repetition, divide by factorials of repeated counts.',
+                    'Principle of Inclusion-Exclusion: |A ∪ B| = |A| + |B| − |A ∩ B|.'
+                ],
+                formulas: [
+                    'n! = n × (n−1) × (n−2) × ... × 1',
+                    'Multiplication rule: m × n',
+                    '|A ∪ B| = |A| + |B| − |A ∩ B|'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'How many ways to choose a starter from 3 options and a main from 5 options?', options: [ { text: '15', correct: true }, { text: '8', correct: false }, { text: '10', correct: false } ] },
+                    { id: 'q2', prompt: 'What is 5!?', options: [ { text: '120', correct: true }, { text: '24', correct: false }, { text: '60', correct: false } ] },
+                    { id: 'q3', prompt: 'Using inclusion-exclusion, if |A| = 10, |B| = 8, |A ∩ B| = 3, what is |A ∪ B|?', options: [ { text: '15', correct: true }, { text: '18', correct: false }, { text: '5', correct: false } ] }
+                ]
+            },
+            {
+                id: 'permutations',
+                title: 'Permutations and Arrangements',
+                description: 'Count ordered arrangements, handle repetitions, and solve circular permutation problems.',
+                points: [
+                    'Permutation P(n, r) = n!/(n−r)! counts ordered selections of r from n distinct items.',
+                    'Circular permutations of n objects: (n−1)! since rotations are identical.',
+                    'Arrangements with repetition: n!/( n₁! n₂! ... nₖ!) if n₁ of type 1, n₂ of type 2, etc.',
+                    'Derangements: permutations with no element in original position; D(n) ≈ n!/e for large n.',
+                    'Restricted permutations: subtract forbidden cases or use direct counting.'
+                ],
+                formulas: [
+                    'P(n, r) = n! / (n − r)!',
+                    'Circular: (n − 1)!',
+                    'With repetition: n! / (n₁! n₂! ... nₖ!)'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'How many ways to arrange 3 books out of 5 on a shelf?', options: [ { text: '60', correct: true }, { text: '10', correct: false }, { text: '120', correct: false } ] },
+                    { id: 'q2', prompt: 'How many circular arrangements of 4 people?', options: [ { text: '6', correct: true }, { text: '24', correct: false }, { text: '12', correct: false } ] },
+                    { id: 'q3', prompt: 'Arrangements of the letters in AABB?', options: [ { text: '6', correct: true }, { text: '12', correct: false }, { text: '24', correct: false } ] }
+                ]
+            },
+            {
+                id: 'combinations',
+                title: 'Combinations and Selections',
+                description: 'Count unordered selections, solve combination problems, and apply binomial coefficients.',
+                points: [
+                    'Combination C(n, r) = n! / (r!(n−r)!) counts unordered selections of r from n.',
+                    'Symmetry: C(n, r) = C(n, n−r).',
+                    'Pascal\'s identity: C(n, r) = C(n−1, r−1) + C(n−1, r) builds Pascal\'s triangle.',
+                    'Stars and bars: distribute k identical items into n bins with formula C(n+k−1, k).',
+                    'Combinations with repetition allowed: C(n+r−1, r).'
+                ],
+                formulas: [
+                    'C(n, r) = n! / (r!(n − r)!)',
+                    'C(n, r) = C(n, n − r)',
+                    'C(n, r) = C(n−1, r−1) + C(n−1, r)'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'How many ways to choose 3 toppings from 7?', options: [ { text: '35', correct: true }, { text: '21', correct: false }, { text: '42', correct: false } ] },
+                    { id: 'q2', prompt: 'What is C(5, 2)?', options: [ { text: '10', correct: true }, { text: '20', correct: false }, { text: '5', correct: false } ] },
+                    { id: 'q3', prompt: 'Using stars and bars, distribute 5 identical candies to 3 children. How many ways?', options: [ { text: 'C(7, 5) = 21', correct: true }, { text: 'C(5, 3) = 10', correct: false }, { text: '15', correct: false } ] }
+                ]
+            },
+            {
+                id: 'binomial',
+                title: 'Binomial Theorem and Coefficients',
+                description: 'Expand binomials, find specific terms, and apply binomial identities.',
+                points: [
+                    'Binomial theorem: (x + y)ⁿ = Σ C(n, k) xⁿ⁻ᵏ yᵏ for k = 0 to n.',
+                    'General term (k+1)-th term: C(n, k) xⁿ⁻ᵏ yᵏ.',
+                    'Sum of coefficients: set x = y = 1 to get 2ⁿ.',
+                    'Alternating sum: set x = 1, y = −1 to get 0 = Σ (−1)ᵏ C(n, k).',
+                    'Applications: probability distributions, polynomial expansion, combinatorial identities.'
+                ],
+                formulas: [
+                    '(x + y)ⁿ = Σ C(n, k) xⁿ⁻ᵏ yᵏ',
+                    'Term (k+1): C(n, k) xⁿ⁻ᵏ yᵏ',
+                    'Σ C(n, k) = 2ⁿ'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'What is the coefficient of x² in (x + 1)⁴?', options: [ { text: 'C(4, 2) = 6', correct: true }, { text: '4', correct: false }, { text: '10', correct: false } ] },
+                    { id: 'q2', prompt: 'Sum of all binomial coefficients C(5, k) for k = 0 to 5?', options: [ { text: '32', correct: true }, { text: '25', correct: false }, { text: '16', correct: false } ] },
+                    { id: 'q3', prompt: 'In (2x − 3)³, what is the constant term?', options: [ { text: '−27', correct: true }, { text: '27', correct: false }, { text: '8', correct: false } ] }
+                ]
+            },
+            {
+                id: 'graphs',
+                title: 'Graph Theory Basics',
+                description: 'Understand vertices, edges, degree, paths, cycles, and fundamental graph properties.',
+                points: [
+                    'Graph G = (V, E) has vertices V and edges E connecting pairs of vertices.',
+                    'Degree of vertex v is the number of edges incident to v; sum of degrees = 2|E| (handshaking lemma).',
+                    'Path is a sequence of vertices connected by edges; cycle is a closed path.',
+                    'Connected graph: path exists between any two vertices; component is maximal connected subgraph.',
+                    'Tree is a connected acyclic graph with |E| = |V| − 1.'
+                ],
+                formulas: [
+                    'Σ deg(v) = 2|E| (handshaking)',
+                    'Tree: |E| = |V| − 1',
+                    'Complete graph Kₙ: |E| = n(n−1)/2'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'In a graph with 4 vertices and degrees 3, 3, 2, 2, how many edges?', options: [ { text: '5', correct: true }, { text: '10', correct: false }, { text: '4', correct: false } ] },
+                    { id: 'q2', prompt: 'A tree with 10 vertices has how many edges?', options: [ { text: '9', correct: true }, { text: '10', correct: false }, { text: '8', correct: false } ] },
+                    { id: 'q3', prompt: 'Complete graph K₅ has how many edges?', options: [ { text: '10', correct: true }, { text: '5', correct: false }, { text: '20', correct: false } ] }
+                ]
+            },
+            {
+                id: 'advanced',
+                title: 'Advanced Counting and Generating Functions',
+                description: 'Use recurrence relations, generating functions, and Catalan numbers for complex problems.',
+                points: [
+                    'Recurrence relation defines sequence in terms of previous terms; solve with characteristic equation.',
+                    'Fibonacci: F(n) = F(n−1) + F(n−2) with F(0) = 0, F(1) = 1.',
+                    'Generating function G(x) = Σ aₙ xⁿ encodes sequence; operations on G(x) solve counting problems.',
+                    'Catalan numbers Cₙ = (1/(n+1)) C(2n, n) count binary trees, parenthesizations, lattice paths.',
+                    'Principle of Inclusion-Exclusion for multiple sets: |A₁ ∪ ... ∪ Aₙ| = Σ|Aᵢ| − Σ|Aᵢ ∩ Aⱼ| + ...'
+                ],
+                formulas: [
+                    'F(n) = F(n−1) + F(n−2)',
+                    'Cₙ = (1/(n+1)) C(2n, n)',
+                    'G(x) = Σ aₙ xⁿ'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'What is F(5) in the Fibonacci sequence?', options: [ { text: '5', correct: true }, { text: '8', correct: false }, { text: '3', correct: false } ] },
+                    { id: 'q2', prompt: 'Fourth Catalan number C₃ (counting binary trees with 3 internal nodes)?', options: [ { text: '5', correct: true }, { text: '4', correct: false }, { text: '6', correct: false } ] },
+                    { id: 'q3', prompt: 'Generating function for sequence 1, 1, 1, ... is:', options: [ { text: '1/(1−x)', correct: true }, { text: '1 + x + x²', correct: false }, { text: 'x/(1−x)', correct: false } ] }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_combinatorics_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = combinatoricsUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = combinatoricsUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const cappedCompleted = Math.min(completed, combinatoricsUnits.length);
+            const percent = Math.round((cappedCompleted / combinatoricsUnits.length) * 100);
+            document.getElementById('unitsCompleted').textContent = `${cappedCompleted} / ${combinatoricsUnits.length}`;
+            document.getElementById('averageScore').textContent = `${avg}%`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('combinatoricsProgressFill').style.width = `${percent}%`;
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/([A-Za-z])_\{([^}]+)\}/g, '$1<sub>$2</sub>')
+                .replace(/([A-Za-z])_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^\{([^}]+)\}/g, '<sup>$1</sup>')
+                .replace(/\^([0-9()+−-]+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetCombinatoricsProgress() {
+            if (confirm('Reset progress for the Combinatorics pathway? This cannot be undone.')) {
+                unitProgress = {};
+                saveProgress();
+                renderSummary();
+                renderUnits();
+                alert('Combinatorics progress has been reset.');
+            }
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            grid.innerHTML = '';
+            combinatoricsUnits.forEach((unit, index) => {
+                const prevUnit = combinatoricsUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit?.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed - ${progress.score}%` : 'Quiz ready';
+                const lessonList = unit.points.map(p => `<div class="lesson-point">${formatFormula(p)}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+                const questionsHtml = unit.quiz.map(q => `<div class="quiz-question" style="margin-bottom:10px;"><p class="quiz-title">${formatFormula(q.prompt)}</p>${q.options.map((opt) => `<label class="quiz-option"><input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked ? 'disabled' : ''}><span>${formatFormula(opt.text)}</span></label>`).join('')}</div>`).join('');
+                const actionButtons = progress.completed ? `<button class="secondary-btn" onclick="retakeUnit('${unit.id}')">Retake Unit</button><span class="quiz-result" id="result-${unit.id}" style="margin-left: 10px;"></span>` : `<button class="primary-btn" onclick="submitQuiz('${unit.id}')" ${locked ? 'disabled' : ''}>Submit quiz</button><span class="quiz-result" id="result-${unit.id}"></span>`;
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+                card.innerHTML = `<div class="unit-header"><div class="unit-label">Unit ${index + 1}</div><div class="unit-status ${statusClass}">${statusText}</div></div><h3 class="unit-title">${unit.title}</h3><p class="unit-desc">${unit.description}</p><div class="lesson-points">${lessonList}</div><div class="formula-badges">${formulaList}</div><div class="quiz-block" data-quiz="${unit.id}"><p style="margin:0 0 6px; font-weight:700; color:#0f1724;">Quick mastery quiz (3 questions)</p>${locked ? `<p class="locked-note">Unlock by completing Unit ${index}</p>` : ''} ${questionsHtml}<div class="quiz-actions">${actionButtons}</div></div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = combinatoricsUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+            let answered = 0, correct = 0;
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now(), completedDate: new Date().toISOString() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'combinatorics');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

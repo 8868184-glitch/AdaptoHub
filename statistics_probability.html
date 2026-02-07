@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Level Statistics & Probability | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="background-customizer.js"></script>
+    <style>
+        body { margin: 0; background: #f5f8fc; font-family: 'Bai Jamjuree', sans-serif; color: #0f1724; }
+        .shell { max-width: 1200px; margin: 100px auto 60px; padding: 0 24px; }
+        .hero-card { background: linear-gradient(135deg, #0f172a 0%, #0e7490 55%, #14b8a6 100%); color: #ffffff; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(14, 116, 144, 0.28); position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%), radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%); pointer-events: none; }
+        .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .hero-title { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #d1fae5; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #d1fae5; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.18); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #d1fae5; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #d1fae5; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.18); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #34d399 0%, #10b981 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #e7edf3; position: relative; overflow: hidden; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #d1fae5; color: #0e7490; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #166534; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #0f1724; }
+        .unit-desc { margin: 0 0 12px; color: #4b5563; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #f4f7fb; border-radius: 10px; border: 1px solid #e7edf3; font-size: 0.95rem; color: #111827; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #0e7490; color: #d1fae5; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #0f1724; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #0e7490; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #0e7490; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #0f172a; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #0e7490; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #4b5563; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #0e7490; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #99f6e4; border-radius: 10px; background: #d1fae5; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #166534; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+        /* Dark Mode Styles */
+        [data-theme="dark"] body { background: #1a1d23; color: #e6ebf1; }
+        [data-theme="dark"] .shell { background: transparent; }
+        [data-theme="dark"] .unit-card { background: #242830; border-color: #3a4150; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+        [data-theme="dark"] .unit-title { color: #e6ebf1; }
+        [data-theme="dark"] .unit-desc { color: #b8c5d6; }
+        [data-theme="dark"] .lesson-point { background: #2d333e; border-color: #3a4150; color: #e6ebf1; }
+        [data-theme="dark"] .quiz-block { background: #2d333e; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-title { color: #e6ebf1; }
+        [data-theme="dark"] .quiz-option { background: #1a1d23; border-color: #3a4150; }
+        [data-theme="dark"] .quiz-option:hover { border-color: #a855f7; }
+        [data-theme="dark"] .secondary-btn { background: #2d333e; color: #d8b4fe; border-color: #3a4150; }
+        [data-theme="dark"] .secondary-btn:hover { background: #3a4150; }
+        [data-theme="dark"] .reset-section { background: rgba(180, 35, 24, 0.1); border-color: rgba(180, 35, 24, 0.3); }
+        [data-theme="dark"] .reset-section p { color: #b8c5d6; }
+        [data-theme="dark"] .ghost-link { background: rgba(168, 85, 247, 0.1); border-color: #9333ea; color: #d8b4fe; }    </style>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display">
+            <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+            <div class="account-avatar" id="accountAvatar"></div>
+        </div>
+        </header>
+
+    <main class="shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="applied_mathematics.html">← Applied Mathematics</a>
+            <a class="ghost-link" href="mathematics.html">← Mathematics</a>
+            <span style="color:#4b5563; font-weight:600;">A-Level Statistics & Probability • Lessons + quizzes after every unit</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">A-Level Statistics & Probability</h1>
+                    <p class="hero-subtitle">Data literacy, distributions, inference, and risk with unit-by-unit mastery checks.</p>
+                    <div class="tag-row">
+                        <span class="pill">Descriptive stats</span>
+                        <span class="pill">Probability</span>
+                        <span class="pill">Random variables</span>
+                        <span class="pill">Inference</span>
+                        <span class="pill">Regression</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 6</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="statsProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #0f1724;">Start Over?</p>
+            <p>Reset your progress for the Statistics & Probability pathway.</p>
+            <button class="danger-btn" onclick="resetStatsProgress()">Reset Statistics & Probability Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const statsUnits = [
+            {
+                id: 'descriptive',
+                title: 'Descriptive Statistics',
+                description: 'Summarize data with center, spread, and shape awareness.',
+                points: [
+                    'Mean, median, and mode describe central tendency; median resists outliers.',
+                    'Range, IQR, variance, and standard deviation quantify spread.',
+                    'Box plots visualize median, quartiles, and possible outliers.',
+                    'Z-scores standardize values relative to mean and standard deviation.',
+                    'Beware of skew; report median/IQR for skewed data.'
+                ],
+                formulas: [
+                    'Mean: x̄ = (Σx_i)/n',
+                    'Variance: s^2 = Σ(x_i - x̄)^2/(n-1)',
+                    'Z = (x - μ)/σ'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Median resists:', options: [ { text: 'Outliers', correct: true }, { text: 'Order', correct: false }, { text: 'Sample size', correct: false } ] },
+                    { id: 'q2', prompt: 'Standard deviation measures:', options: [ { text: 'Spread around the mean', correct: true }, { text: 'Center only', correct: false }, { text: 'Shape', correct: false } ] },
+                    { id: 'q3', prompt: 'Z-score compares value to:', options: [ { text: 'Mean and standard deviation', correct: true }, { text: 'Median only', correct: false }, { text: 'Mode only', correct: false } ] }
+                ]
+            },
+            {
+                id: 'probability',
+                title: 'Probability Rules',
+                description: 'Work with events, complements, conditional probability, and independence.',
+                points: [
+                    'P(A^c) = 1 - P(A) for complements.',
+                    'Addition rule: P(A ∪ B) = P(A) + P(B) - P(A ∩ B).',
+                    'Conditional probability: P(A|B) = P(A ∩ B)/P(B) when P(B) > 0.',
+                    'Independence implies P(A ∩ B) = P(A)P(B).',
+                    'Tree diagrams or tables organize multi-step probabilities.'
+                ],
+                formulas: [
+                    'P(A^c) = 1 - P(A)',
+                    'P(A ∪ B) = P(A) + P(B) - P(A ∩ B)',
+                    'P(A|B) = P(A ∩ B)/P(B)'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'P(A^c) equals:', options: [ { text: '1 - P(A)', correct: true }, { text: 'P(A)', correct: false }, { text: 'P(B)', correct: false } ] },
+                    { id: 'q2', prompt: 'Independence means:', options: [ { text: 'P(A ∩ B) = P(A)P(B)', correct: true }, { text: 'P(A|B) = 0', correct: false }, { text: 'Events cannot occur together', correct: false } ] },
+                    { id: 'q3', prompt: 'Conditional probability divides by:', options: [ { text: 'P(B)', correct: true }, { text: 'P(A)', correct: false }, { text: 'P(A ∩ B)', correct: false } ] }
+                ]
+            },
+            {
+                id: 'random-variables',
+                title: 'Random Variables and Distributions',
+                description: 'Handle discrete and continuous variables, expectation, and variance.',
+                points: [
+                    'PMF for discrete, PDF for continuous; CDF accumulates probability.',
+                    'Expected value E[X] = Σ x p(x) (discrete) or ∫ x f(x) dx (continuous).',
+                    'Variance Var(X) = E[X^2] - (E[X])^2.',
+                    'Common families: binomial, geometric, normal, exponential.',
+                    'Linear transformations: E[aX + b] = aE[X] + b.'
+                ],
+                formulas: [
+                    'E[X] = Σ x p(x)',
+                    'Var(X) = E[X^2] - (E[X])^2',
+                    'For normal: Z = (X - μ)/σ'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'PMF applies to:', options: [ { text: 'Discrete variables', correct: true }, { text: 'Continuous variables', correct: false }, { text: 'Deterministic values', correct: false } ] },
+                    { id: 'q2', prompt: 'E[X] for discrete variable is:', options: [ { text: 'Σ x p(x)', correct: true }, { text: 'Max of X', correct: false }, { text: 'Median of X', correct: false } ] },
+                    { id: 'q3', prompt: 'Z-score rescales normal data by:', options: [ { text: 'Mean and standard deviation', correct: true }, { text: 'Mode only', correct: false }, { text: 'Range', correct: false } ] }
+                ]
+            },
+            {
+                id: 'sampling',
+                title: 'Sampling and the Central Limit Theorem',
+                description: 'Understand sampling variability and why averages go normal.',
+                points: [
+                    'Sampling distribution of the mean centers at population mean μ.',
+                    'Standard error: σ/√n (use s/√n when σ unknown).',
+                    'CLT: for large n, sampling distribution of mean is approximately normal.',
+                    'Larger samples reduce variability but not bias.',
+                    'Random sampling improves representativeness.'
+                ],
+                formulas: [
+                    'SE( x̄ ) = σ/√n',
+                    'CLT: x̄ ~ Normal(μ, σ/√n) for large n',
+                    'Margin of error ∝ 1/√n'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Central Limit Theorem shapes sampling means toward:', options: [ { text: 'Normal', correct: true }, { text: 'Uniform', correct: false }, { text: 'Skewed', correct: false } ] },
+                    { id: 'q2', prompt: 'Standard error shrinks as n:', options: [ { text: 'Increases', correct: true }, { text: 'Decreases', correct: false }, { text: 'Stays same', correct: false } ] },
+                    { id: 'q3', prompt: 'Margin of error scales with:', options: [ { text: '1/√n', correct: true }, { text: 'n', correct: false }, { text: 'n^2', correct: false } ] }
+                ]
+            },
+            {
+                id: 'inference',
+                title: 'Confidence Intervals and Hypothesis Tests',
+                description: 'Estimate parameters and test claims with error control.',
+                points: [
+                    'Confidence interval: estimate ± margin of error (z or t multiplier).',
+                    'Null vs alternative hypotheses frame the test.',
+                    'p-value: probability of data as extreme assuming null is true.',
+                    'Type I error: false positive; Type II error: false negative.',
+                    'Use t-distribution when σ unknown with small samples.'
+                ],
+                formulas: [
+                    'CI: x̄ ± z* (σ/√n) or x̄ ± t* (s/√n)',
+                    'Test statistic (z): (x̄ - μ0)/(σ/√n)',
+                    'p-value compares observed statistic to null distribution'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Type I error means:', options: [ { text: 'Rejecting a true null', correct: true }, { text: 'Failing to reject a false null', correct: false }, { text: 'Using wrong variance', correct: false } ] },
+                    { id: 'q2', prompt: 'Small n, unknown σ uses:', options: [ { text: 't-distribution', correct: true }, { text: 'z with σ', correct: false }, { text: 'Uniform', correct: false } ] },
+                    { id: 'q3', prompt: 'p-value is calculated assuming:', options: [ { text: 'Null hypothesis is true', correct: true }, { text: 'Alternative is true', correct: false }, { text: 'No hypothesis', correct: false } ] }
+                ]
+            },
+            {
+                id: 'regression',
+                title: 'Correlation and Regression',
+                description: 'Quantify linear relationships and make predictions carefully.',
+                points: [
+                    'Correlation r measures linear strength/direction; -1 to 1.',
+                    'Least-squares regression minimizes squared residuals.',
+                    'Line equation: ŷ = b0 + b1 x; slope b1 in units of y per x.',
+                    'Check residual plots for nonlinearity or heteroscedasticity.',
+                    'Correlation is not causation; watch lurking variables.'
+                ],
+                formulas: [
+                    'ŷ = b0 + b1 x',
+                    'r = Σ[(x - x̄)(y - ȳ)] / sqrt(Σ(x - x̄)^2 Σ(y - ȳ)^2)',
+                    'R^2 explains variance share'
+                ],
+                quiz: [
+                    { id: 'q1', prompt: 'Correlation r range is:', options: [ { text: '-1 to 1', correct: true }, { text: '0 to 1', correct: false }, { text: '-2 to 2', correct: false } ] },
+                    { id: 'q2', prompt: 'Least-squares fit minimizes:', options: [ { text: 'Squared residuals', correct: true }, { text: 'Absolute residuals', correct: false }, { text: 'Mean only', correct: false } ] },
+                    { id: 'q3', prompt: 'A high correlation does not imply:', options: [ { text: 'Causation', correct: true }, { text: 'Association', correct: false }, { text: 'A linear trend', correct: false } ] }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_statistics_probability_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = statsUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = statsUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const cappedCompleted = Math.min(completed, statsUnits.length);
+            const percent = Math.round((cappedCompleted / statsUnits.length) * 100);
+            document.getElementById('unitsCompleted').textContent = `${cappedCompleted} / ${statsUnits.length}`;
+            document.getElementById('averageScore').textContent = `${avg}%`;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('statsProgressFill').style.width = `${percent}%`;
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/([A-Za-z])_\{([^}]+)\}/g, '$1<sub>$2</sub>')
+                .replace(/([A-Za-z])_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^\{([^}]+)\}/g, '<sup>$1</sup>')
+                .replace(/\^([0-9()+\-]+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetStatsProgress() {
+            if (confirm('Reset progress for the Statistics & Probability pathway? This cannot be undone.')) {
+                unitProgress = {};
+                saveProgress();
+                renderSummary();
+                renderUnits();
+                alert('Statistics & Probability progress has been reset.');
+            }
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            grid.innerHTML = '';
+            statsUnits.forEach((unit, index) => {
+                const prevUnit = statsUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit?.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed - ${progress.score}%` : 'Quiz ready';
+                const lessonList = unit.points.map(p => `<div class="lesson-point">${formatFormula(p)}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+                    const questionsHtml = unit.quiz.map(q => `<div class="quiz-question" style="margin-bottom:10px;"><p class="quiz-title">${formatFormula(q.prompt)}</p>${q.options.map((opt) => `<label class="quiz-option"><input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked ? 'disabled' : ''}><span>${formatFormula(opt.text)}</span></label>`).join('')}</div>`).join('');
+                const actionButtons = progress.completed ? `<button class="secondary-btn" onclick="retakeUnit('${unit.id}')">Retake Unit</button><span class="quiz-result" id="result-${unit.id}" style="margin-left: 10px;"></span>` : `<button class="primary-btn" onclick="submitQuiz('${unit.id}')" ${locked ? 'disabled' : ''}>Submit quiz</button><span class="quiz-result" id="result-${unit.id}"></span>`;
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+                card.innerHTML = `<div class="unit-header"><div class="unit-label">Unit ${index + 1}</div><div class="unit-status ${statusClass}">${statusText}</div></div><h3 class="unit-title">${unit.title}</h3><p class="unit-desc">${unit.description}</p><div class="lesson-points">${lessonList}</div><div class="formula-badges">${formulaList}</div><div class="quiz-block" data-quiz="${unit.id}"><p style=\"margin:0 0 6px; font-weight:700; color:#0f1724;\">Quick mastery quiz (3 questions)</p>${locked ? `<p class=\"locked-note\">Unlock by completing Unit ${index}</p>` : ''} ${questionsHtml}<div class="quiz-actions">${actionButtons}</div></div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = statsUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+            let answered = 0, correct = 0;
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now(), completedDate: new Date().toISOString() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'statistics_probability');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

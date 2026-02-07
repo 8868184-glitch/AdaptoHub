@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamification Profile — AdaptoHub</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+  <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+  <script defer src="dark-mode.js"></script>
+  <script defer src="achievements.js"></script>
+  <script defer src="gamification.js"></script>
+  <script defer src="goals.js"></script>
+  <script defer src="gamification-profile.js"></script>    <script defer src="background-customizer.js"></script></head>
+<body>
+  <header class="top-banner">
+    <div class="logo">
+      <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+      <a class="site-title" href="index.html">AdaptoHub</a>
+    </div>
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="gamification-profile.html" class="nav-link active">Gamification</a>
+    </nav>
+    <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">⚙️ จัดการโปรไฟล์</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">📋 ข้อมูลบัญชี</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">📚 ประวัติการเรียน</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+    </header>
+
+  <main class="content">
+    <div class="gamification-container">
+      
+      <section class="stats-overview">
+        <h1>🎮 Your Gamification Profile</h1>
+        
+        <div class="stats-grid">
+          <div class="stat-card points-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-details">
+              <div class="stat-label">Points</div>
+              <div class="stat-value" id="pointsValue">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card coins-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-details">
+              <div class="stat-label">Coins</div>
+              <div class="stat-value" id="coinsValue">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card streak-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-details">
+              <div class="stat-label">Current Streak</div>
+              <div class="stat-value" id="streakValue">0</div>
+              <div class="stat-sublabel">days</div>
+            </div>
+          </div>
+
+          <div class="stat-card quizzes-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-details">
+              <div class="stat-label">Quizzes Completed</div>
+              <div class="stat-value" id="quizzesValue">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card achievements-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-details">
+              <div class="stat-label">Achievements</div>
+              <div class="stat-value"><span id="achievementsValue">0</span>/<span id="achievementsTotal">0</span></div>
+            </div>
+          </div>
+
+          <div class="stat-card perfects-card">
+            <div class="stat-icon">💯</div>
+            <div class="stat-details">
+              <div class="stat-label">Perfect Scores</div>
+              <div class="stat-value" id="perfectsValue">0</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="streak-section">
+        <h2>📅 Learning Streak Calendar</h2>
+        <div class="streak-controls">
+          <button id="freezeStreakBtn" class="btn-freeze-streak">❄️ Use Freeze (1/month)</button>
+        </div>
+        <div id="streakCalendar" class="streak-calendar"></div>
+        <div class="streak-info">
+          <p><strong>Longest Streak:</strong> <span id="longestStreakValue">0</span> days</p>
+          <p>Keep learning consistently to maintain your streak! 🚀</p>
+        </div>
+      </section>
+
+      <section class="goals-section" style="background: linear-gradient(135deg, #f3f0ff 0%, #ede9fe 100%); padding: 24px; border-radius: 16px; margin-bottom: 32px; border-left: 4px solid #8b5cf6;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="margin: 0; color: #1f2933;">🎯 Learning Goals</h2>
+          <button onclick="GoalsUI.showGoalsModal()" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            ➕ Manage Goals
+          </button>
+        </div>
+        <div id="goals-preview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;"></div>
+      </section>
+
+      <section class="achievements-section">
+        <h2>🎯 Achievements</h2>
+        
+        <div class="achievements-filter">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="common">Common</button>
+          <button class="filter-btn" data-filter="uncommon">Uncommon</button>
+          <button class="filter-btn" data-filter="rare">Rare</button>
+          <button class="filter-btn" data-filter="epic">Epic</button>
+          <button class="filter-btn" data-filter="legendary">Legendary</button>
+        </div>
+
+        <div id="achievementsContainer" class="achievements-grid">
+        </div>
+      </section>
+
+      <section class="leaderboards-section">
+        <h2>🏅 Leaderboards</h2>
+
+        <div class="leaderboard-controls">
+          <div class="timeframe-selector">
+            <label for="timeframeSelect">Timeframe:</label>
+            <select id="timeframeSelect">
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="alltime">All Time</option>
+            </select>
+          </div>
+
+          <div class="leaderboard-type-selector">
+            <label for="leaderboardTypeSelect">Type:</label>
+            <select id="leaderboardTypeSelect">
+              <option value="overall">Overall Points</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Science">Science</option>
+              <option value="History">History</option>
+              <option value="streak">Longest Streak</option>
+            </select>
+          </div>
+
+          <div class="privacy-toggle">
+            <label>
+              <input type="checkbox" id="anonymousToggle">
+              Show Anonymous
+            </label>
+          </div>
+        </div>
+
+        <div id="leaderboardContainer" class="leaderboard-table-container">
+        </div>
+      </section>
+
+      <section class="rewards-section">
+        <h2>🛍️ Rewards Shop</h2>
+        <p class="shop-intro">Exchange your points for cosmetic rewards and useful items!</p>
+
+        <div class="rewards-grid">
+          <div class="reward-card">
+            <div class="reward-icon">🎨</div>
+            <h3>Avatar Color Pack</h3>
+            <p>Unlock 10 premium avatar colors</p>
+            <div class="reward-cost">500 points</div>
+            <button class="btn-redeem" data-reward-id="avatar_pack" data-cost="500">Redeem</button>
+          </div>
+
+          <div class="reward-card">
+            <div class="reward-icon">💡</div>
+            <h3>Hint Bundle</h3>
+            <p>Get 5 extra hints for quizzes</p>
+            <div class="reward-cost">300 points</div>
+            <button class="btn-redeem" data-reward-id="hint_bundle" data-cost="300">Redeem</button>
+          </div>
+
+          <div class="reward-card">
+            <div class="reward-icon">🌟</div>
+            <h3>Premium Badge Pack</h3>
+            <p>Display exclusive badges on profile</p>
+            <div class="reward-cost">750 points</div>
+            <button class="btn-redeem" data-reward-id="badge_pack" data-cost="750">Redeem</button>
+          </div>
+
+          <div class="reward-card">
+            <div class="reward-icon">✨</div>
+            <h3>Streak Boost</h3>
+            <p>Add 7 days to your streak</p>
+            <div class="reward-cost">1000 points</div>
+            <button class="btn-redeem" data-reward-id="streak_boost" data-cost="1000">Redeem</button>
+          </div>
+
+          <div class="reward-card">
+            <div class="reward-icon">🎭</div>
+            <h3>Custom Avatar Frame</h3>
+            <p>Personalize your avatar with a frame</p>
+            <div class="reward-cost">600 points</div>
+            <button class="btn-redeem" data-reward-id="avatar_frame" data-cost="600">Redeem</button>
+          </div>
+
+          <div class="reward-card">
+            <div class="reward-icon">🔥</div>
+            <h3>Streak Freeze +</h3>
+            <p>Get an extra freeze to use</p>
+            <div class="reward-cost">400 points</div>
+            <button class="btn-redeem" data-reward-id="extra_freeze" data-cost="400">Redeem</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="subjects-section">
+        <h2>📊 Subject Performance</h2>
+        <div id="subjectPerformanceContainer" class="subject-performance-grid">
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <style>
+    .gamification-container h1 {
+      margin: 0 0 24px 0;
+      color: var(--primary-color, #0097b2);
+      font-size: 2rem;
+    }
+
+    .gamification-container h2 {
+      margin: 0 0 16px 0;
+      color: var(--primary-color, #0097b2);
+      font-size: 1.5rem;
+    }
+
+    .points-card { border-left-color: #3498db; }
+    .coins-card { border-left-color: #f39c12; }
+    .streak-card { border-left-color: #e74c3c; }
+    .quizzes-card { border-left-color: #27ae60; }
+    .achievements-card { border-left-color: #9b59b6; }
+    .perfects-card { border-left-color: #f1c40f; }
+
+    .achievements-filter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .filter-btn.active {
+      background: var(--primary-color, #0097b2);
+      color: white;
+      border-color: var(--primary-color, #0097b2);
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .achievement-badge-locked::before {
+      content: '🔒';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 1rem;
+    }
+
+    .streak-controls {
+      margin-bottom: 16px;
+    }
+
+    .btn-freeze-streak {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-freeze-streak:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-freeze-streak:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .leaderboard-controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .leaderboard-controls select,
+    .leaderboard-controls input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    .privacy-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .leaderboard-table-container {
+      overflow-x: auto;
+    }
+
+    .shop-intro {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .leaderboard-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</body>
+</html>

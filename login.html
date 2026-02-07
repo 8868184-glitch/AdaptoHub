@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AdaptoHub</title>
+  <link rel="stylesheet" href="styles.css">  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">    <!-- Google OAuth Library -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Bai Jamjuree", sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .loading-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 30px;
+      animation: rotateBounce 1.5s ease-in-out infinite;
+    }
+
+    .loading-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+    }
+
+    @keyframes rotateBounce {
+      0% {
+        transform: rotateZ(0deg) translateY(0);
+      }
+      25% {
+        transform: rotateZ(90deg) translateY(-20px);
+      }
+      50% {
+        transform: rotateZ(180deg) translateY(0);
+      }
+      75% {
+        transform: rotateZ(270deg) translateY(-20px);
+      }
+      100% {
+        transform: rotateZ(360deg) translateY(0);
+      }
+    }
+
+    .loading-text {
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .loading-text span {
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    .loading-text span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loading-text span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .login-container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 48px;
+      max-width: 420px;
+      width: 100%;
+      animation: slideIn 0.5s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .login-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .login-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .login-container::-webkit-scrollbar-thumb {
+      background: #0097b2;
+      border-radius: 10px;
+    }
+
+    .login-container::-webkit-scrollbar-thumb:hover {
+      background: #0088a0;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .login-logo img {
+      height: 50px;
+    }
+
+    .login-logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0097b2;
+    }
+
+    .login-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2933;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      font-size: 0.95rem;
+      color: #636d79;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .required {
+      color: #dc2626;
+      margin-left: 4px;
+    }
+
+    .login-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #636d79;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .tab-btn:hover {
+      color: #0097b2;
+    }
+
+    .tab-btn.active {
+      color: #0097b2;
+      border-bottom-color: #0097b2;
+    }
+
+    .login-form {
+      display: none;
+    }
+
+    .login-form.active {
+      display: block;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .verification-container {
+      text-align: center;
+    }
+
+    .verification-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .verification-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2933;
+      margin-bottom: 8px;
+    }
+
+    .verification-subtitle {
+      font-size: 0.9rem;
+      color: #636d79;
+      margin-bottom: 24px;
+    }
+
+    .code-hint {
+      font-size: 0.8rem;
+      color: #a8b2ba;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    #verificationCode {
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      font-weight: 600;
+      font-family: "Courier New", monospace;
+    }
+
+    .back-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      background-color: #f5f6f8;
+      border: 2px solid #d0d5db;
+      border-radius: 6px;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0097b2;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #f0f9fc;
+      border-color: #0097b2;
+    }
+
+    @media (max-width: 480px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: #1f2933;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #d0d5db;
+      border-radius: 6px;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      color: #1f2933;
+      transition: all 0.3s ease;
+    }
+
+    select {
+      cursor: pointer;
+      background-color: #ffffff;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #0097b2;
+      box-shadow: 0 0 0 3px rgba(0, 151, 178, 0.1);
+    }
+
+    input::placeholder {
+      color: #a8b2ba;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 14px;
+      background-color: #0097b2;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: "Bai Jamjuree", sans-serif;
+      margin-top: 28px;
+    }
+
+    .login-button:hover {
+      background-color: #0088a0;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 151, 178, 0.3);
+    }
+
+    .login-button:active {
+      transform: translateY(0);
+    }
+
+    .login-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .demo-users {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .demo-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #636d79;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .demo-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .demo-btn {
+      padding: 12px;
+      background-color: #f5f6f8;
+      border: 2px solid #d0d5db;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #0097b2;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .demo-btn:hover {
+      background-color: #f0f9fc;
+      border-color: #0097b2;
+    }
+
+    .error-message {
+      padding: 12px;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .success-message {
+      padding: 12px;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: 0.9rem;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 32px 24px;
+      }
+
+      .login-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+      color: #a8b2ba;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #d0d5db;
+    }
+
+    .divider span {
+      padding: 0 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .google-signin-container {
+      margin-bottom: 20px;
+    }
+
+    .google-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ffffff;
+      border: 2px solid #d0d5db;
+      border-radius: 6px;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1f2933;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .google-button:hover {
+      border-color: #0097b2;
+      background-color: #f5f9fc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 151, 178, 0.15);
+    }
+
+    .google-button img {
+      width: 20px;
+      height: 20px;
+    }
+
+    #g_id_onload {
+      display: none;
+    }
+
+    .google-signin-button {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .google-signin-button div {
+      margin: 0 auto;
+    }
+
+    .scopes-panel {
+      margin-top: 12px;
+      background: #f8fafb;
+      border: 1px solid #e6eef0;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .scopes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .access-dropdown {
+      margin-top: 10px;
+      background: #ffffff;
+      border: 1px solid #e6eef0;
+      padding: 14px;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      animation: fadeIn 0.18s ease;
+    }
+
+    .access-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .access-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .small-btn {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #0097b2;
+      color: white;
+    }
+
+    .small-btn.secondary {
+      background: #f5f6f8;
+      color: #1f2933;
+      border: 1px solid #d0d5db;
+    }
+
+    .access-info {
+      font-size: 0.9rem;
+      color: #475569;
+      margin-top: 6px;
+    }
+  </style>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-logo">
+      <img src="assets/AdaptoHub.png" alt="AdaptoHub Loading" />
+    </div>
+    <div class="loading-text">
+      <span>ก</span><span>ำ</span><span>ล</span><span>ั</span><span>ง</span><span>โ</span><span>ห</span><span>ล</span><span>ด</span>
+    </div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">
+        <img src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+        <span class="login-logo-text">AdaptoHub</span>
+      </div>
+      <h1 class="login-title">เข้าสู่ระบบ</h1>
+      <p class="login-subtitle">ยินดีต้อนรับสู่ AdaptoHub</p>
+    </div>
+
+    <div class="login-tabs">
+      <button class="tab-btn active" data-tab="google" onclick="switchTab('google')">🔐 Google</button>
+      <button class="tab-btn" data-tab="guest" onclick="switchTab('guest')">👤 Guest</button>
+    </div>
+
+    <form id="googleLoginForm" class="login-form active">
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
+
+      <div class="google-signin-button">
+        <button type="button" class="google-button" id="googleSignInBtn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo">
+          <span>ลงชื่อเข้าด้วย Google</span>
+        </button>
+      </div>
+
+      <div class="scopes-panel" id="scopesPanelWrapper" aria-hidden="false">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:600; color:#1f2933;">ร้องขอสิทธิ์เพิ่มเติม (เลือกอย่างใดอย่างหนึ่ง)</div>
+          <button id="toggleScopesBtn" class="small-btn secondary" type="button">Toggle</button>
+        </div>
+
+        <div id="scopesPanel" class="scopes-list" style="display:none; margin-top:10px;">
+          <label><input type="checkbox" value="drive" class="scope-checkbox"> Google Drive</label>
+          <label><input type="checkbox" value="docs" class="scope-checkbox"> Google Docs</label>
+          <label><input type="checkbox" value="gmail" class="scope-checkbox"> Gmail (read)</label>
+          <label><input type="checkbox" value="calendar" class="scope-checkbox"> Google Calendar</label>
+        </div>
+
+        <div id="accessDropdown" class="access-dropdown" style="display:none;">
+          <div style="font-weight:600;color:#1f2933;margin-bottom:8px;">ยืนยันรายละเอียดสำหรับคำขอสิทธิ์</div>
+
+          <div class="form-group">
+            <label for="accessEmail">อีเมลที่ต้องการให้สิทธิ์</label>
+            <input type="email" id="accessEmail" placeholder="user@example.com">
+          </div>
+
+          <div class="form-group">
+            <label for="accessPassword">รหัสผ่าน (สำหรับการยืนยันภายในระบบ — จะไม่ส่งไปยัง Google)</label>
+            <input type="password" id="accessPassword" placeholder="••••••••">
+          </div>
+
+          <div style="margin-top:8px;">
+            <div style="font-weight:600;margin-bottom:6px;">โหมดการเข้าถึง</div>
+            <div class="access-row">
+              <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="accessMode" value="view" checked> View</label>
+              <label style="display:flex; align-items:center; gap:8px;"><input type="radio" name="accessMode" value="no-view"> No View</label>
+            </div>
+            <div class="access-info">คำขอเหล่านี้จะถูกบันทึกเป็นคำขอสิทธิ์ภายใน (mock). ครู/ผู้ดูแลระบบสามารถตอบรับหรือปฏิเสธคำขอได้จากแดชบอร์ด</div>
+          </div>
+
+          <div class="access-actions">
+            <button id="submitAccessRequest" class="small-btn" type="button">ส่งคำขอ</button>
+            <button id="cancelAccessRequest" class="small-btn secondary" type="button">ยกเลิก</button>
+          </div>
+
+          <div id="accessFormMessage" style="margin-top:8px; display:none;"></div>
+        </div>
+      </div>
+
+    </form>
+
+    <form id="guestLoginForm" class="login-form">
+      <div class="error-message" id="guestErrorMessage"></div>
+      <div class="success-message" id="guestSuccessMessage"></div>
+
+      <div class="form-group">
+        <label for="firstName">ชื่อ <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="firstName" 
+          name="firstName" 
+          placeholder="กรุณากรอกชื่อ" 
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">นามสกุล <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="lastName" 
+          name="lastName" 
+          placeholder="กรุณากรอกนามสกุล" 
+          required
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="room">ห้อง <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="room" 
+            name="room" 
+            placeholder="เช่น 101" 
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="seatNumber">เลขที่ <span class="required">*</span></label>
+          <input 
+            type="number" 
+            id="seatNumber" 
+            name="seatNumber" 
+            min="1"
+            placeholder="1-50" 
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="grade">ระดับชั้น <span class="required">*</span></label>
+          <select id="grade" name="grade" required>
+            <option value="">เลือกระดับชั้น</option>
+            <option value="ป.1">ป.1</option>
+            <option value="ป.2">ป.2</option>
+            <option value="ป.3">ป.3</option>
+            <option value="ป.4">ป.4</option>
+            <option value="ป.5">ป.5</option>
+            <option value="ป.6">ป.6</option>
+            <option value="ม.1">ม.1</option>
+            <option value="ม.2">ม.2</option>
+            <option value="ม.3">ม.3</option>
+            <option value="ม.4">ม.4</option>
+            <option value="ม.5">ม.5</option>
+            <option value="ม.6">ม.6</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="school">โรงเรียน <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="school" 
+          name="school" 
+          placeholder="ชื่อโรงเรียน" 
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">อีเมล <span class="required">*</span></label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="example@school.ac.th" 
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="studentId">เลขประจำตัวนักเรียน <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="studentId" 
+          name="studentId" 
+          placeholder="เช่น 001234" 
+          required
+        />
+      </div>
+
+      <button type="submit" class="login-button" id="guestLoginBtn">
+        <span id="guestBtnText">ส่งลิงก์เข้าสู่ระบบ</span>
+      </button>
+    </form>
+
+    <form id="verificationForm" class="login-form">
+      <div class="error-message" id="verificationErrorMessage"></div>
+      <div class="success-message" id="verificationSuccessMessage"></div>
+
+      <div class="verification-container">
+        <div class="verification-icon">✉️</div>
+        <h2 class="verification-title">ยืนยันอีเมล</h2>
+        <p class="verification-subtitle" id="verificationSubtitle"></p>
+        
+        <div class="form-group">
+          <label for="verificationCode">รหัสยืนยัน <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="verificationCode" 
+            name="verificationCode" 
+            placeholder="กรุณากรอกรหัสที่ส่งไปในอีเมล" 
+            maxlength="6"
+            required
+          />
+          <p class="code-hint">รหัสจะหมดอายุภายใน 10 นาที</p>
+        </div>
+
+        <button type="submit" class="login-button" id="verifyBtn">
+          <span id="verifyBtnText">ยืนยันและเข้าสู่ระบบ</span>
+        </button>
+
+        <button type="button" class="back-btn" id="backToFormBtn">
+          ← กลับไปกรอกฟอร์ม
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const GOOGLE_CLIENT_ID = '116727860889-at2jiksc5saovh9spnbrtehj72gr7oih.apps.googleusercontent.com'; 
+    const REDIRECT_URI = 'http://localhost:5500/google-auth-callback.html'; 
+
+    function initializeGoogleOAuth() {
+      const googleSignInBtn = document.getElementById('googleSignInBtn');
+      if (googleSignInBtn) {
+        googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+      }
+
+      const toggleScopesBtn = document.getElementById('toggleScopesBtn');
+      if (toggleScopesBtn) toggleScopesBtn.addEventListener('click', () => {
+        const panel = document.getElementById('scopesPanel');
+        panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+      });
+
+      document.querySelectorAll('.scope-checkbox').forEach(cb => {
+        cb.addEventListener('change', onScopeChange);
+      });
+
+      document.getElementById('submitAccessRequest').addEventListener('click', submitAccessRequest);
+      document.getElementById('cancelAccessRequest').addEventListener('click', cancelAccessRequest);
+    }
+
+    function onScopeChange() {
+      const anyChecked = Array.from(document.querySelectorAll('.scope-checkbox')).some(cb => cb.checked);
+      const accessDropdown = document.getElementById('accessDropdown');
+      if (anyChecked) {
+        accessDropdown.style.display = 'block';
+      } else {
+        accessDropdown.style.display = 'none';
+      }
+    }
+
+    function submitAccessRequest(e) {
+      const checkedScopes = Array.from(document.querySelectorAll('.scope-checkbox'))
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const email = document.getElementById('accessEmail').value.trim();
+      const password = document.getElementById('accessPassword').value; // note: kept local-only
+      const accessMode = document.querySelector('input[name="accessMode"]:checked')?.value || 'view';
+
+      const msgEl = document.getElementById('accessFormMessage');
+      msgEl.style.display = 'none';
+      msgEl.textContent = '';
+
+      if (checkedScopes.length === 0) {
+        msgEl.style.display = 'block';
+        msgEl.style.color = '#b91c1c';
+        msgEl.textContent = 'กรุณาเลือกอย่างน้อยหนึ่งสิทธิ์ (scope)';
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msgEl.style.display = 'block';
+        msgEl.style.color = '#b91c1c';
+        msgEl.textContent = 'กรุณากรอกอีเมลที่ถูกต้องสำหรับการยืนยัน';
+        return;
+      }
+
+      if (!password || password.length < 4) {
+        msgEl.style.display = 'block';
+        msgEl.style.color = '#b91c1c';
+        msgEl.textContent = 'กรุณากรอกรหัสผ่านสั้น ๆ เพื่อยืนยันตัวตน (ระบบตัวอย่าง)';
+        return;
+      }
+
+      const requests = JSON.parse(localStorage.getItem('adaptohubAccessRequests') || '[]');
+      const newReq = {
+        id: 'req_' + Date.now(),
+        email,
+        scopes: checkedScopes,
+        accessMode,
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+      };
+      requests.push(newReq);
+      localStorage.setItem('adaptohubAccessRequests', JSON.stringify(requests));
+
+      msgEl.style.display = 'block';
+      msgEl.style.color = '#064e3b';
+      msgEl.textContent = '✓ คำขอถูกส่งแล้ว (mock). ผู้สอน/ผู้ดูแลจะพิจารณาและตอบรับภายหลัง';
+
+      setTimeout(() => {
+        document.getElementById('accessDropdown').style.display = 'none';
+        document.querySelectorAll('.scope-checkbox').forEach(cb => cb.checked = false);
+        msgEl.style.display = 'none';
+        document.getElementById('accessEmail').value = '';
+        document.getElementById('accessPassword').value = '';
+      }, 1600);
+    }
+
+    function cancelAccessRequest() {
+      document.getElementById('accessDropdown').style.display = 'none';
+      document.querySelectorAll('.scope-checkbox').forEach(cb => cb.checked = false);
+      document.getElementById('accessEmail').value = '';
+      document.getElementById('accessPassword').value = '';
+      document.getElementById('accessFormMessage').style.display = 'none';
+    }
+
+    function handleGoogleSignIn(e) {
+      e.preventDefault();
+      
+      if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID') {
+        showError('⚠️ Google Client ID ยังไม่ได้ตั้งค่า กรุณาอัพเดต GOOGLE_CLIENT_ID ในไฟล์ login.html');
+        console.error('❌ Google Client ID not configured. Update line ~497');
+        return;
+      }
+      
+      try {
+        const selectedScopes = Array.from(document.querySelectorAll('.scope-checkbox'))
+          .filter(cb => cb.checked)
+          .map(cb => {
+            switch(cb.value) {
+              case 'drive': return 'https://www.googleapis.com/auth/drive';
+              case 'docs': return 'https://www.googleapis.com/auth/documents';
+              case 'gmail': return 'https://www.googleapis.com/auth/gmail.readonly';
+              case 'calendar': return 'https://www.googleapis.com/auth/calendar.readonly';
+              default: return '';
+            }
+          }).filter(Boolean);
+
+        const scopeBase = 'openid email profile';
+        const scopeParam = selectedScopes.length ? (scopeBase + ' ' + selectedScopes.join(' ')) : scopeBase;
+
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+          `client_id=${GOOGLE_CLIENT_ID}&` +
+          `redirect_uri=${encodeURIComponent(REDIRECT_URI)}&` +
+          `response_type=code&` +
+          `scope=${encodeURIComponent(scopeParam)}&` +
+          `access_type=offline&` +
+          `prompt=consent&` +
+          `state=${encodeURIComponent(Math.random().toString(36).substring(7))}`;
+        
+        console.log('🔗 OAuth URL:', authUrl);
+        window.location.href = authUrl;
+      } catch (error) {
+        showError('❌ ไม่สามารถเชื่อมต่อ Google ได้ กรุณาลองใหม่');
+        console.error('Google Sign-In Error:', error);
+      }
+    }
+
+    function handleGoogleSignInResponse(response) {
+      if (response.credential) {
+        document.getElementById('loadingScreen').classList.add('active');
+        
+        const decodedToken = decodeJwt(response.credential);
+        
+        const userData = {
+          fullName: decodedToken.name,
+          email: decodedToken.email,
+          studentId: decodedToken.email.split('@')[0].substring(0, 6).toUpperCase(),
+          googleId: decodedToken.sub,
+          googleToken: response.credential,
+          authProvider: 'google',
+          loginTime: new Date().toISOString(),
+          profilePicture: decodedToken.picture
+        };
+
+        localStorage.setItem('adaptohubUser', JSON.stringify(userData));
+        localStorage.setItem('googleAccessToken', response.credential);
+        
+        const allProfiles = JSON.parse(localStorage.getItem('adaptohubProfiles')) || [];
+        const profileExists = allProfiles.find(p => p.email === userData.email);
+        if (!profileExists) {
+          allProfiles.push(userData);
+          localStorage.setItem('adaptohubProfiles', JSON.stringify(allProfiles));
+        }
+        
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2500);
+      }
+    }
+
+    function decodeJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+        );
+        return JSON.parse(jsonPayload);
+      } catch (error) {
+        console.error('Failed to decode JWT:', error);
+        return {};
+      }
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorMessage');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+      document.getElementById('successMessage').style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      const successEl = document.getElementById('successMessage');
+      successEl.textContent = message;
+      successEl.style.display = 'block';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    function clearMessages() {
+      document.getElementById('errorMessage').style.display = 'none';
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('guestErrorMessage').style.display = 'none';
+      document.getElementById('guestSuccessMessage').style.display = 'none';
+      document.getElementById('verificationErrorMessage').style.display = 'none';
+      document.getElementById('verificationSuccessMessage').style.display = 'none';
+    }
+
+    const MAGIC_LINK_CONFIG = {
+      CODE_LENGTH: 6,
+      EXPIRY_MINUTES: 10,
+      STORAGE_KEY: 'adaptohubMagicLink'
+    };
+
+    function generateMagicCode() {
+      return Math.random().toString().substr(2, MAGIC_LINK_CONFIG.CODE_LENGTH).padEnd(MAGIC_LINK_CONFIG.CODE_LENGTH, '0');
+    }
+
+    function storeMagicLink(email, code, userData) {
+      const expiryTime = Date.now() + (MAGIC_LINK_CONFIG.EXPIRY_MINUTES * 60 * 1000);
+      const magicLink = {
+        code: code,
+        email: email,
+        userData: userData,
+        expiryTime: expiryTime,
+        attempts: 0
+      };
+      localStorage.setItem(MAGIC_LINK_CONFIG.STORAGE_KEY, JSON.stringify(magicLink));
+    }
+
+    function getMagicLink() {
+      const data = localStorage.getItem(MAGIC_LINK_CONFIG.STORAGE_KEY);
+      return data ? JSON.parse(data) : null;
+    }
+
+    function clearMagicLink() {
+      localStorage.removeItem(MAGIC_LINK_CONFIG.STORAGE_KEY);
+    }
+
+    function isMagicLinkValid(magicLink) {
+      if (!magicLink) return false;
+      if (Date.now() > magicLink.expiryTime) return false;
+      if (magicLink.attempts >= 5) return false;
+      return true;
+    }
+
+    function showVerificationError(message) {
+      const errorEl = document.getElementById('verificationErrorMessage');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+      document.getElementById('verificationSuccessMessage').style.display = 'none';
+    }
+
+    function showVerificationSuccess(message) {
+      const successEl = document.getElementById('verificationSuccessMessage');
+      successEl.textContent = message;
+      successEl.style.display = 'block';
+      document.getElementById('verificationErrorMessage').style.display = 'none';
+    }
+
+    function handleGuestLogin(e) {
+      e.preventDefault();
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const room = document.getElementById('room').value.trim();
+      const seatNumber = document.getElementById('seatNumber').value.trim();
+      const grade = document.getElementById('grade').value.trim();
+      const school = document.getElementById('school').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const studentId = document.getElementById('studentId').value.trim();
+
+      if (!firstName || !lastName || !room || !seatNumber || !grade || !school || !email || !studentId) {
+        showGuestError('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showGuestError('รูปแบบอีเมลไม่ถูกต้อง');
+        return;
+      }
+
+      const userData = {
+        firstName: firstName,
+        lastName: lastName,
+        fullName: firstName + ' ' + lastName,
+        room: room,
+        seatNumber: parseInt(seatNumber),
+        grade: grade,
+        school: school,
+        email: email,
+        studentId: studentId,
+        authProvider: 'guest'
+      };
+
+      const magicCode = generateMagicCode();
+      storeMagicLink(email, magicCode, userData);
+
+      showVerificationForm(email, magicCode, userData);
+    }
+
+    function showVerificationForm(email, code, userData) {
+      document.getElementById('guestLoginForm').classList.remove('active');
+      
+      document.getElementById('verificationForm').classList.add('active');
+      
+      document.getElementById('verificationSubtitle').innerHTML = 
+        `รหัสยืนยันได้ถูกส่งไปที่: <strong>${email}</strong><br/>` +
+        `<span style="font-size: 0.85rem; color: #0097b2; margin-top: 8px; display: block;">📌 รหัส: <strong style="font-family: monospace; font-size: 1.1rem;">${code}</strong></span>`;
+      
+      clearMagicLink();
+      storeMagicLink(email, code, userData);
+    }
+
+    function handleVerificationSubmit(e) {
+      e.preventDefault();
+
+      const inputCode = document.getElementById('verificationCode').value.trim();
+      const magicLink = getMagicLink();
+
+      if (!magicLink || !isMagicLinkValid(magicLink)) {
+        showVerificationError('❌ หมดเวลาแล้ว กรุณากรอกฟอร์มใหม่');
+        return;
+      }
+
+      if (inputCode !== magicLink.code) {
+        magicLink.attempts = (magicLink.attempts || 0) + 1;
+        localStorage.setItem(MAGIC_LINK_CONFIG.STORAGE_KEY, JSON.stringify(magicLink));
+        
+        const attemptsLeft = 5 - magicLink.attempts;
+        if (attemptsLeft > 0) {
+          showVerificationError(`❌ รหัสไม่ถูกต้อง (เหลือโอกาส ${attemptsLeft} ครั้ง)`);
+        } else {
+          showVerificationError('❌ พยายามมากเกินไป กรุณากรอกฟอร์มใหม่');
+          setTimeout(() => {
+            clearMagicLink();
+            location.reload();
+          }, 3000);
+        }
+        return;
+      }
+
+      const userData = magicLink.userData;
+      userData.loginTime = new Date().toISOString();
+      userData.authProvider = 'magic-link';
+
+      document.getElementById('loadingScreen').classList.add('active');
+
+      localStorage.setItem('adaptohubUser', JSON.stringify(userData));
+      
+      const allProfiles = JSON.parse(localStorage.getItem('adaptohubProfiles')) || [];
+      const profileExists = allProfiles.find(p => p.email === userData.email);
+      if (!profileExists) {
+        allProfiles.push(userData);
+        localStorage.setItem('adaptohubProfiles', JSON.stringify(allProfiles));
+      }
+
+      clearMagicLink();
+      
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 2500);
+    }
+
+    function backToForm() {
+      clearMagicLink();
+      document.getElementById('verificationForm').classList.remove('active');
+      document.getElementById('guestLoginForm').classList.add('active');
+      document.getElementById('verificationCode').value = '';
+      clearMessages();
+    }
+
+    function initializeTabs() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const tabName = btn.getAttribute('data-tab');
+          switchTab(tabName);
+        });
+      });
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+      document.querySelectorAll('.login-form').forEach(form => {
+        form.classList.remove('active');
+      });
+      if (tabName === 'google') {
+        document.getElementById('googleLoginForm').classList.add('active');
+      } else if (tabName === 'guest') {
+        document.getElementById('guestLoginForm').classList.add('active');
+      }
+      
+      clearMessages();
+    }
+
+    function showGuestError(message) {
+      const errorEl = document.getElementById('guestErrorMessage');
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+      document.getElementById('guestSuccessMessage').style.display = 'none';
+    }
+
+    function showGuestSuccess(message) {
+      const successEl = document.getElementById('guestSuccessMessage');
+      successEl.textContent = message;
+      successEl.style.display = 'block';
+      document.getElementById('guestErrorMessage').style.display = 'none';
+    }
+
+    window.addEventListener('load', () => {
+      const user = localStorage.getItem('adaptohubUser');
+      if (user) {
+        window.location.href = 'index.html';
+      }
+      initializeGoogleOAuth();
+      initializeTabs();
+      
+      const guestForm = document.getElementById('guestLoginForm');
+      if (guestForm) {
+        guestForm.addEventListener('submit', handleGuestLogin);
+      }
+
+      const verificationForm = document.getElementById('verificationForm');
+      if (verificationForm) {
+        verificationForm.addEventListener('submit', handleVerificationSubmit);
+      }
+
+      const backBtn = document.getElementById('backToFormBtn');
+      if (backBtn) {
+        backBtn.addEventListener('click', backToForm);
+      }
+    });
+  </script>
+</body>
+</html>

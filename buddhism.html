@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buddhism | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <style>
+        body { margin: 0; background: #fef8f0; font-family: 'Bai Jamjuree', sans-serif; color: #2c1810; }
+        .buddhism-shell { max-width: 1200px; margin: 100px auto 60px; padding: 0 24px; }
+        .hero-card { background: linear-gradient(135deg, #6b2c00 0%, #b8860b 50%, #daa520 100%); color: #fffbf0; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(107, 44, 0, 0.28); position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%), radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%); pointer-events: none; }
+        .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .hero-title { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #ffefd5; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #fffbf0; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.14); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #ffe9c8; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #ffe9c8; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #f0ddc8; position: relative; overflow: visible; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #ffefd5; color: #6b2c00; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #1b5e20; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #2c1810; }
+        .unit-desc { margin: 0 0 12px; color: #5c4a3a; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #fffbf5; border-radius: 10px; border: 1px solid #f0ddc8; font-size: 0.95rem; color: #3a2818; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #6b2c00; color: #ffe9c8; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #2c1810; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #6b2c00; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #6b2c00; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #5a2400; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #6b2c00; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #5c4a3a; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #6b2c00; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #f0ddc8; border-radius: 10px; background: #fffbf5; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #1b5e20; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <main class="buddhism-shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="social_studies.html">← Back to Social Studies</a>
+            <span style="color:#5c4a3a; font-weight:600;">Buddhism - Teachings, practices, and wisdom development</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">Buddhism Learning Path</h1>
+                    <p class="hero-subtitle">Progress through Buddhist history, teachings, practices, and wisdom. Study the life of the Buddha, principles, ceremonies, and mind development.</p>
+                    <div class="tag-row">
+                        <span class="pill">Buddhist history</span>
+                        <span class="pill">Life of the Buddha</span>
+                        <span class="pill">Principles & ethics</span>
+                        <span class="pill">Mind development</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 11</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="buddhismProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #2c1810;">Start Over?</p>
+            <p>Reset your progress for this Buddhism pathway.</p>
+            <button class="danger-btn" onclick="resetBuddhismProgress()">Reset Buddhism Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const buddhismUnits = [
+            {
+                id: 'history-significance',
+                title: 'History and Significance of Buddhism',
+                description: 'Explore the origins, spread, and global impact of Buddhism as a world religion.',
+                points: [
+                    'Buddhism originated in ancient India around the 6th-5th century BCE with Siddhartha Gautama.',
+                    'The religion spread from India to Sri Lanka, Southeast Asia, Central Asia, East Asia, and the West.',
+                    'Three main branches: Theravada (Southeast Asia), Mahayana (East Asia), and Vajrayana (Tibet, Mongolia).',
+                    'Buddhism emphasizes the Four Noble Truths and the Eightfold Path as core teachings.',
+                    'Buddhist philosophy influenced art, culture, ethics, and social systems across Asia and beyond.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Buddhism originated in which region?', options: [ { text: 'Ancient India', correct: true }, { text: 'Tibet', correct: false }, { text: 'China', correct: false } ] },
+                    { id: 'q2', prompt: 'Which branch of Buddhism is prominent in Southeast Asia?', options: [ { text: 'Theravada', correct: true }, { text: 'Mahayana', correct: false }, { text: 'Zen', correct: false } ] },
+                    { id: 'q3', prompt: 'Buddhism emphasizes which central teaching?', options: [ { text: 'Four Noble Truths', correct: true }, { text: 'Ten Commandments', correct: false }, { text: 'Five Pillars', correct: false } ] }
+                ]
+            },
+            {
+                id: 'life-buddha',
+                title: 'Life of the Buddha',
+                description: 'Study the biography of Siddhartha Gautama from birth to enlightenment and teaching.',
+                points: [
+                    'Born Prince Siddhartha Gautama in Lumbini (present-day Nepal) around 563 BCE.',
+                    'Renounced royal life at age 29 after witnessing suffering: old age, sickness, death, and ascetic life.',
+                    'Practiced extreme asceticism for six years before rejecting it as ineffective.',
+                    'Attained enlightenment under the Bodhi tree in Bodh Gaya through meditation and insight.',
+                    'Spent 45 years teaching the Dharma across northern India until his passing (Parinirvana) at age 80.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Where was Siddhartha Gautama born?', options: [ { text: 'Lumbini', correct: true }, { text: 'Bodh Gaya', correct: false }, { text: 'Varanasi', correct: false } ] },
+                    { id: 'q2', prompt: 'What prompted Siddhartha to leave the palace?', options: [ { text: 'Witnessing suffering and impermanence', correct: true }, { text: 'A divine command', correct: false }, { text: 'Political conflict', correct: false } ] },
+                    { id: 'q3', prompt: 'Where did the Buddha attain enlightenment?', options: [ { text: 'Under the Bodhi tree in Bodh Gaya', correct: true }, { text: 'In the Himalayas', correct: false }, { text: 'In a palace', correct: false } ] }
+                ]
+            },
+            {
+                id: 'jataka-tales',
+                title: 'Jataka Tales',
+                description: 'Learn from the Jataka stories illustrating the Buddha\'s past lives and moral lessons.',
+                points: [
+                    'Jataka tales are stories of the Buddha\'s previous lives as a Bodhisattva (Buddha-to-be).',
+                    'Each story teaches virtues such as generosity, compassion, wisdom, patience, and ethical conduct.',
+                    'Common tales include the Monkey King, the Hare\'s Self-Sacrifice, and Prince Vessantara\'s generosity.',
+                    'Used for moral education and to illustrate karma, rebirth, and the development of perfections (paramitas).',
+                    'Preserved in Pali, Sanskrit, and vernacular languages; depicted in temple art across Asia.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'What do Jataka tales illustrate?', options: [ { text: 'The Buddha\'s past lives and virtues', correct: true }, { text: 'Only historical events', correct: false }, { text: 'Scientific discoveries', correct: false } ] },
+                    { id: 'q2', prompt: 'Which virtue is commonly taught in Jataka tales?', options: [ { text: 'Compassion and generosity', correct: true }, { text: 'Wealth accumulation', correct: false }, { text: 'Military conquest', correct: false } ] },
+                    { id: 'q3', prompt: 'Jataka tales are used primarily for:', options: [ { text: 'Moral education and ethical lessons', correct: true }, { text: 'Entertainment only', correct: false }, { text: 'Political propaganda', correct: false } ] }
+                ]
+            },
+            {
+                id: 'buddhist-days',
+                title: 'Important Buddhist Days',
+                description: 'Understand the significance of key Buddhist observances and festivals.',
+                points: [
+                    'Vesak (Visakha Bucha): celebrates the birth, enlightenment, and death of the Buddha on the full moon of May.',
+                    'Asalha Puja: commemorates the Buddha\'s first sermon and the founding of the Sangha.',
+                    'Magha Puja: honors the spontaneous assembly of 1,250 enlightened disciples before the Buddha.',
+                    'Uposatha days: weekly observance days (new and full moon) for ethical reflection and meditation.',
+                    'Buddhist New Year and other regional festivals vary by tradition and culture.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Which day celebrates the Buddha\'s birth, enlightenment, and death?', options: [ { text: 'Vesak', correct: true }, { text: 'Christmas', correct: false }, { text: 'Diwali', correct: false } ] },
+                    { id: 'q2', prompt: 'Asalha Puja commemorates:', options: [ { text: 'The first sermon of the Buddha', correct: true }, { text: 'The Buddha\'s birth', correct: false }, { text: 'A royal coronation', correct: false } ] },
+                    { id: 'q3', prompt: 'Uposatha days are observed:', options: [ { text: 'On new and full moon days', correct: true }, { text: 'Only once a year', correct: false }, { text: 'Every day', correct: false } ] }
+                ]
+            },
+            {
+                id: 'principles',
+                title: 'Buddhist Principles',
+                description: 'Master core Buddhist teachings including the Four Noble Truths and the Eightfold Path.',
+                points: [
+                    'Four Noble Truths: suffering exists, its origin is craving, cessation is possible, the path leads to cessation.',
+                    'Noble Eightfold Path: right view, intention, speech, action, livelihood, effort, mindfulness, concentration.',
+                    'Three Universal Marks: impermanence (anicca), suffering (dukkha), non-self (anatta).',
+                    'Five Precepts: abstain from killing, stealing, sexual misconduct, lying, and intoxicants.',
+                    'Karma and rebirth: actions have consequences shaping future experiences across lifetimes.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'The Four Noble Truths focus on:', options: [ { text: 'Suffering and its cessation', correct: true }, { text: 'Wealth and power', correct: false }, { text: 'Ritual sacrifices', correct: false } ] },
+                    { id: 'q2', prompt: 'How many components are in the Noble Eightfold Path?', options: [ { text: 'Eight', correct: true }, { text: 'Four', correct: false }, { text: 'Ten', correct: false } ] },
+                    { id: 'q3', prompt: 'The Five Precepts guide:', options: [ { text: 'Ethical conduct for lay Buddhists', correct: true }, { text: 'Meditation techniques only', correct: false }, { text: 'Business practices', correct: false } ] }
+                ]
+            },
+            {
+                id: 'proverbs',
+                title: 'Buddhist Proverbs',
+                description: 'Reflect on wisdom sayings from Buddhist scriptures and traditions.',
+                points: [
+                    'Dhammapada: a collection of Buddha\'s sayings emphasizing mind training and ethical living.',
+                    '"Mind is the forerunner of all states" - mental intention shapes actions and experiences.',
+                    '"Hatred is never appeased by hatred; by non-hatred alone is it appeased" - principle of loving-kindness.',
+                    '"Better than a thousand hollow words is one word that brings peace" - value of meaningful speech.',
+                    'Proverbs teach impermanence, compassion, wisdom, and the consequences of actions.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'The Dhammapada is a collection of:', options: [ { text: 'Buddha\'s wisdom sayings', correct: true }, { text: 'Historical chronicles', correct: false }, { text: 'Medical texts', correct: false } ] },
+                    { id: 'q2', prompt: 'According to Buddhist proverbs, hatred is appeased by:', options: [ { text: 'Non-hatred and loving-kindness', correct: true }, { text: 'More hatred', correct: false }, { text: 'Ignoring it', correct: false } ] },
+                    { id: 'q3', prompt: 'Buddhist proverbs emphasize:', options: [ { text: 'Mind training and ethical living', correct: true }, { text: 'Material wealth', correct: false }, { text: 'Political power', correct: false } ] }
+                ]
+            },
+            {
+                id: 'ceremonies',
+                title: 'Religious Ceremonies',
+                description: 'Understand Buddhist rituals, merit-making, and communal practices.',
+                points: [
+                    'Merit-making: offering food to monks, temple donations, chanting, and meditation build positive karma.',
+                    'Ordination: temporary or lifelong entry into the monastic Sangha with ethical vows and training.',
+                    'Funeral rites: chanting, merit transfer, and rituals to support the deceased\'s favorable rebirth.',
+                    'Paritta chanting: recitation of protective verses for blessings, healing, and well-being.',
+                    'Meditation retreats and Dhamma talks strengthen practice and understanding.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Merit-making involves:', options: [ { text: 'Offering food to monks and ethical actions', correct: true }, { text: 'Only monetary donations', correct: false }, { text: 'Competitive rituals', correct: false } ] },
+                    { id: 'q2', prompt: 'Ordination marks:', options: [ { text: 'Entry into the monastic Sangha', correct: true }, { text: 'Marriage ceremony', correct: false }, { text: 'Political appointment', correct: false } ] },
+                    { id: 'q3', prompt: 'Paritta chanting is used for:', options: [ { text: 'Protection and blessings', correct: true }, { text: 'Business contracts', correct: false }, { text: 'Legal disputes', correct: false } ] }
+                ]
+            },
+            {
+                id: 'duties-etiquette',
+                title: 'Duties and Etiquette of Buddhists',
+                description: 'Learn proper conduct, respect, and responsibilities of Buddhist practitioners.',
+                points: [
+                    'Respect the Triple Gem: Buddha (teacher), Dhamma (teachings), Sangha (monastic community).',
+                    'Proper temple etiquette: remove shoes, dress modestly, maintain silence, and show reverence.',
+                    'Paying respect: wai gesture, bowing, offering flowers, incense, and candles at shrines.',
+                    'Supporting the Sangha: offering alms, listening to teachings, and maintaining the monastery.',
+                    'Daily practice: reciting precepts, chanting, meditation, and applying teachings in daily life.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'The Triple Gem consists of:', options: [ { text: 'Buddha, Dhamma, Sangha', correct: true }, { text: 'Three temples', correct: false }, { text: 'Three sacred texts only', correct: false } ] },
+                    { id: 'q2', prompt: 'Proper temple etiquette includes:', options: [ { text: 'Removing shoes and dressing modestly', correct: true }, { text: 'Wearing hats inside', correct: false }, { text: 'Loud conversations', correct: false } ] },
+                    { id: 'q3', prompt: 'The wai gesture shows:', options: [ { text: 'Respect and reverence', correct: true }, { text: 'Disagreement', correct: false }, { text: 'Indifference', correct: false } ] }
+                ]
+            },
+            {
+                id: 'mind-management',
+                title: 'Mind Management and Wisdom Development',
+                description: 'Develop mental discipline, mindfulness, and insight through Buddhist practice.',
+                points: [
+                    'Samatha meditation: cultivating concentration and calm through focused attention (e.g., breath).',
+                    'Vipassana meditation: developing insight into impermanence, suffering, and non-self.',
+                    'Four Foundations of Mindfulness: body, feelings, mind, and mental objects.',
+                    'Mental hindrances: recognize and overcome desire, aversion, sloth, restlessness, and doubt.',
+                    'Wisdom (panna) arises from study, reflection, and meditation leading to liberation.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Samatha meditation focuses on:', options: [ { text: 'Concentration and calmness', correct: true }, { text: 'Physical exercise', correct: false }, { text: 'Debate skills', correct: false } ] },
+                    { id: 'q2', prompt: 'Vipassana meditation develops:', options: [ { text: 'Insight into impermanence and non-self', correct: true }, { text: 'Magical powers', correct: false }, { text: 'Material wealth', correct: false } ] },
+                    { id: 'q3', prompt: 'The Four Foundations of Mindfulness include:', options: [ { text: 'Body, feelings, mind, mental objects', correct: true }, { text: 'Earth, water, fire, air', correct: false }, { text: 'Four seasons', correct: false } ] }
+                ]
+            },
+            {
+                id: 'disciples',
+                title: 'History of Buddhist Disciples (Male and Female) and Exemplary Buddhists',
+                description: 'Study the lives and contributions of early disciples and model practitioners.',
+                points: [
+                    'Chief disciples: Sariputta (wisdom) and Moggallana (psychic powers) were the Buddha\'s foremost students.',
+                    'Ananda: the Buddha\'s personal attendant who memorized and recited teachings, pivotal for preserving the Dhamma.',
+                    'Mahapajapati Gotami: the Buddha\'s stepmother and first nun, founder of the female monastic order (Bhikkhuni Sangha).',
+                    'Khema and Uppalavanna: foremost female disciples known for wisdom and psychic abilities.',
+                    'Exemplary lay followers like Anathapindika (generosity) and Visakha (supporter of the Sangha) advanced the community.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Sariputta was known for:', options: [ { text: 'Great wisdom', correct: true }, { text: 'Wealth', correct: false }, { text: 'Military skill', correct: false } ] },
+                    { id: 'q2', prompt: 'Who was the first Buddhist nun?', options: [ { text: 'Mahapajapati Gotami', correct: true }, { text: 'Ananda', correct: false }, { text: 'Moggallana', correct: false } ] },
+                    { id: 'q3', prompt: 'Ananda is remembered for:', options: [ { text: 'Memorizing and preserving the Buddha\'s teachings', correct: true }, { text: 'Building temples', correct: false }, { text: 'Leading armies', correct: false } ] }
+                ]
+            },
+            {
+                id: 'problem-solving',
+                title: 'Buddhism and Problem Solving and Development',
+                description: 'Apply Buddhist principles to personal growth, conflict resolution, and social development.',
+                points: [
+                    'Right view and intention guide ethical decision-making and problem analysis.',
+                    'Loving-kindness (metta) and compassion (karuna) foster peaceful conflict resolution.',
+                    'Mindfulness enhances awareness of thoughts and emotions, reducing reactive behavior.',
+                    'Middle Way principle: avoid extremes, seek balanced and sustainable solutions.',
+                    'Engaged Buddhism: applying teachings to social justice, environmental care, and community development.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Buddhist problem-solving emphasizes:', options: [ { text: 'Ethical decision-making and mindfulness', correct: true }, { text: 'Aggressive confrontation', correct: false }, { text: 'Avoiding all problems', correct: false } ] },
+                    { id: 'q2', prompt: 'The Middle Way principle suggests:', options: [ { text: 'Avoiding extremes and seeking balance', correct: true }, { text: 'Always choosing the easiest path', correct: false }, { text: 'Indulging in excess', correct: false } ] },
+                    { id: 'q3', prompt: 'Engaged Buddhism applies teachings to:', options: [ { text: 'Social justice and community development', correct: true }, { text: 'Only monastic life', correct: false }, { text: 'Political campaigns only', correct: false } ] }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_buddhism_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = buddhismUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = buddhismUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const percent = Math.round((completed / buddhismUnits.length) * 100);
+
+            const unitsCompletedEl = document.getElementById('unitsCompleted');
+            const averageScoreEl = document.getElementById('averageScore');
+            const progressPercentEl = document.getElementById('progressPercent');
+            const progressFillEl = document.getElementById('buddhismProgressFill');
+
+            if (unitsCompletedEl) unitsCompletedEl.textContent = `${completed} / ${buddhismUnits.length}`;
+            if (averageScoreEl) averageScoreEl.textContent = `${avg}%`;
+            if (progressPercentEl) progressPercentEl.textContent = `${percent}%`;
+            if (progressFillEl) progressFillEl.style.width = `${percent}%`;
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/(\w)_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^(\d+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetBuddhismProgress() {
+            if (confirm('Reset progress for all Buddhism units? This cannot be undone.')) {
+                localStorage.removeItem(storageKey);
+                unitProgress = {};
+                renderSummary();
+                renderUnits();
+                alert('Buddhism progress has been reset.');
+            }
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            buddhismUnits.forEach((unit, index) => {
+                const prevUnit = buddhismUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed • ${progress.score || 0}%` : 'Quiz ready';
+
+                const lessonList = unit.points.map(point => `<div class="lesson-point">${point}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+
+                const questionsHtml = unit.quiz.map(q => `
+                    <div class="quiz-question" style="margin-bottom:10px;">
+                        <p class="quiz-title">${formatFormula(q.prompt)}</p>
+                        ${q.options.map(opt => `
+                            <label class="quiz-option">
+                                <input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked || progress.completed ? 'disabled' : ''}>
+                                <span>${formatFormula(opt.text)}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `).join('');
+
+                const actionButtons = progress.completed
+                    ? `<button class="secondary-btn" onclick="retakeUnit('${unit.id}')">Retake Unit</button><span class="quiz-result" id="result-${unit.id}" style="margin-left: 10px;"></span>`
+                    : `<button class="primary-btn" onclick="submitQuiz('${unit.id}')" ${locked ? 'disabled' : ''}>Submit quiz</button><span class="quiz-result" id="result-${unit.id}"></span>`;
+
+                card.innerHTML = `
+                    <div class="unit-header">
+                        <div class="unit-label">Unit ${index + 1}</div>
+                        <div class="unit-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <h3 class="unit-title">${unit.title}</h3>
+                    <p class="unit-desc">${unit.description}</p>
+                    <div class="lesson-points">${lessonList}</div>
+                    <div class="formula-badges">${formulaList}</div>
+                    <div class="quiz-block" data-quiz="${unit.id}">
+                        <p style="margin:0 0 6px; font-weight:700; color:#2c1810;">Quick mastery quiz (3 questions)</p>
+                        ${locked ? `<p class="locked-note">Unlock by completing Unit ${index}</p>` : ''}
+                        ${questionsHtml}
+                        <div class="quiz-actions">${actionButtons}</div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = buddhismUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+
+            let answered = 0;
+            let correct = 0;
+
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'buddhism');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

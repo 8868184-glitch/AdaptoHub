@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0097b2">
+    <meta name="description" content="AdaptoHub - Adaptive Learning Platform with AI-Generated Study Plans and Gamification">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AdaptoHub">
+    <link rel="apple-touch-icon" href="assets/AdaptoHub.png">
+    <link rel="manifest" href="manifest.json">
+    <title>AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>
+    <script defer src="adaptive-learning.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="mastery-timeline.js"></script>
+    <script defer src="time-tracker.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <script defer src="google-api-client.js"></script>
+    <script defer src="achievements.js"></script>
+    <script defer src="gamification.js"></script>
+    <script defer src="gamification-quiz-integration.js"></script>
+    <script defer src="mobile-gestures.js"></script>
+    <script defer src="learning-path.js"></script>
+    <script defer src="analytics.js"></script>
+    <script defer src="goals.js"></script>
+    <script defer src="personalization-integration.js"></script>
+    <script defer src="notification-service.js"></script>
+
+    <script defer src="multimedia-learning.js"></script>
+    <script defer src="real-world-applications.js"></script>
+    <script defer src="micro-learning.js"></script>
+
+    <script defer src="learning-insights.js"></script>
+    <script defer src="challenges-competitions.js"></script>
+    <script defer src="success-stories.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="quick-wins.js"></script>
+    <script src="question-generator.js"></script>
+    <script src="background-customizer.js"></script>
+
+    <script defer src="/_/firebase/12.7.0/firebase-app-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-auth-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-database-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-firestore-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-functions-compat.js"></script>
+    <script defer src="/_/firebase/12.7.0/firebase-messaging-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-storage-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-analytics-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-remote-config-compat.js"></script>
+    <script defer src="//firebase/12.7.0/firebase-performance-compat.js"></script>
+    <script defer src="//firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+            body{ background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+            #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px 16px; border-radius: 3px; }
+            #message h3 { color: #888; font-weight: normal; font-size: 16px; margin: 16px 0 12px; }
+            #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+            #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px; }
+            #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+            #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+            #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+            #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+            @media (max-width: 600px) {
+                body, #message { margin-top: 0; background: white; box-shadow: none; }
+                body { border-top: 16px solid #ffa100; }
+            }
+
+      .access-dropdown-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 11000;
+      }
+      .access-dropdown-backdrop.active { display: flex; }
+      .access-dropdown {
+        width: 360px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        padding: 20px;
+        font-family: "Bai Jamjuree", sans-serif;
+      }
+      .access-dropdown h3 { margin: 0 0 8px 0; color: #1f2933; font-size: 1.05rem; }
+      .access-dropdown p.sub { margin: 0 0 12px 0; color: #636d79; font-size: 0.9rem; }
+      .access-field { margin-bottom: 12px; }
+      .access-field label { display:block; font-weight:600; margin-bottom:6px; color:#1f2933; font-size:0.9rem; }
+      .access-field input[type="email"], .access-field input[type="password"] {
+        width: 100%; padding: 10px 12px; border: 1px solid #d0d5db; border-radius:6px; font-size:0.95rem;
+      }
+      .access-actions { display:flex; gap:10px; margin-top:12px; }
+      .access-btn {
+        flex:1; padding:10px 12px; border-radius:8px; cursor:pointer; border:0; font-weight:600;
+      }
+      .access-submit { background:#0097b2; color:white; }
+      .access-cancel { background:#f5f6f8; color:#1f2933; border:1px solid #e0e0e0; }
+      .toggle-row { display:flex; gap:8px; align-items:center; margin-top:6px; }
+      .toggle-row label { margin:0; font-size:0.9rem; color:#636d79; }
+
+      .access-examples { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+      .example-btn { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; background:#e8f0f2; color:#0b4850; font-weight:600; }
+      .example-btn:hover { background:#d4edf0; transform:translateY(-2px); }
+
+      .account-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 320px;
+        margin-top: 8px;
+        z-index: 10002;
+        animation: slideDown 0.2s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .account-dropdown-header {
+        padding: 16px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .user-avatar-large {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #a78bfa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .user-info {
+        flex: 1;
+      }
+
+      .user-name {
+        font-weight: 600;
+        color: #1f2933;
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+      }
+
+      .user-email {
+        font-size: 0.85rem;
+        color: #636d79;
+        margin-bottom: 2px;
+      }
+
+      .user-id {
+        font-size: 0.8rem;
+        color: #8b92a9;
+      }
+
+      .account-dropdown-divider {
+        height: 1px;
+        background: #e4e7eb;
+      }
+
+      .account-dropdown-body {
+        padding: 8px 0;
+      }
+
+      .dropdown-item {
+        display: block;
+        padding: 10px 16px;
+        color: #1f2933;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .dropdown-item:hover {
+        background: #f5f6f8;
+      }
+
+      .account-dropdown-footer {
+        padding: 8px 16px;
+      }
+
+      .logout-btn {
+        width: 100%;
+        padding: 10px 12px;
+        background: #f5f6f8;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #1f2933;
+        font-size: 0.9rem;
+        transition: background 0.2s;
+      }
+
+      .logout-btn:hover {
+        background: #e8ecf1;
+      }
+
+      .account-details-dropdown {
+        position: fixed;
+        top: 75px;
+        right: 370px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 320px;
+        z-index: 10002;
+        animation: slideDown 0.2s ease;
+      }
+
+      .account-display {
+        position: relative;
+      }
+   </style>
+   
+   <script>
+   window.addEventListener('load', () => {
+     setTimeout(() => {
+       console.log('🔍 Post-load Avatar System Check:');
+       console.log('   window.AvatarSystem exists?', !!window.AvatarSystem);
+       console.log('   window.AvatarSystem.openModal exists?', !!(window.AvatarSystem?.openModal));
+       console.log('   window.AvatarSystem.openModal is function?', typeof window.AvatarSystem?.openModal === 'function');
+       
+       if (!window.AvatarSystem) {
+         console.error('❌ CRITICAL: Avatar System not loaded after page load!');
+         console.error('   Please check browser console for errors');
+       } else if (typeof window.AvatarSystem.openModal !== 'function') {
+         console.error('❌ CRITICAL: AvatarSystem.openModal is not a function!');
+         console.error('   Type:', typeof window.AvatarSystem.openModal);
+       } else {
+         console.log('✅ Avatar System fully loaded and ready!');
+       }
+     }, 1500);
+   });
+   </script>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="logo">
+      <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+      <a class="site-title" href="index.html">AdaptoHub</a>
+    </div>
+    <div class="header-controls">
+      <div id="streak-display"></div>
+      
+      <div id="points-display" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); border-radius: 20px; font-weight: 600; font-size: 14px; color: white; box-shadow: 0 2px 8px rgba(245,158,11,0.3);" title="Total Points">
+        <span>⭐</span>
+        <span id="pointsValue">0</span>
+      </div>
+      
+      <button onclick="window.randomQuiz?.()" style="padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(139,92,246,0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="Random Quiz">🎲 Random</button>
+      
+      <button onclick="window.GoalsUI?.showGoalsModal()" style="padding: 8px 16px; background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(139,92,246,0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="Learning Goals">🎯 Goals</button>
+      
+      <button onclick="backgroundCustomizer?.showCustomizer()" style="padding: 8px 16px; background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 13px; box-shadow: 0 2px 8px rgba(236,72,153,0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="Background Customizer">🎨 Theme</button>
+      
+      <div id="realTimeClock" style="font-weight: 500; color: #ffffff; margin: 0 8px; font-size: 0.95rem;"></div>
+      <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; padding: 5px;" title="Toggle dark mode"></button>
+    </div>
+    <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar" style="width: 40px; height: 40px; border-radius: 50%; background: #6366f1; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; margin-left: 8px;"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">✕</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">⚙️ จัดการโปรไฟล์</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">📋 ข้อมูลบัญชี</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">📚 ประวัติการเรียน</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+    
+    </div>
+  </header>
+  <script>
+    function toggleAccountDropdown() {
+      const dropdown = document.getElementById('accountDropdownMenu');
+      if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        showAccountDropdown();
+      } else {
+        hideAccountDropdown();
+      }
+    }
+
+    function showAccountDropdown() {
+      const dropdown = document.getElementById('accountDropdownMenu');
+      const user = JSON.parse(localStorage.getItem('adaptohubUser') || '{}');
+      
+      if (user.fullName) {
+        document.getElementById('dropdownUserName').textContent = user.fullName;
+        document.getElementById('accountName').textContent = user.fullName;
+      }
+      if (user.email) {
+        document.getElementById('dropdownUserEmail').textContent = user.email;
+      }
+      if (user.studentId) {
+        document.getElementById('dropdownStudentId').textContent = `Student ID: ${user.studentId}`;
+      }
+      
+      const avatarEl = document.getElementById('dropdownUserAvatar');
+      if (user.fullName) {
+        const firstLetter = user.fullName.charAt(0).toUpperCase();
+        avatarEl.textContent = firstLetter;
+      }
+      
+      dropdown.style.display = 'block';
+      
+      document.addEventListener('click', closeDropdownOnClickOutside);
+    }
+
+    function hideAccountDropdown() {
+      const dropdown = document.getElementById('accountDropdownMenu');
+      dropdown.style.display = 'none';
+      document.removeEventListener('click', closeDropdownOnClickOutside);
+    }
+
+    function closeDropdownOnClickOutside(e) {
+      const dropdown = document.getElementById('accountDropdownMenu');
+      const accountDisplay = document.getElementById('accountDisplayBtn');
+      
+      if (!dropdown.contains(e.target) && !accountDisplay.contains(e.target)) {
+        hideAccountDropdown();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('adaptohubUser');
+      localStorage.removeItem('googleAccessToken');
+      window.location.href = 'login.html';
+    }
+
+    function showAccountDetailsPanel() {
+      try {
+        console.log('=== showAccountDetailsPanel CALLED ===');
+        const detailsDropdown = document.getElementById('accountDetailsDropdown');
+        console.log('Dropdown element found:', !!detailsDropdown);
+        
+        if (!detailsDropdown) {
+          console.error('Account details dropdown not found');
+          return false;
+        }
+        
+        detailsDropdown.style.display = 'block';
+        console.log('Dropdown display set to:', detailsDropdown.style.display);
+        
+        const user = JSON.parse(localStorage.getItem('adaptohubUser') || '{}');
+        console.log('User data from localStorage:', user);
+        
+        const nameEl = document.getElementById('detailsDropdownName');
+        const emailEl = document.getElementById('detailsDropdownEmail');
+        const studentIdEl = document.getElementById('detailsDropdownStudentId');
+        const providerEl = document.getElementById('detailsDropdownProvider');
+        const loginTimeEl = document.getElementById('detailsDropdownLoginTime');
+        
+        if (nameEl) nameEl.textContent = user.fullName || '-';
+        if (emailEl) emailEl.textContent = user.email || '-';
+        if (studentIdEl) studentIdEl.textContent = user.studentId || '-';
+        if (providerEl) providerEl.textContent = (user.authProvider || '').toUpperCase() || '-';
+        
+        if (loginTimeEl) {
+          if (user.loginTime) {
+            const loginDate = new Date(user.loginTime);
+            const formattedTime = loginDate.toLocaleString('en-US', { 
+              year: 'numeric', 
+              month: 'short', 
+              day: 'numeric', 
+              hour: '2-digit', 
+              minute: '2-digit' 
+            });
+            loginTimeEl.textContent = formattedTime;
+          } else {
+            loginTimeEl.textContent = '-';
+          }
+        }
+        
+        console.log('=== Dropdown should now be visible ===');
+        return false;
+      } catch (e) {
+        console.error('ERROR in showAccountDetailsPanel:', e);
+        return false;
+      }
+    }
+
+    function hideAccountDetailsPanel() {
+      const detailsDropdown = document.getElementById('accountDetailsDropdown');
+      if (detailsDropdown) {
+        detailsDropdown.style.display = 'none';
+      }
+    }
+
+    function showProfileSettings() {
+      try {
+        console.log('=== showProfileSettings called ===');
+        
+        const accountDetailsDropdown = document.getElementById('accountDetailsDropdown');
+        const learningHistoryDropdown = document.getElementById('learningHistoryDropdown');
+        if (accountDetailsDropdown) accountDetailsDropdown.style.display = 'none';
+        if (learningHistoryDropdown) learningHistoryDropdown.style.display = 'none';
+        
+        const settingsDropdown = document.getElementById('profileSettingsDropdown');
+        if (!settingsDropdown) {
+          console.error('Profile settings dropdown not found');
+          return false;
+        }
+        
+        const settings = JSON.parse(localStorage.getItem('profileSettings') || '{}');
+        const user = JSON.parse(localStorage.getItem('adaptohubUser') || '{}');
+        
+        const displayNameEl = document.getElementById('settingsDisplayName');
+        const emailNotifEl = document.getElementById('settingsEmailNotif');
+        const themeEl = document.getElementById('settingsTheme');
+        const languageEl = document.getElementById('settingsLanguage');
+        
+        if (displayNameEl) displayNameEl.value = settings.displayName || user.fullName || '';
+        if (emailNotifEl) emailNotifEl.checked = settings.emailNotifications !== false;
+        if (themeEl) themeEl.value = settings.theme || 'light';
+        if (languageEl) languageEl.value = settings.language || 'en';
+        
+        settingsDropdown.style.display = 'block';
+        console.log('=== Profile Settings dropdown should now be visible ===');
+        return false;
+      } catch (e) {
+        console.error('ERROR in showProfileSettings:', e);
+        return false;
+      }
+    }
+
+    function saveProfileSettings() {
+      try {
+        const settings = {
+          displayName: document.getElementById('settingsDisplayName').value,
+          emailNotifications: document.getElementById('settingsEmailNotif').checked,
+          theme: document.getElementById('settingsTheme').value,
+          language: document.getElementById('settingsLanguage').value,
+          updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('profileSettings', JSON.stringify(settings));
+        
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = '✓ Settings Saved!';
+        button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.background = 'linear-gradient(135deg, #0097b2 0%, #00b8d4 100%)';
+        }, 2000);
+        
+        console.log('Profile settings saved:', settings);
+      } catch (e) {
+        console.error('Error saving profile settings:', e);
+        alert('Failed to save settings. Please try again.');
+      }
+    }
+
+    function recordLearningActivity(type, title, score, maxScore = 100) {
+      try {
+        const history = JSON.parse(localStorage.getItem('learningHistory') || '[]');
+        
+        const activity = {
+          type: type, 
+          title: title,
+          score: score,
+          maxScore: maxScore,
+          percentage: Math.round((score / maxScore) * 100),
+          timestamp: new Date().toISOString(),
+          date: new Date().toLocaleDateString('en-US')
+        };
+        
+        history.push(activity);
+        
+        if (history.length > 50) {
+          history.shift();
+        }
+        
+        localStorage.setItem('learningHistory', JSON.stringify(history));
+        console.log('Learning activity recorded:', activity);
+      } catch (e) {
+        console.error('Error recording learning activity:', e);
+      }
+    }
+    
+    window.recordLearningActivity = recordLearningActivity;
+
+    function showLearningHistory() {
+      try {
+        console.log('=== showLearningHistory CALLED ===');
+        const learningDropdown = document.getElementById('learningHistoryDropdown');
+        
+        if (!learningDropdown) {
+          console.error('Learning history dropdown not found');
+          return false;
+        }
+        
+        learningDropdown.style.display = 'block';
+        
+        const history = JSON.parse(localStorage.getItem('learningHistory') || '[]');
+        console.log('Learning history:', history);
+        
+        if (history.length === 0) {
+          document.getElementById('learningHistoryStats').textContent = 'No activity recorded';
+          document.getElementById('learningHistoryList').innerHTML = '<p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>';
+          return false;
+        }
+        
+        const totalActivities = history.length;
+        const averageScore = Math.round(history.reduce((sum, a) => sum + a.percentage, 0) / history.length);
+        const quizzes = history.filter(a => a.type === 'quiz').length;
+        const challenges = history.filter(a => a.type === 'challenge').length;
+        const questions = history.filter(a => a.type === 'question').length;
+        
+        document.getElementById('learningHistoryStats').innerHTML = `
+          <div style="font-weight: 600; color: #1f2933; margin-bottom: 8px;">📊 Performance Stats</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem;">
+            <div style="background: white; padding: 8px; border-radius: 6px; border-left: 3px solid #0097b2;">
+              <div style="color: #8b92a9; font-size: 0.75rem;">Total Activities</div>
+              <div style="color: #1f2933; font-weight: 600; font-size: 1.1rem;">${totalActivities}</div>
+            </div>
+            <div style="background: white; padding: 8px; border-radius: 6px; border-left: 3px solid #10b981;">
+              <div style="color: #8b92a9; font-size: 0.75rem;">Average Score</div>
+              <div style="color: #1f2933; font-weight: 600; font-size: 1.1rem;">${averageScore}%</div>
+            </div>
+            <div style="background: white; padding: 8px; border-radius: 6px; border-left: 3px solid #6366f1;">
+              <div style="color: #8b92a9; font-size: 0.75rem;">Quizzes</div>
+              <div style="color: #1f2933; font-weight: 600; font-size: 1.1rem;">${quizzes}</div>
+            </div>
+            <div style="background: white; padding: 8px; border-radius: 6px; border-left: 3px solid #f59e0b;">
+              <div style="color: #8b92a9; font-size: 0.75rem;">Challenges</div>
+              <div style="color: #1f2933; font-weight: 600; font-size: 1.1rem;">${challenges}</div>
+            </div>
+          </div>
+        `;
+        
+        const recentActivities = history.slice().reverse().slice(0, 10);
+        let listHTML = '<div style="display: flex; flex-direction: column; gap: 8px;">';
+        
+        recentActivities.forEach(activity => {
+          const scoreColor = activity.percentage >= 80 ? '#10b981' : activity.percentage >= 60 ? '#f59e0b' : '#ef4444';
+          const icon = activity.type === 'quiz' ? '📝' : activity.type === 'challenge' ? '⚡' : '❓';
+          const date = new Date(activity.timestamp).toLocaleString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          });
+          
+          listHTML += `
+            <div style="background: white; padding: 10px; border-radius: 6px; border-left: 3px solid ${scoreColor}; display: flex; justify-content: space-between; align-items: center;">
+              <div style="flex: 1;">
+                <div style="color: #1f2933; font-weight: 500; font-size: 0.9rem;">${icon} ${activity.title}</div>
+                <div style="color: #8b92a9; font-size: 0.8rem;">${date}</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="color: #1f2933; font-weight: 600; font-size: 0.95rem;">${activity.percentage}%</div>
+                <div style="color: #8b92a9; font-size: 0.75rem;">${activity.score}/${activity.maxScore}</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        listHTML += '</div>';
+        document.getElementById('learningHistoryList').innerHTML = listHTML;
+        
+        console.log('=== Learning history dropdown updated ===');
+        return false;
+      } catch (e) {
+        console.error('ERROR in showLearningHistory:', e);
+        return false;
+      }
+    }
+
+    function closeDetailsDropdownOnClickOutside(e) {
+      const detailsDropdown = document.getElementById('accountDetailsDropdown');
+      const accountDropdown = document.getElementById('accountDropdownMenu');
+      const accountDisplay = document.getElementById('accountDisplayBtn');
+      
+      if (!detailsDropdown.contains(e.target) && 
+          !accountDropdown.contains(e.target) && 
+          !accountDisplay.contains(e.target)) {
+        hideAccountDetailsPanel();
+      }
+    }
+
+    document.getElementById('accountDisplayBtn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleAccountDropdown();
+      hideAccountDetailsPanel();
+    });
+
+    document.addEventListener('click', function(e) {
+      const accountDropdown = document.getElementById('accountDropdownMenu');
+      const detailsDropdown = document.getElementById('accountDetailsDropdown');
+      const accountDisplay = document.getElementById('accountDisplayBtn');
+      
+      if (accountDropdown && accountDropdown.style.display !== 'none') {
+        if (!accountDropdown.contains(e.target) && !accountDisplay.contains(e.target)) {
+          accountDropdown.style.display = 'none';
+        }
+      }
+      
+      if (detailsDropdown && detailsDropdown.style.display !== 'none') {
+        if (!detailsDropdown.contains(e.target) && !accountDisplay.contains(e.target)) {
+          detailsDropdown.style.display = 'none';
+        }
+      }
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      document.getElementById('realTimeClock').textContent = now.toLocaleString('en-US', options);
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      darkModeToggle.textContent = '';
+    }
+    darkModeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('darkMode', 'false');
+        darkModeToggle.textContent = '';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('darkMode', 'true');
+        darkModeToggle.textContent = '';
+      }
+    });
+  </script>
+  <div class="layout">
+    <aside class="sidebar">
+      <nav>
+        <small>
+          Navigation
+        </small>
+        <ul>
+          <li><button class="nav-btn" data-target="classrooms">
+              Classrooms
+          </button></li>
+          <li><button class="nav-btn" data-target="collaboration">
+              Collaboration
+          </button></li>
+          <li><a href="analytics-dashboard.html" style="display: block; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              📊 Analytics
+          </a></li>
+          <li><a href="social-dashboard.html" style="display: block; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              🤝 Community
+          </a></li>
+          <li><a href="personalization-settings.html" style="display: block; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              ⚙️ Personalization
+          </a></li>
+          <li><button class="nav-btn" onclick="openDailyChallenge()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              ⚡ Daily Challenge
+          </button></li>
+          <li><button class="nav-btn" onclick="showMicroLearningHub()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              📚 Quick Lessons
+          </button></li>
+          <li><button class="nav-btn" onclick="showRealWorldApps()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              🌍 Real-World Apps
+          </button></li>
+        </ul>
+        <small style="margin-top: 20px; display: block; padding-left: 10px; color: #999;">
+          Motivation
+        </small>
+        <ul style="padding-left: 0;">
+          <li><button class="nav-btn" onclick="openWeeklyRecap()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              📊 Weekly Recap
+          </button></li>
+          <li><button class="nav-btn" onclick="openAchievements()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              🏆 Achievements
+          </button></li>
+          <li><button class="nav-btn" onclick="openTournaments()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              🎯 Tournaments
+          </button></li>
+          <li><button class="nav-btn" onclick="openTopPerformers()" style="width: 100%; padding: 10px; border-radius: 6px; background-color: #f5f6f8; text-decoration: none; color: #0097b2; font-weight: 500; margin-top: 10px; text-align: center; transition: all 0.2s ease; border: none; cursor: pointer;" onmouseover="this.style.background='#e8ecf1'" onmouseout="this.style.background='#f5f6f8'">
+              🌟 Success Stories
+          </button></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      <div class="scroll">
+        <section id="about-us" style="margin-bottom: 48px; padding: 32px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); border-radius: 16px; box-shadow: 0 8px 24px rgba(0, 151, 178, 0.2);">
+          <div style="max-width: 900px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              🌟 About AdaptoHub
+            </h2>
+            <div style="background: rgba(255, 255, 255, 0.95); padding: 28px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+              <p style="font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 16px; text-align: justify;">
+                Welcome to <strong>AdaptoHub</strong> – a passion project dedicated to revolutionizing the way students learn and engage with education. We believe that learning should be personalized, interactive, and accessible to everyone, regardless of their learning style or pace.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 16px; text-align: justify;">
+                Our mission is to create an adaptive learning platform that combines gamification, real-time analytics, and collaborative features to make education more engaging and effective. From comprehensive subject coverage to micro-learning challenges, we're building tools that empower students to take control of their educational journey.
+              </p>
+              <p style="font-size: 1.15rem; line-height: 1.8; color: #333; margin-bottom: 0; text-align: justify;">
+                Built with ❤️ by educators and developers who are passionate about transforming education through technology, AdaptoHub is more than just a learning platform – it's a community where curiosity meets innovation, and every student has the opportunity to thrive.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <h2 id="classrooms">
+          Classrooms
+        </h2>
+        <section class="subject-grid">
+        </section>
+        <h2 id="collaboration">
+          Collaboration
+        </h2>
+        <section class="subject-grid">
+        </section>
+        <div style="height:30px"></div>
+      </div>
+    </main>
+  </div>
+  <div id="message">
+        <h2>Welcome to AdaptoHub</h2>
+        <h1>Firebase Hosting Setup Complete</h1>
+        <p>You're seeing this because you've successfully deployed your Firebase app to Firebase Hosting. Now you can start building something amazing!</p>
+        <a target="_blank" href="https://firebase.google.com/docs/hosting">Open Hosting Documentation</a>
+
+        <div style="margin-top:16px">
+          <p style="font-size:0.9rem;color:#636d79;margin-bottom:8px;">Try requesting access to external tools (prototype):</p>
+          <div class="access-examples">
+            <button class="example-btn" onclick="showAccessDropdown('Google Drive')">Google Drive</button>
+            <button class="example-btn" onclick="showAccessDropdown('Google Docs')">Google Docs</button>
+            <button class="example-btn" onclick="showAccessDropdown('Google Sheets')">Google Sheets</button>
+          </div>
+        </div>
+  </div>
+  <p id="load">Firebase SDK Loading&hellip;</p>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadE1 = document.querySelector('#load');
+        try {
+         let app = firebase.app();
+          let features = [
+            'auth',
+            'database',
+            'firestore',
+            'functions',
+            'messaging',
+            'storage',
+            'analytics',
+            'remote-config',
+            'performance'
+          ].filter(feature => typeof app[feature] === 'function');
+          loadE1.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          loadE1.textContent = 'Error loading the Firebase SDK, check the console.';
+          console.error(e);
+        }
+    });
+    </script>
+
+    <!-- Loading screen managed by loading-tips.js -->
+
+    <div id="accessBackdrop" class="access-dropdown-backdrop" onclick="closeAccessDropdown(event)">
+      <div class="access-dropdown" id="accessDropdown" onclick="event.stopPropagation()">
+        <h3 id="accessTitle">Request access</h3>
+        <p class="sub" id="accessSubtitle">Provide credentials to request access to the service.</p>
+
+        <div class="access-field">
+          <label for="accessEmail">Email</label>
+          <input id="accessEmail" type="email" placeholder="name@example.com" autocomplete="username">
+        </div>
+
+        <div class="access-field">
+          <label for="accessPassword">Password</label>
+          <input id="accessPassword" type="password" placeholder="••••••" autocomplete="current-password">
+        </div>
+
+        <div class="access-field">
+          <label style="font-weight:600;margin-bottom:6px;">Mode</label>
+          <div class="toggle-row">
+            <label><input type="radio" name="accessMode" value="view" checked> View</label>
+            <label><input type="radio" name="accessMode" value="no-view"> No view</label>
+          </div>
+          <div style="margin-top:8px;font-size:0.85rem;color:#9aa8ac;">"View" grants read-only; "No view" records a non-view / deny request.</div>
+        </div>
+
+        <div id="accessMessage" style="display:none;margin-top:8px;font-size:0.9rem;color:#2f855a;"></div>
+
+        <div class="access-actions">
+          <button class="access-btn access-cancel" onclick="closeAccessDropdown()">Cancel</button>
+          <button class="access-btn access-submit" onclick="handleAccessSubmit()">Request Access</button>
+        </div>
+      </div>
+    </div>
+<div id="bottomLoader" style="display:none; text-align:center; padding:12px; color:#0097b2; font-weight:600;">
+  ↻ กำลังรีเฟรชข้อมูล...
+</div>
+<div id="bottomSentinel" aria-hidden="true" style="height:1px;">
+</div>
+
+  <script src="study-groups.js"></script>
+  <script src="discussion-forums.js"></script>
+  <script src="peer-tutoring.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✓ Service Worker registered:', registration);
+            
+            setInterval(() => {
+              registration.update();
+            }, 60000); 
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('New Service Worker activated - refreshing...');
+        const updateNotif = confirm('New version available! Refresh to update?');
+        if (updateNotif) {
+          window.location.reload();
+        }
+      });
+    }
+
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      const installButton = document.getElementById('install-button');
+      if (installButton) {
+        installButton.style.display = 'block';
+        installButton.addEventListener('click', () => {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+          });
+        });
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA was installed');
+      deferredPrompt = null;
+      
+      if ('Notification' in window) {
+        new Notification('AdaptoHub Installed', {
+          body: 'Welcome to AdaptoHub! You can now use the app offline.',
+          icon: '/assets/AdaptoHub.png'
+        });
+      }
+    });
+
+    window.addEventListener('online', () => {
+      console.log('✓ Connection restored');
+      if (typeof PersonalizationIntegration !== 'undefined') {
+        PersonalizationIntegration.loadAndApply();
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      console.log('✗ Connection lost - offline mode enabled');
+      const offlineNotif = document.createElement('div');
+      offlineNotif.style.cssText = `
+        position: fixed;
+        top: 80px;
+        left: 0;
+        right: 0;
+        background: #f44336;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        z-index: 10000;
+        font-weight: 600;
+      `;
+      offlineNotif.textContent = '📡 Offline Mode - Limited features available';
+      document.body.appendChild(offlineNotif);
+
+      setTimeout(() => offlineNotif.remove(), 5000);
+    });
+
+    function requestNotificationPermission() {
+      if ('Notification' in window && 'serviceWorker' in navigator) {
+        if (Notification.permission === 'granted') {
+          console.log('Notifications enabled');
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+              console.log('Notification permission granted');
+              navigator.serviceWorker.ready.then((registration) => {
+                registration.showNotification('AdaptoHub', {
+                  body: 'Push notifications enabled!',
+                  icon: '/assets/AdaptoHub.png'
+                });
+              });
+            }
+          });
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Show loading screen on page load
+      if (window.LoadingTips) {
+        window.LoadingTips.showForDuration(1200, 'general', 'Initializing AdaptoHub...');
+      }
+      
+      if (!localStorage.getItem('notification-permission-asked')) {
+        setTimeout(() => {
+          requestNotificationPermission();
+          localStorage.setItem('notification-permission-asked', 'true');
+        }, 3000);
+      }
+      
+      updatePointsDisplay();
+      
+      window.addEventListener('gamification:pointsEarned', updatePointsDisplay);
+      window.addEventListener('gamification:achievementUnlocked', updatePointsDisplay);
+    });
+    
+    function updatePointsDisplay() {
+      const pointsElement = document.getElementById('pointsValue');
+      if (!pointsElement) return;
+      
+      if (window.gamification) {
+        const userId = window.gamification.getCurrentUserId();
+        const profile = window.gamification.getUserProfile(userId);
+        const points = profile ? profile.points : 0;
+        pointsElement.textContent = points.toLocaleString();
+      } else {
+        setTimeout(updatePointsDisplay, 500);
+      }
+    }
+
+    function showMicroLearningHub() {
+      const modal = document.createElement('div');
+      modal.className = 'content-hub-modal';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
+          <h2>📚 Micro-Learning Hub</h2>
+          <div class="hub-grid">
+            <div class="hub-card" onclick="openQuickLesson('micro-001')">
+              <h3>Order of Operations</h3>
+              <p>⏱️ 5 min • Mathematics</p>
+            </div>
+            <div class="hub-card" onclick="openQuickLesson('micro-002')">
+              <h3>Photosynthesis</h3>
+              <p>⏱️ 5 min • Biology</p>
+            </div>
+            <div class="hub-card" onclick="openQuickLesson('micro-003')">
+              <h3>Prime Numbers</h3>
+              <p>⏱️ 5 min • Mathematics</p>
+            </div>
+            <div class="hub-card" onclick="openBrainTeaser('teaser-001')">
+              <h3>Brain Teasers</h3>
+              <p>🧩 Logic Puzzles • Various</p>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      setTimeout(() => modal.classList.add('active'), 10);
+    }
+
+    function showRealWorldApps() {
+      const modal = document.createElement('div');
+      modal.className = 'content-hub-modal';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
+          <h2>🌍 Real-World Applications</h2>
+          <div class="hub-grid">
+            <div class="hub-card" onclick="openCaseStudy('case-001')">
+              <h3>Netflix Algorithms</h3>
+              <p>📺 Algebra in Practice</p>
+            </div>
+            <div class="hub-card" onclick="openCaseStudy('case-002')">
+              <h3>SpaceX Rockets</h3>
+              <p>🚀 Physics Applications</p>
+            </div>
+            <div class="hub-card" onclick="openCaseStudy('case-003')">
+              <h3>COVID-19 Vaccines</h3>
+              <p>💉 Chemistry Innovation</p>
+            </div>
+            <div class="hub-card" onclick="openExpertVideo('expert-001')">
+              <h3>Expert Insights</h3>
+              <p>🎬 Learn from Industry Leaders</p>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      setTimeout(() => modal.classList.add('active'), 10);
+    }
+
+    const hubStyles = `
+      .content-hub-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 8888;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .content-hub-modal.active {
+        opacity: 1;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 12px;
+        max-width: 700px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 30px;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #f5f5f5;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        font-size: 24px;
+        transition: all 0.2s;
+      }
+
+      .close-btn:hover {
+        background: #e0e0e0;
+        transform: rotate(90deg);
+      }
+
+      .hub-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 25px;
+      }
+
+      .hub-card {
+        padding: 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .hub-card:hover {
+        border-color: #0097b2;
+        background: #f0f8fa;
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,151,178,0.2);
+      }
+
+      .hub-card h3 {
+        margin: 0 0 10px 0;
+        color: #1f2933;
+        font-size: 1rem;
+      }
+
+      .hub-card p {
+        margin: 0;
+        color: #999;
+        font-size: 0.9rem;
+      }
+    `;
+
+    if (!document.getElementById('hub-styles')) {
+      const styleTag = document.createElement('style');
+      styleTag.id = 'hub-styles';
+      styleTag.textContent = hubStyles;
+      document.head.appendChild(styleTag);
+    }
+  </script>
+  </body>
+</html>

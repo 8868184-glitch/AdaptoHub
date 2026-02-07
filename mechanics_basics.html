@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanics Basics - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body {
+            overflow: auto !important;
+            height: auto !important;
+        }
+
+        .lesson-container {
+            max-width: 900px;
+            margin: 80px auto 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #0097b2;
+        }
+
+        .lesson-header h1 {
+            color: #0097b2;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .lesson-header .level-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .lesson-content {
+            margin-bottom: 40px;
+        }
+
+        .lesson-section {
+            margin-bottom: 35px;
+        }
+
+        .lesson-section h2 {
+            color: #0097b2;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-section h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+        }
+
+        .lesson-section p {
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .concept-box {
+            background: #e6f7fa;
+            border-left: 4px solid #0097b2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .concept-box h4 {
+            color: #0097b2;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .formula-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: #f1f8f4;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .example-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .quiz-section {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 2px solid #0097b2;
+        }
+
+        .quiz-section h2 {
+            color: #0097b2;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .question.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .question.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #0097b2;
+            background: #e6f7fa;
+        }
+
+        .option.selected {
+            border-color: #0097b2;
+            background: #e6f7fa;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #f1f8f4;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        .submit-quiz-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 151, 178, 0.4);
+        }
+
+        .submit-quiz-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-result p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .next-lesson-btn {
+            padding: 12px 30px;
+            background: white;
+            color: #0097b2;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .next-lesson-btn:hover {
+            background: #f0f0f0;
+        }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>🔬 Mechanics Basics</h1>
+            <span class="level-badge">Level 1 • Physics</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to Mechanics</h2>
+                <p>
+                    Mechanics is the branch of physics that deals with the motion of objects and the forces that cause this motion. 
+                    It is the foundation of physics and helps us understand how things move in our everyday world—from falling apples 
+                    to orbiting planets!
+                </p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ Understanding motion and its types<br>
+                       ✓ Fundamental concepts: distance, displacement, speed, and velocity<br>
+                       ✓ How to describe and analyze simple motion<br>
+                       ✓ Real-world applications of mechanics</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 Core Concepts</h2>
+                
+                <h3>1. Motion</h3>
+                <p>
+                    Motion is the change in position of an object over time. An object is in motion if its position changes 
+                    relative to a reference point. Motion can be described in terms of distance, displacement, speed, and velocity.
+                </p>
+
+                <h3>2. Distance vs. Displacement</h3>
+                <p>
+                    <strong>Distance</strong> is the total path length traveled by an object, regardless of direction. 
+                    It's a scalar quantity (magnitude only).
+                </p>
+                <p>
+                    <strong>Displacement</strong> is the shortest straight-line distance from the starting point to the ending point, 
+                    including direction. It's a vector quantity (magnitude and direction).
+                </p>
+
+                <div class="example-box">
+                    <h4>Example:</h4>
+                    <p>If you walk 3 meters east, then 4 meters north:</p>
+                    <p>• Distance = 3 + 4 = 7 meters</p>
+                    <p>• Displacement = 5 meters (using Pythagorean theorem: √(3² + 4²))</p>
+                </div>
+
+                <h3>3. Speed vs. Velocity</h3>
+                <p>
+                    <strong>Speed</strong> is the rate at which distance is covered. It's a scalar quantity.
+                </p>
+                <div class="formula-box">
+                    Speed = Distance ÷ Time
+                </div>
+
+                <p>
+                    <strong>Velocity</strong> is the rate at which displacement changes. It includes direction, making it a vector.
+                </p>
+                <div class="formula-box">
+                    Velocity = Displacement ÷ Time
+                </div>
+
+                <h3>4. Types of Motion</h3>
+                <div class="concept-box">
+                    <p><strong>Uniform Motion:</strong> When an object covers equal distances in equal intervals of time</p>
+                    <p><strong>Non-uniform Motion:</strong> When an object covers unequal distances in equal intervals of time</p>
+                    <p><strong>Linear Motion:</strong> Motion along a straight line</p>
+                    <p><strong>Circular Motion:</strong> Motion along a circular path</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>📐 Key Formulas</h2>
+                <div class="formula-box" style="text-align: left; padding: 20px;">
+                    <p style="margin: 10px 0;">Average Speed = Total Distance ÷ Total Time</p>
+                    <p style="margin: 10px 0;">Average Velocity = Total Displacement ÷ Total Time</p>
+                    <p style="margin: 10px 0;">Distance = Speed × Time</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <p>Understanding mechanics basics helps us:</p>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Calculate travel time for trips</li>
+                    <li>Understand how GPS navigation works</li>
+                    <li>Design safer vehicles and transportation systems</li>
+                    <li>Analyze sports movements (running, throwing, jumping)</li>
+                    <li>Plan space missions and satellite orbits</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">
+                Answer these questions to demonstrate your mastery of Mechanics Basics
+            </p>
+
+            <div id="quizContainer"></div>
+
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js\"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='\u2600\ufe0f';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='\ud83c\udf19';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='\u2600\ufe0f';}});
+    </script>
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "What is the difference between distance and displacement?",
+                options: [
+                    "Distance is a vector, displacement is a scalar",
+                    "Distance is the total path length, displacement is the shortest path with direction",
+                    "They are the same thing",
+                    "Distance includes direction, displacement doesn't"
+                ],
+                correct: 1,
+                explanation: "Distance is the total path traveled (scalar), while displacement is the shortest straight-line distance with direction (vector)."
+            },
+            {
+                id: 2,
+                question: "If a car travels 60 km in 2 hours, what is its average speed?",
+                options: [
+                    "20 km/h",
+                    "30 km/h",
+                    "40 km/h",
+                    "60 km/h"
+                ],
+                correct: 1,
+                explanation: "Average speed = Distance ÷ Time = 60 km ÷ 2 hours = 30 km/h"
+            },
+            {
+                id: 3,
+                question: "Which quantity is a vector?",
+                options: [
+                    "Distance",
+                    "Speed",
+                    "Velocity",
+                    "Time"
+                ],
+                correct: 2,
+                explanation: "Velocity is a vector because it includes both magnitude and direction. Speed, distance, and time are scalars."
+            },
+            {
+                id: 4,
+                question: "What type of motion occurs when an object covers equal distances in equal time intervals?",
+                options: [
+                    "Accelerated motion",
+                    "Uniform motion",
+                    "Circular motion",
+                    "Random motion"
+                ],
+                correct: 1,
+                explanation: "Uniform motion is when an object covers equal distances in equal intervals of time, meaning constant speed."
+            },
+            {
+                id: 5,
+                question: "A student walks 5 meters east, then 5 meters west. What is their displacement?",
+                options: [
+                    "10 meters",
+                    "5 meters east",
+                    "0 meters",
+                    "5 meters west"
+                ],
+                correct: 2,
+                explanation: "The student ends up at the starting point, so displacement (shortest distance from start to finish) is 0 meters."
+            }
+        ];
+
+        let userAnswers = {};
+        let quizSubmitted = false;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            let html = '';
+
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question" id="question${q.id}">
+                        <h3>Question ${index + 1}</h3>
+                        <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                        <div class="options">
+                            ${q.options.map((option, optIndex) => `
+                                <div class="option" onclick="selectOption(${q.id}, ${optIndex})">
+                                    <input type="radio" name="q${q.id}" id="q${q.id}_${optIndex}" style="margin-right: 10px;">
+                                    <label for="q${q.id}_${optIndex}" style="cursor: pointer;">${option}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback${q.id}"></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectOption(questionId, optionIndex) {
+            if (quizSubmitted) return;
+
+            userAnswers[questionId] = optionIndex;
+
+            const question = document.getElementById(`question${questionId}`);
+            const options = question.querySelectorAll('.option');
+            options.forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optionIndex);
+                const radio = opt.querySelector('input');
+                radio.checked = idx === optionIndex;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) {
+                alert('Please answer all questions before submitting!');
+                return;
+            }
+
+            quizSubmitted = true;
+            let correctCount = 0;
+
+            questions.forEach(q => {
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) correctCount++;
+
+                const questionEl = document.getElementById(`question${q.id}`);
+                const feedbackEl = document.getElementById(`feedback${q.id}`);
+                const options = questionEl.querySelectorAll('.option');
+
+                questionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                options.forEach((opt, idx) => {
+                    if (idx === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (idx === userAnswer && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                feedbackEl.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackEl.innerHTML = `
+                    ${isCorrect ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}
+                `;
+            });
+
+            const percentage = Math.round((correctCount / questions.length) * 100);
+
+            const resultEl = document.getElementById('quizResult');
+            resultEl.className = 'quiz-result show';
+            resultEl.innerHTML = `
+                <h3>${percentage >= 80 ? '🎉 Excellent Work!' : percentage >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3>
+                <p>You scored ${correctCount} out of ${questions.length} (${percentage}%)</p>
+                <p>${percentage >= 80 ? 'You have mastered Mechanics Basics!' : percentage >= 60 ? 'You have a good understanding. Review the missed concepts.' : 'Review the lesson and try again to improve your mastery.'}</p>
+                ${percentage >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + percentage + ')">Complete & Continue</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}
+            `;
+
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {
+            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'Mechanics Basics', score, 100);
+            }
+
+            if (window.analyticsSystem) {
+                analyticsSystem.recordQuizCompletion({
+                    subject: 'Physics',
+                    topic: 'Mechanics Basics',
+                    score: score,
+                    maxScore: 100,
+                    questionsAnswered: questions.length
+                });
+            }
+
+            if (window.gamificationSystem) {
+                const points = Math.floor(score / 10) * 10 + 50; 
+                gamificationSystem.addPoints(points, 'Completed Mechanics Basics');
+            }
+
+            window.dispatchEvent(new CustomEvent('unitCompleted', {
+                detail: { 
+                    unitId: 'p1', 
+                    subject: 'science', 
+                    module: 'physics',
+                    score: score 
+                }
+            }));
+
+            alert(`Congratulations! You've completed Mechanics Basics with ${score}% mastery!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 50}\nCheck your Analytics Dashboard to see your progress!`);
+            
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>

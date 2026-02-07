@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiology - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body { overflow: auto !important; height: auto !important; }
+        .lesson-container { max-width: 900px; margin: 80px auto 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .lesson-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #4caf50; }
+        .lesson-header h1 { color: #4caf50; font-size: 2.5rem; margin-bottom: 10px; }
+        .lesson-header .level-badge { display: inline-block; background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+        .lesson-content { margin-bottom: 40px; }
+        .lesson-section { margin-bottom: 35px; }
+        .lesson-section h2 { color: #4caf50; font-size: 1.8rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .lesson-section h3 { color: #333; font-size: 1.3rem; margin: 20px 0 10px; }
+        .lesson-section p { color: #444; line-height: 1.8; margin-bottom: 15px; font-size: 1.05rem; }
+        .concept-box { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .concept-box h4 { color: #4caf50; margin-bottom: 10px; font-size: 1.2rem; }
+        .formula-box { background: #fff3e0; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 600; }
+        .example-box { background: #f1f8f4; border-left: 4px solid #2e7d32; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .example-box h4 { color: #2e7d32; margin-bottom: 10px; }
+        .quiz-section { background: #f9f9f9; padding: 30px; border-radius: 12px; margin-top: 40px; border: 2px solid #4caf50; }
+        .quiz-section h2 { color: #4caf50; text-align: center; margin-bottom: 25px; }
+        .question { background: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #e0e0e0; }
+        .question.correct { border-color: #4caf50; background: #f1f8f4; }
+        .question.incorrect { border-color: #f44336; background: #ffebee; }
+        .question h3 { color: #333; margin-bottom: 15px; font-size: 1.2rem; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .option:hover { border-color: #4caf50; background: #e8f5e9; }
+        .option.selected { border-color: #4caf50; background: #e8f5e9; }
+        .option.correct { border-color: #4caf50; background: #f1f8f4; }
+        .option.incorrect { border-color: #f44336; background: #ffebee; }
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #f1f8f4; color: #2e7d32; border: 1px solid #4caf50; }
+        .feedback.incorrect { background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        .submit-quiz-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: all 0.3s ease; }
+        .submit-quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4); }
+        .submit-quiz-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .quiz-result { text-align: center; padding: 30px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border-radius: 12px; margin-top: 20px; display: none; }
+        .quiz-result.show { display: block; }
+        .quiz-result h3 { font-size: 2rem; margin-bottom: 15px; }
+        .quiz-result p { font-size: 1.2rem; margin-bottom: 20px; }
+        .next-lesson-btn { padding: 12px 30px; background: white; color: #4caf50; border: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem; cursor: pointer; margin-top: 15px; }
+        .next-lesson-btn:hover { background: #f0f0f0; }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>❤️ Physiology</h1>
+            <span class="level-badge">Level 3 • Biology</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to Physiology</h2>
+                <p>Physiology is the study of how living organisms function. It examines the physical and chemical processes that keep organisms alive and explores how different body systems work together.</p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ Major body systems and their functions<br>✓ Homeostasis and regulation<br>✓ Circulatory and respiratory systems<br>✓ Nervous and digestive systems</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 Homeostasis</h2>
+                <p>Homeostasis is the maintenance of stable internal conditions despite changes in the external environment.</p>
+                <div class="concept-box">
+                    <h4>Homeostatic Mechanisms:</h4>
+                    <p>• <strong>Negative Feedback:</strong> Counteracts changes (most common)<br>• <strong>Positive Feedback:</strong> Amplifies changes (less common)<br>• Examples: Body temperature, blood sugar, pH balance, water balance</p>
+                </div>
+                <div class="example-box">
+                    <h4>Example: Temperature Regulation</h4>
+                    <p>• Too hot → Sweating, vasodilation<br>• Too cold → Shivering, vasoconstriction<br>• Normal body temperature: ~37°C (98.6°F)</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>❤️ Circulatory System</h2>
+                <p>Transports oxygen, nutrients, hormones, and waste products throughout the body.</p>
+                
+                <h3>Heart Structure</h3>
+                <div class="concept-box">
+                    <p>• Four chambers: 2 atria (upper), 2 ventricles (lower)<br>• Right side: Pumps deoxygenated blood to lungs<br>• Left side: Pumps oxygenated blood to body<br>• Valves prevent backflow</p>
+                </div>
+
+                <h3>Blood Vessels</h3>
+                <div class="concept-box">
+                    <p>• <strong>Arteries:</strong> Carry blood away from heart (thick, elastic walls)<br>• <strong>Veins:</strong> Return blood to heart (thinner walls, have valves)<br>• <strong>Capillaries:</strong> Tiny vessels for gas/nutrient exchange</p>
+                </div>
+
+                <h3>Blood Components</h3>
+                <div class="concept-box">
+                    <p>• <strong>Red blood cells:</strong> Carry oxygen via hemoglobin<br>• <strong>White blood cells:</strong> Fight infections<br>• <strong>Platelets:</strong> Blood clotting<br>• <strong>Plasma:</strong> Liquid portion (55% of blood)</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🫁 Respiratory System</h2>
+                <p>Exchanges gases between the body and environment - brings in oxygen, removes carbon dioxide.</p>
+                
+                <h3>Breathing Process</h3>
+                <div class="concept-box">
+                    <p>• <strong>Inhalation:</strong> Diaphragm contracts, lungs expand, air flows in<br>• <strong>Exhalation:</strong> Diaphragm relaxes, lungs deflate, air flows out<br>• Gas exchange occurs in alveoli (tiny air sacs)</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Gas Exchange</h4>
+                    <p>Alveoli (lungs) ↔ Capillaries (blood):<br>• O₂ diffuses into blood<br>• CO₂ diffuses out of blood<br>• Based on concentration gradients</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🧠 Nervous System</h2>
+                <p>Controls and coordinates body activities through electrical and chemical signals.</p>
+                
+                <h3>Central Nervous System (CNS)</h3>
+                <div class="concept-box">
+                    <p>• Brain: Control center<br>• Spinal cord: Information highway</p>
+                </div>
+
+                <h3>Peripheral Nervous System (PNS)</h3>
+                <div class="concept-box">
+                    <p>• <strong>Somatic:</strong> Voluntary movements<br>• <strong>Autonomic:</strong> Involuntary functions<br>&nbsp;&nbsp;- Sympathetic: "Fight or flight"<br>&nbsp;&nbsp;- Parasympathetic: "Rest and digest"</p>
+                </div>
+
+                <h3>Neurons</h3>
+                <div class="concept-box">
+                    <p>• Transmit electrical signals (action potentials)<br>• Parts: Dendrites, cell body, axon, synapses<br>• Neurotransmitters carry signals across synapses</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🍽️ Digestive System</h2>
+                <p>Breaks down food into nutrients that can be absorbed and used by the body.</p>
+                <div class="concept-box">
+                    <h4>Digestive Process:</h4>
+                    <p>1. <strong>Mouth:</strong> Mechanical (chewing) and chemical (saliva) digestion<br>2. <strong>Esophagus:</strong> Transports food to stomach<br>3. <strong>Stomach:</strong> Acids and enzymes break down proteins<br>4. <strong>Small intestine:</strong> Main site of nutrient absorption<br>5. <strong>Large intestine:</strong> Absorbs water, forms waste<br>6. <strong>Rectum/Anus:</strong> Eliminates waste</p>
+                </div>
+                <div class="example-box">
+                    <h4>Accessory Organs</h4>
+                    <p>• Liver: Produces bile (breaks down fats)<br>• Pancreas: Produces digestive enzymes<br>• Gallbladder: Stores bile</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Medical diagnosis and treatment</li>
+                    <li>Exercise science and sports medicine</li>
+                    <li>Pharmaceutical drug development</li>
+                    <li>Nutrition and dietary planning</li>
+                    <li>Understanding diseases and disorders</li>
+                    <li>Organ transplantation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">Answer these questions to demonstrate your mastery of Physiology</p>
+            <div id="quizContainer"></div>
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});
+    </script>
+    <script>
+        const questions = [
+            {id: 1, question: "What is homeostasis?", options: ["Breaking down food", "Maintaining stable internal conditions", "Fighting infections", "Circulating blood"], correct: 1, explanation: "Homeostasis is the process of maintaining stable internal conditions despite external changes."},
+            {id: 2, question: "Which blood cells carry oxygen?", options: ["White blood cells", "Red blood cells", "Platelets", "Plasma"], correct: 1, explanation: "Red blood cells contain hemoglobin, which binds to and transports oxygen throughout the body."},
+            {id: 3, question: "Where does gas exchange occur in the respiratory system?", options: ["Trachea", "Bronchi", "Alveoli", "Diaphragm"], correct: 2, explanation: "Alveoli are tiny air sacs in the lungs where oxygen and carbon dioxide are exchanged with the blood."},
+            {id: 4, question: "What part of the nervous system controls voluntary movements?", options: ["Autonomic nervous system", "Sympathetic nervous system", "Somatic nervous system", "Parasympathetic nervous system"], correct: 2, explanation: "The somatic nervous system controls voluntary movements of skeletal muscles."},
+            {id: 5, question: "Where does most nutrient absorption occur?", options: ["Stomach", "Small intestine", "Large intestine", "Esophagus"], correct: 1, explanation: "The small intestine is the main site of nutrient absorption due to its large surface area with villi."}
+        ];
+
+        let userAnswers = {}, quizSubmitted = false;
+
+        function renderQuiz() {
+            document.getElementById('quizContainer').innerHTML = questions.map((q, i) => `
+                <div class="question" id="question${q.id}">
+                    <h3>Question ${i + 1}</h3>
+                    <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="selectOption(${q.id}, ${idx})">
+                                <input type="radio" name="q${q.id}" id="q${q.id}_${idx}" style="margin-right: 10px;">
+                                <label for="q${q.id}_${idx}" style="cursor: pointer;">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${q.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectOption(qId, optIdx) {
+            if (quizSubmitted) return;
+            userAnswers[qId] = optIdx;
+            const question = document.getElementById(`question${qId}`);
+            question.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optIdx);
+                opt.querySelector('input').checked = idx === optIdx;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) { alert('Please answer all questions!'); return; }
+            quizSubmitted = true;
+            let correctCount = 0;
+            questions.forEach(q => {
+                const correct = userAnswers[q.id] === q.correct;
+                if (correct) correctCount++;
+                const questionEl = document.getElementById(`question${q.id}`);
+                questionEl.classList.add(correct ? 'correct' : 'incorrect');
+                questionEl.querySelectorAll('.option').forEach((opt, idx) => {
+                    if (idx === q.correct) opt.classList.add('correct');
+                    else if (idx === userAnswers[q.id]) opt.classList.add('incorrect');
+                });
+                document.getElementById(`feedback${q.id}`).className = `feedback show ${correct ? 'correct' : 'incorrect'}`;
+                document.getElementById(`feedback${q.id}`).innerHTML = `${correct ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}`;
+            });
+            const pct = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('quizResult').className = 'quiz-result show';
+            document.getElementById('quizResult').innerHTML = `<h3>${pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3><p>You scored ${correctCount}/${questions.length} (${pct}%)</p>${pct >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + pct + ')">Complete & Continue</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}`;
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'Physiology', score, 100);
+            }            skillTreeSystem.unlockUnit('science', 'biology', 'b5', score);
+            if (window.analyticsSystem) analyticsSystem.recordQuizCompletion({subject: 'Biology', topic: 'Physiology', score, maxScore: 100, questionsAnswered: questions.length});
+            if (window.gamificationSystem) gamificationSystem.addPoints(Math.floor(score / 10) * 10 + 50, 'Completed Physiology');
+            window.dispatchEvent(new CustomEvent('unitCompleted', {detail: {unitId: 'b5', subject: 'science', module: 'biology', score}}));
+            alert(`Congratulations! You've completed Physiology with ${score}% mastery!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 50}`);
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>

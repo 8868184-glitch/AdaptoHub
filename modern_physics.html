@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Physics - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body {
+            overflow: auto !important;
+            height: auto !important;
+        }
+
+        .lesson-container {
+            max-width: 900px;
+            margin: 80px auto 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #0097b2;
+        }
+
+        .lesson-header h1 {
+            color: #0097b2;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .lesson-header .level-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .lesson-content {
+            margin-bottom: 40px;
+        }
+
+        .lesson-section {
+            margin-bottom: 35px;
+        }
+
+        .lesson-section h2 {
+            color: #0097b2;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-section h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+        }
+
+        .lesson-section p {
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .concept-box {
+            background: #e6f7fa;
+            border-left: 4px solid #0097b2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .concept-box h4 {
+            color: #0097b2;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .formula-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .example-box {
+            background: #f1f8f4;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .example-box h4 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+
+        .quiz-section {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border: 2px solid #0097b2;
+        }
+
+        .quiz-section h2 {
+            color: #0097b2;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .question {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .question.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .question.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #0097b2;
+            background: #e6f7fa;
+        }
+
+        .option.selected {
+            border-color: #0097b2;
+            background: #e6f7fa;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #f1f8f4;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        .submit-quiz-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 151, 178, 0.4);
+        }
+
+        .submit-quiz-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%);
+            color: white;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .quiz-result.show {
+            display: block;
+        }
+
+        .quiz-result h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-result p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .next-lesson-btn {
+            padding: 12px 30px;
+            background: white;
+            color: #0097b2;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .next-lesson-btn:hover {
+            background: #f0f0f0;
+        }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>⚛️ Modern Physics</h1>
+            <span class="level-badge">Level 4 • Physics</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to Modern Physics</h2>
+                <p>
+                    Modern physics emerged in the early 20th century, revolutionizing our understanding of the 
+                    universe at its most fundamental levels. It includes quantum mechanics, relativity, nuclear 
+                    physics, and particle physics—concepts that challenge our everyday intuitions.
+                </p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ Special and General Relativity<br>
+                       ✓ Quantum Mechanics fundamentals<br>
+                       ✓ Atomic and Nuclear Physics<br>
+                       ✓ Particle Physics basics</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 Einstein's Theory of Relativity</h2>
+                
+                <h3>Special Relativity (1905)</h3>
+                <p>
+                    Special relativity deals with objects moving at constant velocities, particularly at speeds 
+                    close to the speed of light.
+                </p>
+                <div class="concept-box">
+                    <h4>Key Principles:</h4>
+                    <p>1. The laws of physics are the same in all inertial reference frames<br>
+                       2. The speed of light is constant for all observers (c = 3 × 10⁸ m/s)</p>
+                </div>
+
+                <h3>Consequences of Special Relativity</h3>
+                <div class="concept-box">
+                    <p><strong>Time Dilation:</strong> Time passes slower for objects moving at high speeds<br>
+                       <strong>Length Contraction:</strong> Objects appear shorter in the direction of motion<br>
+                       <strong>Mass-Energy Equivalence:</strong> E = mc² (energy and mass are interchangeable)</p>
+                </div>
+
+                <div class="formula-box">
+                    E = mc²<br>
+                    (Energy = mass × speed of light²)
+                </div>
+
+                <h3>General Relativity (1915)</h3>
+                <p>
+                    Gravity is not a force but a curvature of spacetime caused by mass and energy. Massive objects 
+                    like stars and planets bend the fabric of spacetime.
+                </p>
+                <div class="example-box">
+                    <h4>Example:</h4>
+                    <p>GPS satellites must account for both special and general relativity. Time runs slightly 
+                    faster in orbit than on Earth's surface due to weaker gravity!</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌌 Quantum Mechanics</h2>
+                
+                <p>
+                    Quantum mechanics describes the behavior of matter and energy at the atomic and subatomic scale, 
+                    where classical physics breaks down.
+                </p>
+
+                <h3>Wave-Particle Duality</h3>
+                <p>
+                    Light and matter exhibit both wave-like and particle-like properties. Electrons can behave as 
+                    particles or waves depending on how they're observed.
+                </p>
+
+                <h3>Heisenberg's Uncertainty Principle</h3>
+                <p>
+                    It's impossible to simultaneously know both the exact position and exact momentum of a particle.
+                </p>
+                <div class="formula-box">
+                    Δx × Δp ≥ ℏ/2<br>
+                    (uncertainty in position × uncertainty in momentum)
+                </div>
+
+                <h3>Quantum Superposition</h3>
+                <p>
+                    Particles can exist in multiple states simultaneously until measured. Schrödinger's famous 
+                    thought experiment with a cat illustrates this concept.
+                </p>
+
+                <h3>Quantum Entanglement</h3>
+                <p>
+                    When particles become entangled, measuring one instantly affects the other, regardless of 
+                    distance. Einstein called this "spooky action at a distance."
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>⚛️ Atomic and Nuclear Physics</h2>
+                
+                <h3>Atomic Structure</h3>
+                <p>
+                    Atoms consist of a nucleus (protons and neutrons) surrounded by electrons in quantum orbitals, 
+                    not simple circular orbits.
+                </p>
+
+                <h3>Nuclear Forces</h3>
+                <div class="concept-box">
+                    <p><strong>Strong Nuclear Force:</strong> Holds protons and neutrons together in the nucleus<br>
+                       <strong>Weak Nuclear Force:</strong> Responsible for radioactive decay</p>
+                </div>
+
+                <h3>Radioactivity</h3>
+                <p>
+                    Unstable atomic nuclei emit radiation to become more stable. Three types:
+                </p>
+                <div class="concept-box">
+                    <p>• Alpha (α) radiation: Helium nuclei<br>
+                       • Beta (β) radiation: Electrons or positrons<br>
+                       • Gamma (γ) radiation: High-energy photons</p>
+                </div>
+
+                <h3>Nuclear Reactions</h3>
+                <div class="concept-box">
+                    <p><strong>Nuclear Fission:</strong> Splitting heavy nuclei (used in nuclear power plants)<br>
+                       <strong>Nuclear Fusion:</strong> Combining light nuclei (powers the sun and stars)</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>Example:</h4>
+                    <p>The sun fuses hydrogen into helium, converting mass into energy according to E = mc². 
+                    This releases enormous amounts of energy that powers all life on Earth!</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🔬 Particle Physics</h2>
+                
+                <p>
+                    Particle physics studies the fundamental constituents of matter and the forces between them.
+                </p>
+
+                <h3>The Standard Model</h3>
+                <div class="concept-box">
+                    <h4>Fundamental Particles:</h4>
+                    <p><strong>Quarks:</strong> Make up protons and neutrons (6 types)<br>
+                       <strong>Leptons:</strong> Include electrons and neutrinos (6 types)<br>
+                       <strong>Bosons:</strong> Force carrier particles (photon, gluon, W/Z bosons, Higgs)</p>
+                </div>
+
+                <h3>The Higgs Boson</h3>
+                <p>
+                    Discovered in 2012 at CERN, the Higgs boson explains why particles have mass. It confirmed 
+                    the existence of the Higgs field that permeates all of space.
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <p>Modern physics has led to revolutionary technologies:</p>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Nuclear power and nuclear medicine</li>
+                    <li>Semiconductor technology and computer chips</li>
+                    <li>Lasers and fiber optics</li>
+                    <li>MRI and PET scans in medicine</li>
+                    <li>GPS satellites (require relativity corrections)</li>
+                    <li>Quantum computing (emerging technology)</li>
+                    <li>Solar panels (photoelectric effect)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">
+                Answer these questions to demonstrate your mastery of Modern Physics
+            </p>
+
+            <div id="quizContainer"></div>
+
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});
+    </script>
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "What does Einstein's famous equation E = mc² represent?",
+                options: [
+                    "Energy equals momentum times speed",
+                    "Energy and mass are equivalent and interchangeable",
+                    "Energy equals the speed of light",
+                    "Mass cannot be converted to energy"
+                ],
+                correct: 1,
+                explanation: "E = mc² shows that energy and mass are equivalent. A small amount of mass can be converted into a tremendous amount of energy."
+            },
+            {
+                id: 2,
+                question: "What is wave-particle duality?",
+                options: [
+                    "Waves and particles are completely different",
+                    "Light and matter can exhibit both wave and particle properties",
+                    "Only light behaves as a wave",
+                    "Particles cannot behave as waves"
+                ],
+                correct: 1,
+                explanation: "Wave-particle duality means that light and matter can exhibit both wave-like and particle-like properties depending on how they are observed."
+            },
+            {
+                id: 3,
+                question: "According to general relativity, gravity is:",
+                options: [
+                    "A force pulling objects together",
+                    "The curvature of spacetime caused by mass",
+                    "An electromagnetic phenomenon",
+                    "Caused by friction"
+                ],
+                correct: 1,
+                explanation: "General relativity describes gravity not as a force but as the curvature of spacetime caused by mass and energy."
+            },
+            {
+                id: 4,
+                question: "What process powers the sun?",
+                options: [
+                    "Chemical combustion",
+                    "Nuclear fission",
+                    "Nuclear fusion",
+                    "Electrical discharge"
+                ],
+                correct: 2,
+                explanation: "The sun is powered by nuclear fusion, where hydrogen nuclei combine to form helium, releasing enormous amounts of energy."
+            },
+            {
+                id: 5,
+                question: "The Higgs boson is associated with:",
+                options: [
+                    "The speed of light",
+                    "Why particles have mass",
+                    "Radioactive decay",
+                    "Electromagnetic radiation"
+                ],
+                correct: 1,
+                explanation: "The Higgs boson is associated with the Higgs field, which gives fundamental particles their mass. It was discovered at CERN in 2012."
+            }
+        ];
+
+        let userAnswers = {};
+        let quizSubmitted = false;
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            let html = '';
+
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question" id="question${q.id}">
+                        <h3>Question ${index + 1}</h3>
+                        <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                        <div class="options">
+                            ${q.options.map((option, optIndex) => `
+                                <div class="option" onclick="selectOption(${q.id}, ${optIndex})">
+                                    <input type="radio" name="q${q.id}" id="q${q.id}_${optIndex}" style="margin-right: 10px;">
+                                    <label for="q${q.id}_${optIndex}" style="cursor: pointer;">${option}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback${q.id}"></div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function selectOption(questionId, optionIndex) {
+            if (quizSubmitted) return;
+
+            userAnswers[questionId] = optionIndex;
+
+            const question = document.getElementById(`question${questionId}`);
+            const options = question.querySelectorAll('.option');
+            options.forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optionIndex);
+                const radio = opt.querySelector('input');
+                radio.checked = idx === optionIndex;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) {
+                alert('Please answer all questions before submitting!');
+                return;
+            }
+
+            quizSubmitted = true;
+            let correctCount = 0;
+
+            questions.forEach(q => {
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer === q.correct;
+                
+                if (isCorrect) correctCount++;
+
+                const questionEl = document.getElementById(`question${q.id}`);
+                const feedbackEl = document.getElementById(`feedback${q.id}`);
+                const options = questionEl.querySelectorAll('.option');
+
+                questionEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                options.forEach((opt, idx) => {
+                    if (idx === q.correct) {
+                        opt.classList.add('correct');
+                    } else if (idx === userAnswer && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                feedbackEl.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+                feedbackEl.innerHTML = `
+                    ${isCorrect ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}
+                `;
+            });
+
+            const percentage = Math.round((correctCount / questions.length) * 100);
+            
+            const resultEl = document.getElementById('quizResult');
+            resultEl.className = 'quiz-result show';
+            resultEl.innerHTML = `
+                <h3>${percentage >= 80 ? '🎉 Excellent Work!' : percentage >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3>
+                <p>You scored ${correctCount} out of ${questions.length} (${percentage}%)</p>
+                <p>${percentage >= 80 ? 'You have mastered Modern Physics! You completed the entire Physics path!' : percentage >= 60 ? 'You have a good understanding. Review the missed concepts.' : 'Review the lesson and try again to improve your mastery.'}</p>
+                ${percentage >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + percentage + ')">Complete & Finish Physics</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}
+            `;
+
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {
+            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'Modern Physics', score, 100);
+            }
+            skillTreeSystem.unlockUnit('science', 'physics', 'p7', score);
+
+            if (window.analyticsSystem) {
+                analyticsSystem.recordQuizCompletion({
+                    subject: 'Physics',
+                    topic: 'Modern Physics',
+                    score: score,
+                    maxScore: 100,
+                    questionsAnswered: questions.length
+                });
+            }
+
+            if (window.gamificationSystem) {
+                const points = Math.floor(score / 10) * 10 + 100;
+                gamificationSystem.addPoints(points, 'Completed Modern Physics - Finished Physics Path!');
+            }
+
+            window.dispatchEvent(new CustomEvent('unitCompleted', {
+                detail: { 
+                    unitId: 'p7', 
+                    subject: 'science', 
+                    module: 'physics',
+                    score: score 
+                }
+            }));
+
+            alert(`🎉 Congratulations! You've completed Modern Physics with ${score}% mastery!\n\nYou've finished the entire Physics learning path!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 100}\n\nCheck your Analytics Dashboard to see your complete progress!`);
+            
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Demo | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: var(--bg-primary, #f5f7fb);
+            font-family: 'Bai Jamjuree', sans-serif;
+            color: var(--text-primary, #1f2933);
+        }
+        .demo-shell {
+            max-width: 1200px;
+            margin: 100px auto 60px;
+            padding: 0 24px;
+        }
+        .demo-hero {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .demo-hero h1 {
+            margin: 0 0 12px;
+            font-size: 2.5rem;
+        }
+        .demo-hero p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .demo-section {
+            background: var(--card-bg, white);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.1));
+        }
+        .demo-section h2 {
+            margin: 0 0 20px;
+            color: #6366f1;
+        }
+        .demo-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .demo-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: 'Bai Jamjuree', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .demo-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        .demo-btn:active {
+            transform: scale(0.95);
+        }
+        .demo-btn.secondary {
+            background: #10b981;
+        }
+        .demo-btn.secondary:hover {
+            background: #059669;
+        }
+        .demo-btn.danger {
+            background: #ef4444;
+        }
+        .demo-btn.danger:hover {
+            background: #dc2626;
+        }
+        .score-demo {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .score-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color, #e4e7eb);
+            border-radius: 8px;
+            font-family: 'Bai Jamjuree', sans-serif;
+            font-size: 1rem;
+            background: var(--input-bg, white);
+            color: var(--text-primary, #1f2933);
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+        .feature-list li {
+            padding: 12px;
+            background: var(--bg-secondary, #f5f6f8);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #10b981;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: var(--bg-secondary, #f5f6f8);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary, #636d79);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <main class="demo-shell">
+        <div class="demo-hero fade-in">
+            <h1>🎨 New Features Demo</h1>
+            <p>Test all the new visual enhancements and animations!</p>
+        </div>
+
+        <!-- Dark Mode Demo -->
+        <section class="demo-section">
+            <h2>🌙 Dark Mode Toggle</h2>
+            <p>Click the moon/sun icon in the top-right corner to toggle dark mode!</p>
+            <ul class="feature-list">
+                <li>✅ Automatic switching based on time (7 PM - 6 AM)</li>
+                <li>✅ Remembers your preference in localStorage</li>
+                <li>✅ Smooth color transitions</li>
+                <li>✅ Works across all pages</li>
+            </ul>
+        </section>
+
+        <!-- Avatar Demo -->
+        <section class="demo-section">
+            <h2>👤 Avatar Customization</h2>
+            <p>Click on your avatar in the top-right corner to customize it!</p>
+            <div class="demo-buttons">
+                <button class="demo-btn" onclick="openAvatarModal()">Open Avatar Selector</button>
+                <button class="demo-btn secondary" onclick="unlockSampleAvatar()">Unlock Sample Avatar</button>
+            </div>
+            <ul class="feature-list" style="margin-top: 20px;">
+                <li>✅ 6 basic avatars available immediately</li>
+                <li>✅ 6 unlockable avatars with requirements</li>
+                <li>✅ 8 color themes to choose from</li>
+                <li>✅ Achievement notifications when unlocking</li>
+            </ul>
+        </section>
+
+        <!-- Celebrations Demo -->
+        <section class="demo-section">
+            <h2>🎉 Celebration Effects</h2>
+            <p>Try different celebration animations:</p>
+            <div class="demo-buttons">
+                <button class="demo-btn" onclick="testQuizComplete()">Quiz Complete (70%)</button>
+                <button class="demo-btn" onclick="testHighScore()">High Score (90%)</button>
+                <button class="demo-btn secondary" onclick="testPerfectScore()">Perfect Score (100%)</button>
+                <button class="demo-btn secondary" onclick="testUnitComplete()">Unit Complete</button>
+                <button class="demo-btn" onclick="testAchievementBadge()">Achievement Badge</button>
+                <button class="demo-btn" onclick="testStreakCelebration()">Streak Milestone</button>
+            </div>
+            <div class="score-demo">
+                <input type="number" class="score-input" id="customScore" placeholder="Enter score (0-100)" min="0" max="100">
+                <button class="demo-btn" onclick="testCustomScore()">Test Custom Score</button>
+            </div>
+        </section>
+
+        <!-- Loading Tips Demo -->
+        <section class="demo-section">
+            <h2>💡 Loading Tips</h2>
+            <p>Educational tips appear during loading screens:</p>
+            <div class="demo-buttons">
+                <button class="demo-btn" onclick="testLoadingGeneral()">General Tip</button>
+                <button class="demo-btn" onclick="testLoadingMath()">Math Tip</button>
+                <button class="demo-btn" onclick="testLoadingScience()">Science Tip</button>
+                <button class="demo-btn" onclick="testLoadingHistory()">History Tip</button>
+            </div>
+        </section>
+
+        <!-- Animations Demo -->
+        <section class="demo-section">
+            <h2>✨ Smooth Animations</h2>
+            <ul class="feature-list">
+                <li>✅ Page fade-in transitions</li>
+                <li>✅ Button hover and press effects</li>
+                <li>✅ Card entrance animations</li>
+                <li>✅ Smooth quiz question transitions</li>
+                <li>✅ Progress bar animations</li>
+                <li>✅ Number counting animations</li>
+            </ul>
+        </section>
+
+        <!-- Stats Demo -->
+        <section class="demo-section">
+            <h2>📊 Current Demo Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalQuizzes">0</div>
+                    <div class="stat-label">Total Quizzes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgScore">0%</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="perfectScores">0</div>
+                    <div class="stat-label">Perfect Scores</div>
+                </div>
+            </div>
+            <div class="demo-buttons" style="margin-top: 20px;">
+                <button class="demo-btn secondary" onclick="incrementStats()">Simulate Quiz Completion</button>
+                <button class="demo-btn danger" onclick="resetStats()">Reset All Stats</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Avatar functions
+        function openAvatarModal() {
+            if (window.AvatarSystem) {
+                AvatarSystem.openModal();
+            }
+        }
+
+        function unlockSampleAvatar() {
+            const unlocked = JSON.parse(localStorage.getItem('adaptohub_unlocked_avatars') || '[]');
+            if (!unlocked.includes('wizard')) {
+                unlocked.push('wizard');
+                localStorage.setItem('adaptohub_unlocked_avatars', JSON.stringify(unlocked));
+                if (window.Celebrations) {
+                    Celebrations.showBadge('New Avatar Unlocked!', '🧙', 'Wizard');
+                }
+            }
+        }
+
+        // Celebration functions
+        function testQuizComplete() {
+            if (window.Celebrations) {
+                Celebrations.quizComplete(75);
+            }
+        }
+
+        function testHighScore() {
+            if (window.Celebrations) {
+                Celebrations.quizComplete(92);
+            }
+        }
+
+        function testPerfectScore() {
+            if (window.Celebrations) {
+                Celebrations.perfectScore();
+            }
+        }
+
+        function testUnitComplete() {
+            if (window.Celebrations) {
+                Celebrations.unitComplete();
+            }
+        }
+
+        function testAchievementBadge() {
+            if (window.Celebrations) {
+                Celebrations.showBadge('Test Achievement', '🏆', 'Successfully tested the badge system!');
+            }
+        }
+
+        function testStreakCelebration() {
+            if (window.Celebrations) {
+                Celebrations.streakMilestone(7);
+            }
+        }
+
+        function testCustomScore() {
+            const scoreInput = document.getElementById('customScore');
+            const score = parseInt(scoreInput.value) || 0;
+            if (score >= 0 && score <= 100 && window.Celebrations) {
+                if (score === 100) {
+                    Celebrations.perfectScore();
+                } else {
+                    Celebrations.quizComplete(score);
+                }
+            } else {
+                alert('Please enter a score between 0 and 100');
+            }
+        }
+
+        // Loading functions
+        function testLoadingGeneral() {
+            if (window.LoadingTips) {
+                LoadingTips.showForDuration(3000, 'general', 'Loading general tips...');
+            }
+        }
+
+        function testLoadingMath() {
+            if (window.LoadingTips) {
+                LoadingTips.showForDuration(3000, 'mathematics', 'Loading math tips...');
+            }
+        }
+
+        function testLoadingScience() {
+            if (window.LoadingTips) {
+                LoadingTips.showForDuration(3000, 'science', 'Loading science tips...');
+            }
+        }
+
+        function testLoadingHistory() {
+            if (window.LoadingTips) {
+                LoadingTips.showForDuration(3000, 'history', 'Loading history tips...');
+            }
+        }
+
+        // Stats functions
+        function updateStatsDisplay() {
+            const totalQuizzes = localStorage.getItem('adaptohub_total_quizzes') || '0';
+            const streak = localStorage.getItem('adaptohub_streak') || '0';
+            const avgScore = localStorage.getItem('adaptohub_avg_score') || '0';
+            const perfectScores = localStorage.getItem('adaptohub_perfect_scores') || '0';
+
+            document.getElementById('totalQuizzes').textContent = totalQuizzes;
+            document.getElementById('currentStreak').textContent = streak;
+            document.getElementById('avgScore').textContent = avgScore + '%';
+            document.getElementById('perfectScores').textContent = perfectScores;
+        }
+
+        function incrementStats() {
+            const totalQuizzes = parseInt(localStorage.getItem('adaptohub_total_quizzes') || '0') + 1;
+            localStorage.setItem('adaptohub_total_quizzes', totalQuizzes);
+
+            const randomScore = Math.floor(Math.random() * 30) + 70; // 70-100
+            const scores = JSON.parse(localStorage.getItem('adaptohub_all_scores') || '[]');
+            scores.push(randomScore);
+            localStorage.setItem('adaptohub_all_scores', JSON.stringify(scores));
+
+            const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+            localStorage.setItem('adaptohub_avg_score', avg);
+
+            if (randomScore === 100) {
+                const perfect = parseInt(localStorage.getItem('adaptohub_perfect_scores') || '0') + 1;
+                localStorage.setItem('adaptohub_perfect_scores', perfect);
+            }
+
+            const streak = parseInt(localStorage.getItem('adaptohub_streak') || '0') + 1;
+            localStorage.setItem('adaptohub_streak', streak);
+
+            updateStatsDisplay();
+
+            if (window.Celebrations) {
+                Celebrations.quizComplete(randomScore);
+            }
+
+            if (window.AvatarSystem) {
+                AvatarSystem.checkUnlocks();
+            }
+        }
+
+        function resetStats() {
+            if (confirm('Reset all demo stats?')) {
+                localStorage.removeItem('adaptohub_total_quizzes');
+                localStorage.removeItem('adaptohub_streak');
+                localStorage.removeItem('adaptohub_avg_score');
+                localStorage.removeItem('adaptohub_perfect_scores');
+                localStorage.removeItem('adaptohub_all_scores');
+                localStorage.removeItem('adaptohub_unlocked_avatars');
+                updateStatsDisplay();
+                alert('Stats reset!');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatsDisplay();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molecular Biology - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body { overflow: auto !important; height: auto !important; }
+        .lesson-container { max-width: 900px; margin: 80px auto 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .lesson-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #4caf50; }
+        .lesson-header h1 { color: #4caf50; font-size: 2.5rem; margin-bottom: 10px; }
+        .lesson-header .level-badge { display: inline-block; background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+        .lesson-content { margin-bottom: 40px; }
+        .lesson-section { margin-bottom: 35px; }
+        .lesson-section h2 { color: #4caf50; font-size: 1.8rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .lesson-section h3 { color: #333; font-size: 1.3rem; margin: 20px 0 10px; }
+        .lesson-section p { color: #444; line-height: 1.8; margin-bottom: 15px; font-size: 1.05rem; }
+        .concept-box { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .concept-box h4 { color: #4caf50; margin-bottom: 10px; font-size: 1.2rem; }
+        .formula-box { background: #fff3e0; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 600; }
+        .example-box { background: #f1f8f4; border-left: 4px solid #2e7d32; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .example-box h4 { color: #2e7d32; margin-bottom: 10px; }
+        .quiz-section { background: #f9f9f9; padding: 30px; border-radius: 12px; margin-top: 40px; border: 2px solid #4caf50; }
+        .quiz-section h2 { color: #4caf50; text-align: center; margin-bottom: 25px; }
+        .question { background: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #e0e0e0; }
+        .question.correct { border-color: #4caf50; background: #f1f8f4; }
+        .question.incorrect { border-color: #f44336; background: #ffebee; }
+        .question h3 { color: #333; margin-bottom: 15px; font-size: 1.2rem; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .option:hover { border-color: #4caf50; background: #e8f5e9; }
+        .option.selected { border-color: #4caf50; background: #e8f5e9; }
+        .option.correct { border-color: #4caf50; background: #f1f8f4; }
+        .option.incorrect { border-color: #f44336; background: #ffebee; }
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #f1f8f4; color: #2e7d32; border: 1px solid #4caf50; }
+        .feedback.incorrect { background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        .submit-quiz-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: all 0.3s ease; }
+        .submit-quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4); }
+        .submit-quiz-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .quiz-result { text-align: center; padding: 30px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border-radius: 12px; margin-top: 20px; display: none; }
+        .quiz-result.show { display: block; }
+        .quiz-result h3 { font-size: 2rem; margin-bottom: 15px; }
+        .quiz-result p { font-size: 1.2rem; margin-bottom: 20px; }
+        .next-lesson-btn { padding: 12px 30px; background: white; color: #4caf50; border: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem; cursor: pointer; margin-top: 15px; }
+        .next-lesson-btn:hover { background: #f0f0f0; }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>🧬 Molecular Biology</h1>
+            <span class="level-badge">Level 4 • Biology</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to Molecular Biology</h2>
+                <p>Molecular biology studies the molecular basis of biological activity, focusing on the structure and function of macromolecules essential to life, particularly DNA, RNA, and proteins.</p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ DNA replication<br>✓ Transcription (DNA to RNA)<br>✓ Translation (RNA to protein)<br>✓ Gene expression and regulation</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 The Central Dogma</h2>
+                <p>The flow of genetic information in cells:</p>
+                <div class="formula-box">
+                    DNA → RNA → Protein
+                </div>
+                <div class="concept-box">
+                    <p>• <strong>Replication:</strong> DNA → DNA (copying genetic material)<br>• <strong>Transcription:</strong> DNA → RNA (making RNA from DNA)<br>• <strong>Translation:</strong> RNA → Protein (making proteins from RNA)</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>⚡ DNA Replication</h2>
+                <p>The process of copying DNA before cell division to pass genetic information to daughter cells.</p>
+                <div class="concept-box">
+                    <h4>Replication Steps:</h4>
+                    <p>1. <strong>Unwinding:</strong> Helicase unzips the double helix<br>2. <strong>Primer binding:</strong> Primase adds RNA primers<br>3. <strong>Elongation:</strong> DNA polymerase adds complementary nucleotides<br>4. <strong>Proofreading:</strong> DNA polymerase checks for errors<br>5. <strong>Joining:</strong> Ligase seals gaps between fragments</p>
+                </div>
+                <div class="concept-box">
+                    <p>• Semi-conservative: Each new DNA molecule has one old strand, one new strand<br>• Occurs in S phase of cell cycle<br>• Extremely accurate (~1 error per billion bases)</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🔬 Transcription</h2>
+                <p>The synthesis of RNA from a DNA template. Creates messenger RNA (mRNA) that carries genetic instructions.</p>
+                <div class="concept-box">
+                    <h4>Transcription Process:</h4>
+                    <p>1. <strong>Initiation:</strong> RNA polymerase binds to promoter region<br>2. <strong>Elongation:</strong> RNA polymerase reads DNA, synthesizes RNA<br>3. <strong>Termination:</strong> Reaches terminator sequence, releases RNA</p>
+                </div>
+                <div class="example-box">
+                    <h4>DNA to RNA Base Pairing</h4>
+                    <p>DNA strand: A-T-G-C-G-A<br>RNA produced: U-A-C-G-C-U<br>(Note: RNA has Uracil (U) instead of Thymine (T))</p>
+                </div>
+
+                <h3>RNA Processing (Eukaryotes)</h3>
+                <div class="concept-box">
+                    <p>• <strong>5' cap:</strong> Protective cap added to start<br>• <strong>Poly-A tail:</strong> Added to end for stability<br>• <strong>Splicing:</strong> Introns (non-coding) removed, exons (coding) joined</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🧪 Translation</h2>
+                <p>The synthesis of proteins from mRNA instructions. Occurs on ribosomes.</p>
+                <div class="concept-box">
+                    <h4>Translation Steps:</h4>
+                    <p>1. <strong>Initiation:</strong> mRNA binds to ribosome, start codon (AUG) recognized<br>2. <strong>Elongation:</strong> tRNA brings amino acids, ribosome links them<br>3. <strong>Termination:</strong> Stop codon reached, protein released</p>
+                </div>
+
+                <h3>The Genetic Code</h3>
+                <div class="concept-box">
+                    <p>• Triplet code: 3 nucleotides (codon) = 1 amino acid<br>• 64 possible codons code for 20 amino acids<br>• Universal: Same in nearly all organisms<br>• Start codon: AUG (Methionine)<br>• Stop codons: UAA, UAG, UGA</p>
+                </div>
+                <div class="example-box">
+                    <h4>Translation Example</h4>
+                    <p>mRNA: AUG-UUU-GGC-UAA<br>Amino acids: Met-Phe-Gly-STOP<br>Protein: Met-Phe-Gly (3 amino acids long)</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>📊 Gene Expression and Regulation</h2>
+                <p>Cells control which genes are expressed and when, allowing specialization.</p>
+                <div class="concept-box">
+                    <h4>Regulation Mechanisms:</h4>
+                    <p>• <strong>Transcriptional control:</strong> Turning genes on/off<br>• <strong>Epigenetic modifications:</strong> DNA methylation, histone modification<br>• <strong>Post-transcriptional:</strong> mRNA processing, stability<br>• <strong>Translational control:</strong> Controlling protein synthesis<br>• <strong>Post-translational:</strong> Protein modifications</p>
+                </div>
+                <div class="example-box">
+                    <h4>Example: Lac Operon (Bacteria)</h4>
+                    <p>Genes for lactose metabolism only expressed when lactose is present and glucose is absent - efficient resource use.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Genetic engineering and biotechnology</li>
+                    <li>CRISPR gene editing</li>
+                    <li>Recombinant protein production (insulin, vaccines)</li>
+                    <li>Gene therapy for genetic diseases</li>
+                    <li>Forensic DNA analysis</li>
+                    <li>Personalized medicine based on genetic profiles</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">Answer these questions to demonstrate your mastery of Molecular Biology</p>
+            <div id="quizContainer"></div>
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});
+    </script>
+    <script>
+        const questions = [
+            {id: 1, question: "What is the Central Dogma of molecular biology?", options: ["Protein → RNA → DNA", "DNA → RNA → Protein", "RNA → DNA → Protein", "DNA → Protein → RNA"], correct: 1, explanation: "The Central Dogma describes the flow of genetic information: DNA is transcribed to RNA, which is translated to Protein."},
+            {id: 2, question: "Which enzyme is responsible for synthesizing RNA from DNA?", options: ["DNA polymerase", "RNA polymerase", "Helicase", "Ligase"], correct: 1, explanation: "RNA polymerase reads the DNA template and synthesizes complementary RNA during transcription."},
+            {id: 3, question: "How many nucleotides make up one codon?", options: ["1", "2", "3", "4"], correct: 2, explanation: "A codon is a sequence of three nucleotides that codes for one amino acid."},
+            {id: 4, question: "What is the start codon for translation?", options: ["UAA", "UAG", "AUG", "UGA"], correct: 2, explanation: "AUG is the start codon that signals the beginning of translation and codes for methionine."},
+            {id: 5, question: "In RNA, which base replaces thymine?", options: ["Adenine", "Guanine", "Cytosine", "Uracil"], correct: 3, explanation: "RNA contains uracil (U) instead of thymine (T). Uracil pairs with adenine."}
+        ];
+
+        let userAnswers = {}, quizSubmitted = false;
+
+        function renderQuiz() {
+            document.getElementById('quizContainer').innerHTML = questions.map((q, i) => `
+                <div class="question" id="question${q.id}">
+                    <h3>Question ${i + 1}</h3>
+                    <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="selectOption(${q.id}, ${idx})">
+                                <input type="radio" name="q${q.id}" id="q${q.id}_${idx}" style="margin-right: 10px;">
+                                <label for="q${q.id}_${idx}" style="cursor: pointer;">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${q.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectOption(qId, optIdx) {
+            if (quizSubmitted) return;
+            userAnswers[qId] = optIdx;
+            const question = document.getElementById(`question${qId}`);
+            question.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optIdx);
+                opt.querySelector('input').checked = idx === optIdx;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) { alert('Please answer all questions!'); return; }
+            quizSubmitted = true;
+            let correctCount = 0;
+            questions.forEach(q => {
+                const correct = userAnswers[q.id] === q.correct;
+                if (correct) correctCount++;
+                const questionEl = document.getElementById(`question${q.id}`);
+                questionEl.classList.add(correct ? 'correct' : 'incorrect');
+                questionEl.querySelectorAll('.option').forEach((opt, idx) => {
+                    if (idx === q.correct) opt.classList.add('correct');
+                    else if (idx === userAnswers[q.id]) opt.classList.add('incorrect');
+                });
+                document.getElementById(`feedback${q.id}`).className = `feedback show ${correct ? 'correct' : 'incorrect'}`;
+                document.getElementById(`feedback${q.id}`).innerHTML = `${correct ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}`;
+            });
+            const pct = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('quizResult').className = 'quiz-result show';
+            document.getElementById('quizResult').innerHTML = `<h3>${pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3><p>You scored ${correctCount}/${questions.length} (${pct}%)</p>${pct >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + pct + ')">Complete & Continue</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}`;
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'Molecular Biology', score, 100);
+            }            skillTreeSystem.unlockUnit('science', 'biology', 'b6', score);
+            if (window.analyticsSystem) analyticsSystem.recordQuizCompletion({subject: 'Biology', topic: 'Molecular Biology', score, maxScore: 100, questionsAnswered: questions.length});
+            if (window.gamificationSystem) gamificationSystem.addPoints(Math.floor(score / 10) * 10 + 50, 'Completed Molecular Biology');
+            window.dispatchEvent(new CustomEvent('unitCompleted', {detail: {unitId: 'b6', subject: 'science', module: 'biology', score}}));
+            alert(`Congratulations! You've completed Molecular Biology with ${score}% mastery!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 50}`);
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>

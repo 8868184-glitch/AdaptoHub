@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - AdaptoHub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Bai Jamjuree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .offline-container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 20px;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .offline-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    h1 {
+      color: #0097b2;
+      font-size: 28px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .status-text {
+      color: #636d79;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .offline-features {
+      background: #f5f6f8;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .offline-features h3 {
+      color: #0097b2;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .feature-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      color: #1f2933;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: #2ca94f;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      flex-direction: column;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: "Bai Jamjuree", sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 151, 178, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #f5f6f8;
+      color: #0097b2;
+      border: 2px solid #0097b2;
+    }
+
+    .btn-secondary:hover {
+      background: #e8ecf1;
+    }
+
+    .offline-tips {
+      background: #fff3cd;
+      border-left: 4px solid #ff9800;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+      margin-top: 24px;
+    }
+
+    .offline-tips h4 {
+      color: #856404;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .offline-tips p {
+      color: #856404;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: #f44336;
+      border-radius: 50%;
+      margin-right: 8px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0.5; }
+    }
+
+    @media (max-width: 600px) {
+      .offline-container {
+        padding: 30px 16px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .status-text {
+        font-size: 14px;
+      }
+    }
+  </style>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">📡</div>
+    
+    <h1>You're Offline</h1>
+    
+    <div class="status-text">
+      <span class="status-indicator"></span>
+      No internet connection detected. Don't worry, you can still learn!
+    </div>
+
+    <div class="offline-features">
+      <h3>📚 You Can Still:</h3>
+      <ul class="feature-list">
+        <li>Take cached quizzes offline</li>
+        <li>Review downloaded study materials</li>
+        <li>Check your personalization settings</li>
+        <li>View your study progress</li>
+        <li>Take notes and highlights</li>
+      </ul>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-primary" onclick="goToOfflineQuiz()">📝 Take Offline Quiz</button>
+      <button class="btn-primary" onclick="goToStudyMaterials()">📖 Study Materials</button>
+      <button class="btn-secondary" onclick="checkConnection()">🔄 Check Connection</button>
+    </div>
+
+    <div class="offline-tips">
+      <h4>💡 Pro Tips:</h4>
+      <p>
+        The app will automatically sync your progress when you're back online. 
+        Study at your own pace - offline mode works just like the online version!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function goToOfflineQuiz() {
+      const quizzes = Object.keys(localStorage).filter(key => key.startsWith('offline-quiz-'));
+      
+      if (quizzes.length === 0) {
+        alert('No quizzes available offline. Please download a quiz while online.');
+        return;
+      }
+
+      const quizId = quizzes[0].replace('offline-quiz-', '');
+      try {
+        const quizContent = localStorage.getItem(`offline-quiz-${quizId}`);
+        if (quizContent) {
+          sessionStorage.setItem('offline-quiz-content', quizContent);
+          window.location.href = '/index.html?offline=true&quiz=' + quizId;
+        }
+      } catch (error) {
+        alert('Error loading offline quiz: ' + error.message);
+      }
+    }
+
+    function goToStudyMaterials() {
+      const materials = Object.keys(localStorage).filter(key => key.includes('study-material'));
+      
+      if (materials.length === 0) {
+        alert('No study materials cached. Download materials while online.');
+        return;
+      }
+
+      window.location.href = '/index.html?offline=true&view=materials';
+    }
+
+    function checkConnection() {
+      fetch('/manifest.json', { 
+        method: 'HEAD',
+        cache: 'no-cache'
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('✓ Connection restored! Redirecting...');
+            window.location.href = '/';
+          }
+        })
+        .catch(() => {
+          alert('Still offline. Try again in a moment.');
+        });
+    }
+
+    window.addEventListener('online', () => {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const cachedQuizzes = Object.keys(localStorage).filter(key => key.startsWith('offline-quiz-')).length;
+      const cachedMaterials = Object.keys(localStorage).filter(key => key.includes('study-material')).length;
+
+      if (cachedQuizzes === 0 && cachedMaterials === 0) {
+        const tips = document.querySelector('.offline-tips');
+        tips.innerHTML = `
+          <h4>📥 No Content Cached</h4>
+          <p>
+            To enable offline learning, go online and open a quiz or study material. 
+            AdaptoHub will automatically cache it for offline access.
+          </p>
+        `;
+      }
+    });
+
+    window.addEventListener('load', () => {
+      if (navigator.onLine) {
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 500);
+      }
+    });
+  </script>
+</body>
+</html>

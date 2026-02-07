@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>States of Matter - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body { overflow: auto !important; height: auto !important; }
+        .lesson-container { max-width: 900px; margin: 80px auto 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .lesson-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #e91e63; }
+        .lesson-header h1 { color: #e91e63; font-size: 2.5rem; margin-bottom: 10px; }
+        .lesson-header .level-badge { display: inline-block; background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+        .lesson-content { margin-bottom: 40px; }
+        .lesson-section { margin-bottom: 35px; }
+        .lesson-section h2 { color: #e91e63; font-size: 1.8rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .lesson-section h3 { color: #333; font-size: 1.3rem; margin: 20px 0 10px; }
+        .lesson-section p { color: #444; line-height: 1.8; margin-bottom: 15px; font-size: 1.05rem; }
+        .concept-box { background: #fce4ec; border-left: 4px solid #e91e63; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .concept-box h4 { color: #e91e63; margin-bottom: 10px; font-size: 1.2rem; }
+        .formula-box { background: #fff3e0; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 600; }
+        .example-box { background: #f1f8f4; border-left: 4px solid #4caf50; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .example-box h4 { color: #4caf50; margin-bottom: 10px; }
+        .quiz-section { background: #f9f9f9; padding: 30px; border-radius: 12px; margin-top: 40px; border: 2px solid #e91e63; }
+        .quiz-section h2 { color: #e91e63; text-align: center; margin-bottom: 25px; }
+        .question { background: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #e0e0e0; }
+        .question.correct { border-color: #4caf50; background: #f1f8f4; }
+        .question.incorrect { border-color: #f44336; background: #ffebee; }
+        .question h3 { color: #333; margin-bottom: 15px; font-size: 1.2rem; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .option:hover { border-color: #e91e63; background: #fce4ec; }
+        .option.selected { border-color: #e91e63; background: #fce4ec; }
+        .option.correct { border-color: #4caf50; background: #f1f8f4; }
+        .option.incorrect { border-color: #f44336; background: #ffebee; }
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #f1f8f4; color: #2e7d32; border: 1px solid #4caf50; }
+        .feedback.incorrect { background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        .submit-quiz-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #e91e63 0%, #f06292 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: all 0.3s ease; }
+        .submit-quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4); }
+        .submit-quiz-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .quiz-result { text-align: center; padding: 30px; background: linear-gradient(135deg, #e91e63 0%, #f06292 100%); color: white; border-radius: 12px; margin-top: 20px; display: none; }
+        .quiz-result.show { display: block; }
+        .quiz-result h3 { font-size: 2rem; margin-bottom: 15px; }
+        .quiz-result p { font-size: 1.2rem; margin-bottom: 20px; }
+        .next-lesson-btn { padding: 12px 30px; background: white; color: #e91e63; border: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem; cursor: pointer; margin-top: 15px; }
+        .next-lesson-btn:hover { background: #f0f0f0; }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display">
+            <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+            <div class="account-avatar" id="accountAvatar"></div>
+        </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>🌡️ States of Matter</h1>
+            <span class="level-badge">Level 2 • Chemistry</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to States of Matter</h2>
+                <p>Matter exists in different states based on the arrangement and movement of particles. Understanding states of matter helps explain physical properties and phase changes.</p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ The three main states of matter<br>✓ Particle behavior in each state<br>✓ Phase changes and transitions<br>✓ Kinetic molecular theory</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 The Three States of Matter</h2>
+                
+                <h3>Solids</h3>
+                <div class="concept-box">
+                    <p><strong>Particle Arrangement:</strong> Tightly packed in fixed positions<br><strong>Particle Movement:</strong> Vibrate in place<br><strong>Properties:</strong><br>• Definite shape and volume<br>• Incompressible<br>• High density<br>• Particles held by strong forces</p>
+                </div>
+                <div class="example-box">
+                    <h4>Examples: Ice, Diamond, Iron, Salt</h4>
+                </div>
+
+                <h3>Liquids</h3>
+                <div class="concept-box">
+                    <p><strong>Particle Arrangement:</strong> Close together but can move<br><strong>Particle Movement:</strong> Slide past each other<br><strong>Properties:</strong><br>• Definite volume, takes shape of container<br>• Nearly incompressible<br>• Medium density<br>• Can flow</p>
+                </div>
+                <div class="example-box">
+                    <h4>Examples: Water, Milk, Oil, Mercury</h4>
+                </div>
+
+                <h3>Gases</h3>
+                <div class="concept-box">
+                    <p><strong>Particle Arrangement:</strong> Far apart and random<br><strong>Particle Movement:</strong> Move rapidly and freely<br><strong>Properties:</strong><br>• No definite shape or volume<br>• Highly compressible<br>• Low density<br>• Fill entire container</p>
+                </div>
+                <div class="example-box">
+                    <h4>Examples: Oxygen, Carbon Dioxide, Steam, Helium</h4>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🔄 Phase Changes</h2>
+                <p>Substances can change from one state to another through heating or cooling. These transitions involve energy changes.</p>
+                <div class="concept-box">
+                    <h4>Phase Change Processes:</h4>
+                    <p>• <strong>Melting:</strong> Solid → Liquid (heating)<br>• <strong>Freezing:</strong> Liquid → Solid (cooling)<br>• <strong>Vaporization:</strong> Liquid → Gas (heating)<br>• <strong>Condensation:</strong> Gas → Liquid (cooling)<br>• <strong>Sublimation:</strong> Solid → Gas (heating)<br>• <strong>Deposition:</strong> Gas → Solid (cooling)</p>
+                </div>
+                <div class="example-box">
+                    <h4>Real Example: The Water Cycle</h4>
+                    <p>Water demonstrates multiple phase changes: evaporation (liquid to gas), condensation (gas to liquid forming clouds), and freezing (liquid to ice).</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>⚡ Kinetic Molecular Theory</h2>
+                <p>This theory explains the behavior of particles in different states:</p>
+                <div class="concept-box">
+                    <p>1. All matter consists of tiny particles in constant motion<br>2. Temperature is a measure of average kinetic energy<br>3. Higher temperature = faster particle movement<br>4. Particle collisions are elastic (no energy loss)</p>
+                </div>
+                <div class="formula-box">
+                    KE = ½mv²
+                </div>
+                <p style="text-align: center; color: #666; font-size: 0.95rem;">Kinetic Energy = ½ × mass × velocity²</p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Weather forecasting (water vapor, clouds)</li>
+                    <li>Food preservation (freezing, evaporation)</li>
+                    <li>Industrial processes (distillation, crystallization)</li>
+                    <li>Air conditioning and refrigeration</li>
+                    <li>Medical applications (cryogenics)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">Answer these questions to demonstrate your mastery of States of Matter</p>
+            <div id="quizContainer"></div>
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});
+    </script>
+    <script>
+        const questions = [
+            {id: 1, question: "In which state of matter do particles vibrate in fixed positions?", options: ["Solid", "Liquid", "Gas", "Plasma"], correct: 0, explanation: "In solids, particles are tightly packed and vibrate in fixed positions."},
+            {id: 2, question: "Which phase change occurs when a liquid becomes a gas?", options: ["Melting", "Freezing", "Vaporization", "Condensation"], correct: 2, explanation: "Vaporization (including evaporation and boiling) is the phase change from liquid to gas."},
+            {id: 3, question: "What property do gases have that solids and liquids do not?", options: ["Definite volume", "Definite shape", "No definite shape or volume", "Fixed particle positions"], correct: 2, explanation: "Gases have neither definite shape nor definite volume; they expand to fill their container."},
+            {id: 4, question: "The process of a solid changing directly to a gas is called:", options: ["Evaporation", "Sublimation", "Deposition", "Condensation"], correct: 1, explanation: "Sublimation is the phase change directly from solid to gas, skipping the liquid state."},
+            {id: 5, question: "According to kinetic molecular theory, what does temperature measure?", options: ["Total energy", "Average kinetic energy of particles", "Particle size", "Number of particles"], correct: 1, explanation: "Temperature is a measure of the average kinetic energy of particles in a substance."}
+        ];
+
+        let userAnswers = {}, quizSubmitted = false;
+
+        function renderQuiz() {
+            document.getElementById('quizContainer').innerHTML = questions.map((q, i) => `
+                <div class="question" id="question${q.id}">
+                    <h3>Question ${i + 1}</h3>
+                    <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="selectOption(${q.id}, ${idx})">
+                                <input type="radio" name="q${q.id}" id="q${q.id}_${idx}" style="margin-right: 10px;">
+                                <label for="q${q.id}_${idx}" style="cursor: pointer;">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${q.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectOption(qId, optIdx) {
+            if (quizSubmitted) return;
+            userAnswers[qId] = optIdx;
+            const question = document.getElementById(`question${qId}`);
+            question.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optIdx);
+                opt.querySelector('input').checked = idx === optIdx;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) { alert('Please answer all questions!'); return; }
+            quizSubmitted = true;
+            let correctCount = 0;
+            questions.forEach(q => {
+                const correct = userAnswers[q.id] === q.correct;
+                if (correct) correctCount++;
+                const questionEl = document.getElementById(`question${q.id}`);
+                questionEl.classList.add(correct ? 'correct' : 'incorrect');
+                questionEl.querySelectorAll('.option').forEach((opt, idx) => {
+                    if (idx === q.correct) opt.classList.add('correct');
+                    else if (idx === userAnswers[q.id]) opt.classList.add('incorrect');
+                });
+                document.getElementById(`feedback${q.id}`).className = `feedback show ${correct ? 'correct' : 'incorrect'}`;
+                document.getElementById(`feedback${q.id}`).innerHTML = `${correct ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}`;
+            });
+            const pct = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('quizResult').className = 'quiz-result show';
+            document.getElementById('quizResult').innerHTML = `<h3>${pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3><p>You scored ${correctCount}/${questions.length} (${pct}%)</p>${pct >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + pct + ')">Complete & Continue</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}`;
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {
+            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'States of Matter', score, 100);
+            }
+            skillTreeSystem.unlockUnit('science', 'chemistry', 'c3', score);
+            if (window.analyticsSystem) analyticsSystem.recordQuizCompletion({subject: 'Chemistry', topic: 'States of Matter', score, maxScore: 100, questionsAnswered: questions.length});
+            if (window.gamificationSystem) gamificationSystem.addPoints(Math.floor(score / 10) * 10 + 50, 'Completed States of Matter');
+            window.dispatchEvent(new CustomEvent('unitCompleted', {detail: {unitId: 'c3', subject: 'science', module: 'chemistry', score}}));
+            alert(`Congratulations! You've completed States of Matter with ${score}% mastery!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 50}`);
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>

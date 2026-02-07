@@ -1,0 +1,521 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Religion, Morality & Ethics | AdaptoHub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+    <script defer src="dark-mode.js"></script>
+    <script defer src="celebrations.js"></script>
+    <script defer src="avatar-system.js"></script>
+    <script defer src="quiz-animations.js"></script>
+    <script defer src="smooth-animations.js"></script>
+    <script defer src="loading-tips.js"></script>
+    <script defer src="loading-tips-integration.js"></script>
+    <script defer src="feature-integration.js"></script>
+    <style>
+        body { margin: 0; background: #f8f3f9; font-family: 'Bai Jamjuree', sans-serif; color: #3d1f2c; }
+        .religion-shell { max-width: 1200px; margin: 100px auto 60px; padding: 0 24px; }
+        .hero-card { background: linear-gradient(135deg, #6b2d5a 0%, #9d4569 50%, #c85a7f 100%); color: #fff5f8; border-radius: 16px; padding: 32px; box-shadow: 0 20px 40px rgba(107, 45, 90, 0.28); position: relative; overflow: hidden; }
+        .hero-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 35%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.16), transparent 28%), radial-gradient(circle at 60% 70%, rgba(255,255,255,0.12), transparent 32%); pointer-events: none; }
+        .hero-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; }
+        .hero-title { margin: 0 0 10px; font-size: 2rem; letter-spacing: -0.02em; }
+        .hero-subtitle { margin: 0; font-size: 1.05rem; color: #f0dbe9; }
+        .tag-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.16); color: #fff5f8; font-weight: 600; font-size: 0.9rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+        .summary-card { background: rgba(255,255,255,0.14); border-radius: 12px; padding: 14px; border: 1px solid rgba(255,255,255,0.2); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25); }
+        .summary-card span { display: block; color: #f0dbe9; font-size: 0.85rem; }
+        .summary-card strong { font-size: 1.3rem; color: #ffffff; }
+        .progress-wrap { margin-top: 16px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 0.9rem; color: #f0dbe9; margin-bottom: 6px; }
+        .progress-bar { width: 100%; height: 10px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #f087bb 0%, #e84a83 100%); width: 0%; transition: width 0.25s ease; }
+        .unit-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 28px; }
+        .unit-card { background: #ffffff; border-radius: 14px; padding: 22px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); border: 1px solid #f0d8e8; position: relative; overflow: visible; }
+        .unit-header { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+        .unit-label { display: inline-flex; align-items: center; gap: 8px; background: #f0dbe9; color: #6b2d5a; padding: 8px 12px; border-radius: 10px; font-weight: 700; }
+        .unit-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .status-done { background: #e7f6ec; color: #1b5e20; }
+        .status-pending { background: #fff4e5; color: #a15c04; }
+        .status-locked { background: #ffe4e6; color: #b42318; }
+        .unit-title { margin: 6px 0 10px; font-size: 1.35rem; letter-spacing: -0.01em; color: #3d1f2c; }
+        .unit-desc { margin: 0 0 12px; color: #5c3a4e; line-height: 1.55; }
+        .lesson-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin: 12px 0 6px; }
+        .lesson-point { padding: 10px 12px; background: #faf7fc; border-radius: 10px; border: 1px solid #f0d8e8; font-size: 0.95rem; color: #2f1a24; }
+        .formula-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+        .formula-badge { background: #6b2d5a; color: #f0dbe9; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; }
+        .quiz-block { margin-top: 12px; padding: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; }
+        .quiz-title { margin: 0 0 8px; font-size: 1rem; color: #3d1f2c; }
+        .quiz-option { display: flex; gap: 10px; align-items: flex-start; padding: 9px 10px; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: border 0.2s ease, transform 0.2s ease; }
+        .quiz-option:hover { border-color: #6b2d5a; transform: translateY(-1px); }
+        .quiz-option input { margin-top: 3px; }
+        .quiz-actions { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+        .primary-btn { background: #6b2d5a; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .primary-btn:hover { background: #592347; transform: translateY(-1px); }
+        .primary-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        .secondary-btn { background: #f0f0f0; color: #6b2d5a; border: 1px solid #d0d0d0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .secondary-btn:hover { background: #e0e0e0; transform: translateY(-1px); }
+        .danger-btn { background: #b42318; color: #ffffff; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
+        .danger-btn:hover { background: #922118; transform: translateY(-1px); }
+        .reset-section { margin-top: 28px; text-align: center; padding: 20px; background: #fff5f5; border-radius: 14px; border: 1px solid #ffe4e6; }
+        .reset-section p { margin: 0 0 12px; color: #5c3a4e; }
+        .ghost-link { display: inline-flex; align-items: center; gap: 8px; color: #6b2d5a; font-weight: 700; text-decoration: none; padding: 8px 12px; border: 1px solid #f0d8e8; border-radius: 10px; background: #faf7fc; }
+        .quiz-result { font-weight: 700; font-size: 0.95rem; }
+        .result-pass { color: #1b5e20; }
+        .result-fail { color: #b42318; }
+        .locked-note { color: #b42318; font-weight: 700; margin: 6px 0 0; }
+        .top-nav { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .top-nav a { text-decoration: none; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .unit-card { padding: 18px; } .hero-title { font-size: 1.6rem; } }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45" src="assets/AdaptoHub.png" alt="AdaptoHub Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <main class="religion-shell">
+        <div class="top-nav">
+            <a class="ghost-link" href="social_studies.html">← Back to Social Studies</a>
+            <span style="color:#5c3a4e; font-weight:600;">Religion, Morality & Ethics - Values, beliefs, and social ethics</span>
+        </div>
+
+        <section class="hero-card">
+            <div class="hero-grid">
+                <div>
+                    <h1 class="hero-title">Religion, Morality & Ethics Learning Path</h1>
+                    <p class="hero-subtitle">Explore the foundations of human society, social structures, Thai society, world religions, and the ethical principles that guide moral living.</p>
+                    <div class="tag-row">
+                        <span class="pill">Society and culture</span>
+                        <span class="pill">Social structure</span>
+                        <span class="pill">Thai society</span>
+                        <span class="pill">World religions</span>
+                    </div>
+                </div>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span>Units Completed</span>
+                        <strong id="unitsCompleted">0 / 6</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Current Mastery</span>
+                        <strong id="averageScore">0%</strong>
+                    </div>
+                    <div class="summary-card">
+                        <span>Streak-Friendly</span>
+                        <strong>Quiz every unit</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span>Path Completion</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="religionProgressFill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="unit-grid" id="unitGrid"></section>
+
+        <section class="reset-section">
+            <p style="font-weight: 700; color: #3d1f2c;">Start Over?</p>
+            <p>Reset your progress for this Religion, Morality & Ethics pathway.</p>
+            <button class="danger-btn" onclick="resetReligionProgress()">Reset Religion, Morality & Ethics Progress</button>
+        </section>
+    </main>
+
+    <script>
+        const religionUnits = [
+            {
+                id: 'humans-society-culture',
+                title: 'Humans, Society, and Culture',
+                description: 'Understand humans as social beings and the foundations of culture and society.',
+                points: [
+                    'Humans are inherently social beings who form groups and societies to meet needs and achieve shared goals.',
+                    'Culture comprises shared values, beliefs, norms, behaviors, and artifacts of a group or society.',
+                    'Cultural elements: material culture (objects), non-material culture (beliefs, values, norms, laws).',
+                    'Socialization: process through which individuals learn culture and become functioning members of society.',
+                    'Culture provides identity, meaning, and guides behavior; varies across societies and time periods.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Humans are inherently:', options: [ { text: 'Social beings', correct: true }, { text: 'Solitary creatures', correct: false }, { text: 'Always competitive', correct: false } ] },
+                    { id: 'q2', prompt: 'Which is an example of non-material culture?', options: [ { text: 'Values and beliefs', correct: true }, { text: 'Buildings and tools', correct: false }, { text: 'Clothing artifacts', correct: false } ] },
+                    { id: 'q3', prompt: 'Socialization is the process of:', options: [ { text: 'Learning culture and becoming a functioning member of society', correct: true }, { text: 'Only attending social events', correct: false }, { text: 'Creating new cultures', correct: false } ] }
+                ]
+            },
+            {
+                id: 'social-structure',
+                title: 'Social Structure',
+                description: 'Explore roles, statuses, social institutions, and hierarchies that organize society.',
+                points: [
+                    'Social structure: patterned arrangement of roles, positions, and relationships in society.',
+                    'Status: position held in society (e.g., student, teacher, parent); can be ascribed (birth) or achieved (earned).',
+                    'Role: expected behaviors and duties associated with a status; guides social interactions.',
+                    'Social institutions: established systems serving important functions (family, education, religion, government, economy).',
+                    'Social stratification: unequal distribution of resources, power, and status; creates hierarchies (class, caste systems).'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'An ascribed status is:', options: [ { text: 'Determined by birth (e.g., gender, family)', correct: true }, { text: 'Earned through achievement', correct: false }, { text: 'Freely chosen', correct: false } ] },
+                    { id: 'q2', prompt: 'Which is a social institution?', options: [ { text: 'Family, education, religion, government', correct: true }, { text: 'Only political parties', correct: false }, { text: 'Only businesses', correct: false } ] },
+                    { id: 'q3', prompt: 'Social stratification creates:', options: [ { text: 'Hierarchies of power and resources', correct: true }, { text: 'Complete equality', correct: false }, { text: 'No differences in society', correct: false } ] }
+                ]
+            },
+            {
+                id: 'thai-society',
+                title: 'Thai Society and Changes in Thai Society',
+                description: 'Study the characteristics and transformations of Thai society through history.',
+                points: [
+                    'Traditional Thai society: hierarchical, family-centered, agricultural economy, strong Buddhist values, respect for authority.',
+                    'Impact of Buddhism: ethics, social values, community respect, ordination practices, merit-making traditions.',
+                    'Modernization and urbanization: shift from rural agriculture to urban industry and services.',
+                    'Social changes: education expansion, women\'s roles, generational shifts, technological influence.',
+                    'Challenges: balancing tradition and modernity, rural-urban disparities, social cohesion amid rapid change.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Traditional Thai society was primarily:', options: [ { text: 'Hierarchical and family-centered', correct: true }, { text: 'Individualistic and competitive', correct: false }, { text: 'Egalitarian in structure', correct: false } ] },
+                    { id: 'q2', prompt: 'Buddhism influenced Thai society through:', options: [ { text: 'Ethics, values, and community practices', correct: true }, { text: 'Only temple construction', correct: false }, { text: 'Military organization only', correct: false } ] },
+                    { id: 'q3', prompt: 'Modernization in Thailand has shifted society toward:', options: [ { text: 'Urban centers and service industries', correct: true }, { text: 'Only agricultural focus', correct: false }, { text: 'Complete cultural abandonment', correct: false } ] }
+                ]
+            },
+            {
+                id: 'social-problems',
+                title: 'Social Problems in Thailand',
+                description: 'Examine key social issues and challenges facing Thai society.',
+                points: [
+                    'Poverty and economic inequality: income disparities, especially between urban and rural areas.',
+                    'Education gaps: unequal access to quality education, rural school resource limitations.',
+                    'Health challenges: disease burden, mental health stigma, healthcare access disparities.',
+                    'Drug abuse and crime: substance addiction, organized crime, human trafficking concerns.',
+                    'Environmental degradation: pollution, deforestation, water scarcity affecting public health and livelihoods.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'A major social problem in Thailand is:', options: [ { text: 'Urban-rural economic inequality', correct: true }, { text: 'Overpopulation in villages', correct: false }, { text: 'Shortage of temples', correct: false } ] },
+                    { id: 'q2', prompt: 'Education disparities in Thailand relate to:', options: [ { text: 'Unequal access and rural resource limitations', correct: true }, { text: 'Too many universities', correct: false }, { text: 'Excessive education only', correct: false } ] },
+                    { id: 'q3', prompt: 'Drug abuse issues include:', options: [ { text: 'Substance addiction and crime', correct: true }, { text: 'Medical treatment only', correct: false }, { text: 'No connection to society', correct: false } ] }
+                ]
+            },
+            {
+                id: 'major-religions',
+                title: 'Major Religions of the World',
+                description: 'Learn about world religions, their definitions, histories, and core beliefs.',
+                points: [
+                    'Religion: system of faith, belief, and worship shared by communities; provides meaning, ethics, and social cohesion.',
+                    'Hinduism: ancient Indian religion; polytheistic; concepts of karma, dharma, and reincarnation; diverse practices and deities.',
+                    'Buddhism: founded by Siddhartha Gautama; focuses on suffering, enlightenment, ethical living; widespread in Asia.',
+                    'Christianity: based on teachings of Jesus Christ; emphasizes love, redemption, salvation; largest world religion.',
+                    'Islam: founded by Prophet Muhammad; monotheistic; Five Pillars guide practice; emphasizes submission to Allah and community (Ummah).'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'Religion provides communities with:', options: [ { text: 'Meaning, ethics, and social cohesion', correct: true }, { text: 'Only entertainment', correct: false }, { text: 'Political power only', correct: false } ] },
+                    { id: 'q2', prompt: 'Hinduism emphasizes the concept of:', options: [ { text: 'Karma, dharma, and reincarnation', correct: true }, { text: 'Only monotheism', correct: false }, { text: 'Rejection of deities', correct: false } ] },
+                    { id: 'q3', prompt: 'Islam guides followers through:', options: [ { text: 'The Five Pillars and Quranic teachings', correct: true }, { text: 'Only prayer alone', correct: false }, { text: 'Secular law exclusively', correct: false } ] }
+                ]
+            },
+            {
+                id: 'religious-principles',
+                title: 'Consistency of Religious Principles',
+                description: 'Compare ethical and moral teachings across religions and their practical applications.',
+                points: [
+                    'Common ethical principles: compassion, justice, honesty, respect, and care for the vulnerable appear across most religions.',
+                    'Golden Rule variants: most religions teach treating others as you wish to be treated; principle of reciprocity.',
+                    'Moral frameworks: religions provide ethical guidance for personal conduct, family relations, and social justice.',
+                    'Integration of principles: religious teachings inform laws, customs, and social norms in different societies.',
+                    'Universal values: despite differences, major religions share concerns for morality, community, and human dignity.'
+                ],
+                formulas: [],
+                quiz: [
+                    { id: 'q1', prompt: 'A principle found across most religions is:', options: [ { text: 'Compassion and justice for others', correct: true }, { text: 'Only wealth accumulation', correct: false }, { text: 'Conquest of others', correct: false } ] },
+                    { id: 'q2', prompt: 'The Golden Rule emphasizes:', options: [ { text: 'Treating others as you wish to be treated', correct: true }, { text: 'Only self-interest', correct: false }, { text: 'Harming others first', correct: false } ] },
+                    { id: 'q3', prompt: 'Religious moral frameworks guide:', options: [ { text: 'Personal conduct, family relations, and social norms', correct: true }, { text: 'Only commercial transactions', correct: false }, { text: 'Military strategy only', correct: false } ] }
+                ]
+            }
+        ];
+
+        const storageKey = 'adaptohub_religion_units';
+        let unitProgress = JSON.parse(localStorage.getItem(storageKey) || '{}');
+
+        function saveProgress() {
+            localStorage.setItem(storageKey, JSON.stringify(unitProgress));
+        }
+
+        function renderSummary() {
+            const completed = religionUnits.filter(u => unitProgress[u.id]?.completed).length;
+            const scores = religionUnits.map(u => unitProgress[u.id]?.score).filter(s => typeof s === 'number');
+            const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+            const percent = Math.round((completed / religionUnits.length) * 100);
+
+            const unitsCompletedEl = document.getElementById('unitsCompleted');
+            const averageScoreEl = document.getElementById('averageScore');
+            const progressPercentEl = document.getElementById('progressPercent');
+            const progressFillEl = document.getElementById('religionProgressFill');
+
+            if (unitsCompletedEl) unitsCompletedEl.textContent = `${completed} / ${religionUnits.length}`;
+            if (averageScoreEl) averageScoreEl.textContent = `${avg}%`;
+            if (progressPercentEl) progressPercentEl.textContent = `${percent}%`;
+            if (progressFillEl) progressFillEl.style.width = `${percent}%`;
+        }
+
+        function formatFormula(formula) {
+            return formula
+                .replace(/(\w)_([A-Za-z0-9]+)/g, '$1<sub>$2</sub>')
+                .replace(/\^(\d+)/g, '<sup>$1</sup>')
+                .replace(/([A-Za-z])([0-9]+)/g, '$1<sub>$2</sub>');
+        }
+
+        function retakeUnit(unitId) {
+            if (confirm('Retake this unit? Your previous score will be cleared.')) {
+                delete unitProgress[unitId];
+                saveProgress();
+                renderSummary();
+                renderUnits();
+            }
+        }
+
+        function resetReligionProgress() {
+            if (confirm('Reset progress for the Religion, Morality & Ethics pathway? This cannot be undone.')) {
+                localStorage.removeItem(storageKey);
+                unitProgress = {};
+                renderSummary();
+                renderUnits();
+                alert('Religion, Morality & Ethics progress has been reset.');
+            }
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            religionUnits.forEach((unit, index) => {
+                const prevUnit = religionUnits[index - 1];
+                const locked = index > 0 && !(unitProgress[prevUnit.id]?.completed);
+                const progress = unitProgress[unit.id] || {};
+
+                const card = document.createElement('article');
+                card.className = `unit-card ${locked ? 'locked' : ''}`;
+
+                const statusClass = locked ? 'status-locked' : progress.completed ? 'status-done' : 'status-pending';
+                const statusText = locked ? 'Complete the previous unit first' : progress.completed ? `Completed - ${progress.score}%` : 'Quiz ready';
+
+                const lessonList = unit.points.map(point => `<div class="lesson-point">${point}</div>`).join('');
+                const formulaList = unit.formulas.map(f => `<span class="formula-badge">${formatFormula(f)}</span>`).join('');
+
+                const questionsHtml = unit.quiz.map(q => `
+                    <div class="quiz-question" style="margin-bottom:10px;">
+                        <p class="quiz-title">${formatFormula(q.prompt)}</p>
+                        ${q.options.map(opt => `
+                            <label class="quiz-option">
+                                <input type="radio" name="${unit.id}-${q.id}" value="${opt.correct ? 'correct' : 'wrong'}" ${locked || progress.completed ? 'disabled' : ''}>
+                                <span>${formatFormula(opt.text)}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `).join('');
+
+                const actionButtons = progress.completed
+                    ? `<button class="secondary-btn" onclick="retakeUnit('${unit.id}')">Retake Unit</button><span class="quiz-result" id="result-${unit.id}" style="margin-left: 10px;"></span>`
+                    : `<button class="primary-btn" onclick="submitQuiz('${unit.id}')" ${locked ? 'disabled' : ''}>Submit quiz</button><span class="quiz-result" id="result-${unit.id}"></span>`;
+
+                card.innerHTML = `
+                    <div class="unit-header">
+                        <div class="unit-label">Unit ${index + 1}</div>
+                        <div class="unit-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <h3 class="unit-title">${unit.title}</h3>
+                    <p class="unit-desc">${unit.description}</p>
+                    <div class="lesson-points">${lessonList}</div>
+                    <div class="formula-badges">${formulaList}</div>
+                    <div class="quiz-block" data-quiz="${unit.id}">
+                        <p style="margin:0 0 6px; font-weight:700; color:#3d1f2c;">Quick mastery quiz (3 questions)</p>
+                        ${locked ? `<p class="locked-note">Unlock by completing Unit ${index}</p>` : ''}
+                        ${questionsHtml}
+                        <div class="quiz-actions">${actionButtons}</div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function submitQuiz(unitId) {
+            const unit = religionUnits.find(u => u.id === unitId);
+            if (!unit) return;
+            if (unitProgress[unitId]?.completed) {
+                alert('This unit has already been submitted. Use Retake Unit to try again.');
+                return;
+            }
+
+            const quizBlock = document.querySelector(`[data-quiz="${unitId}"]`);
+            if (!quizBlock) return;
+
+            let answered = 0;
+            let correct = 0;
+
+            unit.quiz.forEach(q => {
+                const selected = quizBlock.querySelector(`input[name="${unit.id}-${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    if (selected.value === 'correct') correct++;
+                }
+            });
+
+            if (answered !== unit.quiz.length) {
+                alert('Please answer every question before submitting.');
+                return;
+            }
+
+            const score = Math.round((correct / unit.quiz.length) * 100);
+            unitProgress[unitId] = { completed: true, score, timestamp: Date.now() };
+            saveProgress();
+            renderSummary();
+            renderUnits();
+
+            const resultEl = document.getElementById(`result-${unitId}`);
+            if (resultEl) {
+                resultEl.textContent = score >= 70 ? `Great work: ${score}%` : `Keep reviewing: ${score}%`;
+                resultEl.className = `quiz-result ${score >= 70 ? 'result-pass' : 'result-fail'}`;
+            }
+
+            if (window.FeatureIntegration && window.FeatureIntegration.onQuizComplete) {
+                window.FeatureIntegration.onQuizComplete(unitId, score, 'religion');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUser();
+            renderSummary();
+            renderUnits();
+        });
+    </script>
+</body>
+</html>

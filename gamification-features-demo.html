@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamification Features Demo — AdaptoHub</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="achievements.js"></script>
+  <script defer src="gamification.js"></script>
+  <style>
+    .demo-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      background: #f5f6f8;
+      min-height: 100vh;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .demo-section h2 {
+      color: #0097b2;
+      margin-top: 0;
+      border-bottom: 2px solid #0097b2;
+      padding-bottom: 12px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .demo-button {
+      padding: 12px 16px;
+      background: #0097b2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      margin: 8px 4px 8px 0;
+    }
+
+    .demo-button:hover {
+      background: #006b7e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 151, 178, 0.3);
+    }
+
+    .demo-button.secondary {
+      background: #6c757d;
+    }
+
+    .demo-button.secondary:hover {
+      background: #5a6268;
+    }
+
+    .demo-card {
+      background: #f9f9f9;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid #0097b2;
+    }
+
+    .achievement-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #f0f7fa;
+      border-radius: 6px;
+      margin: 8px 0;
+    }
+
+    .achievement-preview .emoji {
+      font-size: 2rem;
+    }
+
+    .achievement-preview .text h4 {
+      margin: 0 0 4px 0;
+      color: #333;
+    }
+
+    .achievement-preview .text p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      margin: 12px 0;
+    }
+
+    .code-block code {
+      color: #ce9178;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 8px 4px 8px 0;
+    }
+
+    .status-badge.ready {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-badge.info {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .stats-display {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+      border-left: 4px solid #0097b2;
+    }
+
+    .stat-box .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0097b2;
+    }
+
+    .stat-box .label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-list li::before {
+      content: "✅ ";
+      color: #27ae60;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 16px 0;
+    }
+
+    .success {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin: 16px 0;
+    }
+
+    .section-nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .section-nav a {
+      padding: 8px 12px;
+      background: #e9ecef;
+      color: #0097b2;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .section-nav a:hover {
+      background: #0097b2;
+      color: white;
+    }
+  </style>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="logo">
+      <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+      <a class="site-title" href="index.html">AdaptoHub</a>
+    </div>
+    <nav class="nav-menu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="gamification-profile.html" class="nav-link">Gamification Profile</a>
+      <a href="gamification-features-demo.html" class="nav-link active">Features Demo</a>
+    </nav>
+  </header>
+
+  <div class="demo-container" style="margin-top: 64px;">
+    <h1 style="color: #0097b2; text-align: center; margin-bottom: 12px;">🎮 Gamification Features Demo</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+      Comprehensive overview of all gamification features implemented in AdaptoHub
+    </p>
+
+    <!-- Overview Section -->
+    <div class="demo-section">
+      <h2>📋 System Overview</h2>
+      <p>The gamification system has been fully implemented and integrated into AdaptoHub. It automatically tracks student progress, awards points and achievements, and visualizes learning streaks through various engaging interfaces.</p>
+      
+      <div style="margin: 20px 0;">
+        <span class="status-badge ready">✅ Achievement System</span>
+        <span class="status-badge ready">✅ Point System</span>
+        <span class="status-badge ready">✅ Streak Tracking</span>
+        <span class="status-badge ready">✅ Leaderboards</span>
+        <span class="status-badge ready">✅ Profile Dashboard</span>
+        <span class="status-badge ready">✅ Quiz Integration</span>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="demo-section">
+      <h2>🎯 Core Features</h2>
+      
+      <h3>1. Achievement System (20+ Badges)</h3>
+      <ul class="feature-list">
+        <li>Milestone Achievements (Quiz Starter, Master, Legend)</li>
+        <li>Perfect Score Badges (1, 5, 10 perfect scores)</li>
+        <li>Learning Streak Badges (3, 7, 30, 100+ days)</li>
+        <li>Subject Excellence Badges (Math Master, Science Sage)</li>
+        <li>Speed & Social Achievements</li>
+        <li>5 Rarity Tiers (Common to Legendary)</li>
+      </ul>
+
+      <h3>2. Point System</h3>
+      <p>Dynamic point calculation based on:</p>
+      <div class="code-block">
+Base Points (25-100) + Bonuses:
+├── Streak Bonus: up to 50%
+├── Perfect Score: +50 points
+├── Speed Bonus: +30 points (&lt;5 min)
+└── Achievement Unlock: varies
+      </div>
+
+      <h3>3. Learning Streaks</h3>
+      <ul class="feature-list">
+        <li>Calendar Heatmap (12-month view)</li>
+        <li>Current & Longest Streak Counters</li>
+        <li>Streak Freeze (1/month recovery option)</li>
+        <li>Milestone Celebrations (7, 14, 30, 100+ days)</li>
+      </ul>
+
+      <h3>4. Leaderboards</h3>
+      <ul class="feature-list">
+        <li>Overall Points Leaderboard</li>
+        <li>Subject-Specific Rankings</li>
+        <li>Streak Leaderboards</li>
+        <li>Multiple Timeframes (Weekly/Monthly/Yearly/All-time)</li>
+        <li>Anonymous Option for Privacy</li>
+      </ul>
+
+      <h3>5. Rewards Shop</h3>
+      <p>Students can redeem points for:</p>
+      <div class="demo-grid">
+        <div class="demo-card">
+          <strong>🎨 Avatar Colors</strong><br>
+          500 points → 10 colors
+        </div>
+        <div class="demo-card">
+          <strong>💡 Hint Bundle</strong><br>
+          300 points → 5 hints
+        </div>
+        <div class="demo-card">
+          <strong>🌟 Badge Pack</strong><br>
+          750 points → Exclusive badges
+        </div>
+        <div class="demo-card">
+          <strong>✨ Streak Boost</strong><br>
+          1000 points → +7 days
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievements Preview -->
+    <div class="demo-section">
+      <h2>🏆 Achievement Categories</h2>
+      
+      <h3 style="color: #666; margin-top: 20px;">Milestone Achievements</h3>
+      <div class="achievement-preview">
+        <span class="emoji">🎯</span>
+        <div class="text">
+          <h4>Quiz Starter</h4>
+          <p>Complete your first quiz</p>
+        </div>
+      </div>
+      <div class="achievement-preview">
+        <span class="emoji">🏆</span>
+        <div class="text">
+          <h4>Quiz Master</h4>
+          <p>Complete 20 quizzes</p>
+        </div>
+      </div>
+
+      <h3 style="color: #666; margin-top: 20px;">Streak Achievements</h3>
+      <div class="achievement-preview">
+        <span class="emoji">🔥</span>
+        <div class="text">
+          <h4>On Fire</h4>
+          <p>Maintain a 3-day learning streak</p>
+        </div>
+      </div>
+      <div class="achievement-preview">
+        <span class="emoji">👨‍🚀</span>
+        <div class="text">
+          <h4>Legendary</h4>
+          <p>Maintain a 100-day learning streak</p>
+        </div>
+      </div>
+
+      <h3 style="color: #666; margin-top: 20px;">Perfect Score Achievements</h3>
+      <div class="achievement-preview">
+        <span class="emoji">💯</span>
+        <div class="text">
+          <h4>Perfect Score</h4>
+          <p>Get 100% on a quiz</p>
+        </div>
+      </div>
+      <div class="achievement-preview">
+        <span class="emoji">🌟</span>
+        <div class="text">
+          <h4>Perfect Streak</h4>
+          <p>Get 100% on 10 quizzes</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration Section -->
+    <div class="demo-section">
+      <h2>🔗 Integration Details</h2>
+      
+      <h3>Automatic Quiz Tracking</h3>
+      <p>The gamification system is seamlessly integrated with the existing quiz system:</p>
+      <div class="code-block">When a student completes a quiz:
+
+1. Quiz score is submitted
+2. System automatically:
+   ├── Calculates points earned
+   ├── Updates learning streak
+   ├── Checks unlocked achievements
+   ├── Updates subject performance
+   └── Shows notification
+      </div>
+
+      <div class="success">
+        <strong>✅ No Changes Required:</strong> Teachers and students don't need to do anything - gamification works automatically with existing quizzes!
+      </div>
+
+      <h3>Data Storage</h3>
+      <ul class="feature-list">
+        <li>All data stored locally in browser (localStorage)</li>
+        <li>User-specific data isolated by user ID</li>
+        <li>Automatic backup on every quiz completion</li>
+        <li>No external database required</li>
+      </ul>
+    </div>
+
+    <!-- How It Works -->
+    <div class="demo-section">
+      <h2>⚙️ How It Works</h2>
+
+      <h3>For Students:</h3>
+      <ol style="padding-left: 20px;">
+        <li>Complete a quiz in any subject</li>
+        <li>Receive instant point feedback</li>
+        <li>Unlock achievements automatically</li>
+        <li>Build learning streaks</li>
+        <li>Compete on leaderboards</li>
+        <li>Redeem points for rewards</li>
+        <li>View progress in profile dashboard</li>
+      </ol>
+
+      <h3>For Educators:</h3>
+      <ol style="padding-left: 20px;">
+        <li>Monitor student engagement via gamification metrics</li>
+        <li>View achievement progress</li>
+        <li>Identify high-performing students</li>
+        <li>Track learning patterns</li>
+        <li>Encourage consistent learning</li>
+        <li>Customize achievement thresholds (optional)</li>
+      </ol>
+    </div>
+
+    <!-- Files Overview -->
+    <div class="demo-section">
+      <h2>📁 Implementation Files</h2>
+      
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background: #f0f0f0; border-bottom: 2px solid #0097b2;">
+            <th style="padding: 12px; text-align: left; font-weight: 600;">File</th>
+            <th style="padding: 12px; text-align: left; font-weight: 600;">Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><code>achievements.js</code></td>
+            <td style="padding: 12px;">20+ achievement definitions</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><code>gamification.js</code></td>
+            <td style="padding: 12px;">Core gamification system class</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><code>gamification-profile.html</code></td>
+            <td style="padding: 12px;">User dashboard & profile page</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><code>gamification-profile.js</code></td>
+            <td style="padding: 12px;">Profile page interactions</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 12px;"><code>gamification-quiz-integration.js</code></td>
+            <td style="padding: 12px;">Automatic quiz integration</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;"><code>GAMIFICATION_GUIDE.md</code></td>
+            <td style="padding: 12px;">Comprehensive documentation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Testing Section -->
+    <div class="demo-section">
+      <h2>🧪 Testing the System</h2>
+      
+      <div class="warning">
+        <strong>⚠️ Note:</strong> To fully test gamification, complete actual quizzes on the site. The system tracks real quiz completions.
+      </div>
+
+      <h3>Quick Test Steps:</h3>
+      <ol style="padding-left: 20px;">
+        <li>Complete a quiz (any subject)</li>
+        <li>Points notification appears (bottom-right)</li>
+        <li>Visit <strong>/gamification-profile.html</strong></li>
+        <li>See updated stats and achievements</li>
+        <li>Complete more quizzes to unlock badges</li>
+        <li>Check leaderboards to see rankings</li>
+      </ol>
+
+      <h3>Test Actions:</h3>
+      <div>
+        <button class="demo-button" onclick="alert('To test, complete actual quizzes on the site.')">📊 View Gamification Profile</button>
+        <button class="demo-button secondary" onclick="alert('Achievements are unlocked automatically during quizzes.')">🏆 View Achievements</button>
+        <button class="demo-button secondary" onclick="alert('Leaderboards update automatically as students take quizzes.')">🏅 View Leaderboards</button>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="demo-section">
+      <h2>📊 System Statistics</h2>
+      
+      <div class="stats-display">
+        <div class="stat-box">
+          <div class="value">20+</div>
+          <div class="label">Achievements</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">5</div>
+          <div class="label">Rarity Tiers</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">∞</div>
+          <div class="label">Points Possible</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">6</div>
+          <div class="label">Reward Types</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">4</div>
+          <div class="label">Leaderboard Types</div>
+        </div>
+        <div class="stat-box">
+          <div class="value">40KB</div>
+          <div class="label">Code Size</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="demo-section">
+      <h2>📖 Documentation & Resources</h2>
+      
+      <p>Full documentation is available in multiple formats:</p>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <strong>📘 GAMIFICATION_GUIDE.md</strong><br>
+          <p>Complete feature documentation with code examples</p>
+        </div>
+        <div class="demo-card">
+          <strong>📋 GAMIFICATION_SUMMARY.txt</strong><br>
+          <p>Quick reference guide with implementation overview</p>
+        </div>
+        <div class="demo-card">
+          <strong>💻 Source Code</strong><br>
+          <p>Well-commented code in all .js files</p>
+        </div>
+        <div class="demo-card">
+          <strong>🔗 Profile Page</strong><br>
+          <p>Interactive dashboard at /gamification-profile.html</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="demo-section">
+      <h2>❓ FAQ</h2>
+      
+      <h3>Q: Do students need to opt-in to gamification?</h3>
+      <p><strong>A:</strong> No! Gamification is automatic. All students participate when they complete quizzes.</p>
+
+      <h3>Q: Can I disable gamification?</h3>
+      <p><strong>A:</strong> Yes, by removing the gamification scripts from index.html if needed.</p>
+
+      <h3>Q: How is progress saved?</h3>
+      <p><strong>A:</strong> All data is stored locally in each student's browser. No server required.</p>
+
+      <h3>Q: Can I customize achievements?</h3>
+      <p><strong>A:</strong> Yes, modify thresholds in achievements.js and gamification.js.</p>
+
+      <h3>Q: Is gamification optional for teachers?</h3>
+      <p><strong>A:</strong> Yes, it's fully optional. Teachers can ignore it if they prefer traditional grading.</p>
+
+      <h3>Q: Does gamification affect grades?</h3>
+      <p><strong>A:</strong> No, gamification is purely motivational. Quiz scores remain the source of truth.</p>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="demo-section" style="background: linear-gradient(135deg, #0097b2 0%, #006b7e 100%); color: white;">
+      <h2 style="color: white; border-bottom-color: rgba(255,255,255,0.3);">🚀 Ready to Get Started?</h2>
+      
+      <p>The gamification system is fully implemented and ready to use!</p>
+
+      <div style="margin: 20px 0;">
+        <a href="gamification-profile.html" class="demo-button" style="background: white; color: #0097b2; cursor: pointer; display: inline-block; text-decoration: none;">
+          View Your Profile Dashboard →
+        </a>
+      </div>
+
+      <p style="font-size: 0.95rem; margin-top: 20px;">
+        <strong>Next Steps:</strong> Start completing quizzes to earn points, unlock achievements, and build your learning streak!
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 40px 20px; color: #666;">
+      <p style="margin: 0;">✨ Gamification System v1.0</p>
+      <p style="margin: 8px 0 0 0; font-size: 0.9rem;">Made with 🎮 for AdaptoHub</p>
+    </div>
+  </div>
+</body>
+</html>

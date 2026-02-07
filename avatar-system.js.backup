@@ -1,0 +1,1095 @@
+const AvatarSystem = {
+    avatars: {
+        basic: [
+            { id: 'student', emoji: '👨‍🎓', name: 'Student', unlocked: true },
+            { id: 'scholar', emoji: '👩‍🎓', name: 'Scholar', unlocked: true },
+            { id: 'teacher', emoji: '👨‍🏫', name: 'Teacher', unlocked: true },
+            { id: 'scientist', emoji: '👩‍🔬', name: 'Scientist', unlocked: true },
+            { id: 'artist', emoji: '👨‍🎨', name: 'Artist', unlocked: true },
+            { id: 'engineer', emoji: '👷', name: 'Engineer', unlocked: true },
+            { id: 'detective', emoji: '🕵️', name: 'Detective', unlocked: true },
+            { id: 'doctor', emoji: '👨‍⚕️', name: 'Doctor', unlocked: true },
+            { id: 'pilot', emoji: '👨‍✈️', name: 'Pilot', unlocked: true },
+            { id: 'chef', emoji: '👨‍🍳', name: 'Chef', unlocked: true }
+        ],
+        animals: [
+            { id: 'cat', emoji: '🐱', name: 'Cat', unlocked: true },
+            { id: 'dog', emoji: '🐶', name: 'Dog', unlocked: true },
+            { id: 'panda', emoji: '🐼', name: 'Panda', unlocked: true },
+            { id: 'fox', emoji: '🦊', name: 'Fox', unlocked: true },
+            { id: 'lion', emoji: '🦁', name: 'Lion', unlocked: true },
+            { id: 'tiger', emoji: '🐯', name: 'Tiger', unlocked: true },
+            { id: 'bear', emoji: '🐻', name: 'Bear', unlocked: true },
+            { id: 'koala', emoji: '🐨', name: 'Koala', unlocked: true },
+            { id: 'monkey', emoji: '🐵', name: 'Monkey', unlocked: true },
+            { id: 'rabbit', emoji: '🐰', name: 'Rabbit', unlocked: true },
+            { id: 'hamster', emoji: '🐹', name: 'Hamster', unlocked: true },
+            { id: 'owl', emoji: '🦉', name: 'Owl', unlocked: true },
+            { id: 'penguin', emoji: '🐧', name: 'Penguin', unlocked: true },
+            { id: 'dragon', emoji: '🐉', name: 'Dragon', unlocked: true }
+        ],
+        fantasy: [
+            { id: 'wizard', emoji: '🧙', name: 'Wizard', unlocked: true },
+            { id: 'ninja', emoji: '🥷', name: 'Ninja', unlocked: true },
+            { id: 'vampire', emoji: '🧛', name: 'Vampire', unlocked: true },
+            { id: 'fairy', emoji: '🧚', name: 'Fairy', unlocked: true },
+            { id: 'mermaid', emoji: '🧜', name: 'Mermaid', unlocked: true },
+            { id: 'elf', emoji: '🧝', name: 'Elf', unlocked: true },
+            { id: 'genie', emoji: '🧞', name: 'Genie', unlocked: true },
+            { id: 'zombie', emoji: '🧟', name: 'Zombie', unlocked: true },
+            { id: 'alien', emoji: '👽', name: 'Alien', unlocked: true },
+            { id: 'ghost', emoji: '👻', name: 'Ghost', unlocked: true }
+        ],
+        tech: [
+            { id: 'robot', emoji: '🤖', name: 'Robot', unlocked: true },
+            { id: 'astronaut', emoji: '👨‍🚀', name: 'Astronaut', unlocked: true },
+            { id: 'satellite', emoji: '🛰️', name: 'Satellite', unlocked: true },
+            { id: 'rocket', emoji: '🚀', name: 'Rocket', unlocked: true },
+            { id: 'computer', emoji: '💻', name: 'Computer', unlocked: true },
+            { id: 'brain', emoji: '🧠', name: 'Brain', unlocked: true }
+        ],
+        symbols: [
+            { id: 'superhero', emoji: '🦸', name: 'Superhero', unlocked: true },
+            { id: 'crown', emoji: '👑', name: 'Champion', unlocked: true },
+            { id: 'star', emoji: '⭐', name: 'Star', unlocked: true },
+            { id: 'trophy', emoji: '🏆', name: 'Trophy', unlocked: true },
+            { id: 'medal', emoji: '🏅', name: 'Medal', unlocked: true },
+            { id: 'fire', emoji: '🔥', name: 'Fire', unlocked: true },
+            { id: 'lightning', emoji: '⚡', name: 'Lightning', unlocked: true },
+            { id: 'diamond', emoji: '💎', name: 'Diamond', unlocked: true },
+            { id: 'heart', emoji: '❤️', name: 'Heart', unlocked: true },
+            { id: 'sparkles', emoji: '✨', name: 'Sparkles', unlocked: true }
+        ],
+        unlockable: [
+            { id: 'unicorn', emoji: '🦄', name: 'Unicorn', requirement: 'Complete 10 quizzes', requiredQuizzes: 10 },
+            { id: 'phoenix', emoji: '🔥🐦', name: 'Phoenix', requirement: '7-day streak', requiredStreak: 7 },
+            { id: 'ace', emoji: '🃏', name: 'Ace', requirement: '90% average score', requiredAverage: 90 },
+            { id: 'crystal', emoji: '🔮', name: 'Crystal', requirement: 'Perfect score', requiredPerfect: 1 },
+            { id: 'emperor', emoji: '👑🌟', name: 'Emperor', requirement: 'Complete 5 subjects', requiredSubjects: 5 },
+            { id: 'legend', emoji: '🌟👑', name: 'Legend', requirement: '30-day streak', requiredStreak: 30 }
+        ],
+        colors: [
+            { id: 'default', color: '#6366f1', name: 'Indigo' },
+            { id: 'red', color: '#ef4444', name: 'Red' },
+            { id: 'green', color: '#10b981', name: 'Green' },
+            { id: 'blue', color: '#3b82f6', name: 'Blue' },
+            { id: 'purple', color: '#8b5cf6', name: 'Purple' },
+            { id: 'pink', color: '#ec4899', name: 'Pink' },
+            { id: 'orange', color: '#f97316', name: 'Orange' },
+            { id: 'teal', color: '#14b8a6', name: 'Teal' },
+            { id: 'cyan', color: '#06b6d4', name: 'Cyan' },
+            { id: 'yellow', color: '#eab308', name: 'Yellow' },
+            { id: 'lime', color: '#84cc16', name: 'Lime' },
+            { id: 'rose', color: '#f43f5e', name: 'Rose' }
+        ],
+        gradients: [
+            { id: 'sunset', gradient: 'linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%)', name: 'Sunset' },
+            { id: 'ocean', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', name: 'Ocean' },
+            { id: 'forest', gradient: 'linear-gradient(135deg, #0ba360 0%, #3cba92 100%)', name: 'Forest' },
+            { id: 'galaxy', gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', name: 'Galaxy' },
+            { id: 'fire', gradient: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)', name: 'Fire' },
+            { id: 'ice', gradient: 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)', name: 'Ice' },
+            { id: 'purple-dream', gradient: 'linear-gradient(135deg, #c471f5 0%, #fa71cd 100%)', name: 'Purple Dream' },
+            { id: 'neon', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', name: 'Neon' }
+        ],
+        borders: [
+            { id: 'none', style: 'none', name: 'None' },
+            { id: 'solid', style: '3px solid rgba(255,255,255,0.5)', name: 'Solid' },
+            { id: 'double', style: '5px double rgba(255,255,255,0.5)', name: 'Double' },
+            { id: 'dotted', style: '3px dotted rgba(255,255,255,0.5)', name: 'Dotted' },
+            { id: 'dashed', style: '3px dashed rgba(255,255,255,0.5)', name: 'Dashed' },
+            { id: 'glow', style: '0 0 10px rgba(255,255,255,0.8)', name: 'Glow' }
+        ],
+        animations: [
+            { id: 'none', animation: 'none', name: 'None' },
+            { id: 'pulse', animation: 'avatarPulse 2s infinite', name: 'Pulse' },
+            { id: 'bounce', animation: 'avatarBounce 1s infinite', name: 'Bounce' },
+            { id: 'spin', animation: 'avatarSpin 3s linear infinite', name: 'Spin' },
+            { id: 'shake', animation: 'avatarShake 0.5s infinite', name: 'Shake' },
+            { id: 'rainbow', animation: 'avatarRainbow 5s infinite', name: 'Rainbow' }
+        ]
+    },
+
+    init() {
+        console.log('🚀 AvatarSystem.init() called');
+        this.loadUserAvatar();
+        console.log('✓ User avatar loaded:', this.currentAvatar);
+        this.updateAvatarDisplay();
+        console.log('✓ Avatar display updated');
+        this.addClickListener();
+        console.log('✓ Click listener added');
+        this.checkUnlocks();
+        console.log('✓ Unlocks checked');
+    },
+
+    loadUserAvatar() {
+        const saved = localStorage.getItem('adaptohub_avatar');
+        if (saved) {
+            try {
+                this.currentAvatar = JSON.parse(saved);
+            } catch (e) {
+                this.currentAvatar = this.getDefaultAvatar();
+            }
+        } else {
+            this.currentAvatar = this.getDefaultAvatar();
+        }
+    },
+
+    getDefaultAvatar() {
+        return {
+            type: 'student',
+            emoji: '👨‍🎓',
+            color: '#6366f1',
+            name: 'Student',
+            gradient: null,
+            border: 'none',
+            animation: 'none',
+            customEmoji: null
+        };
+    },
+
+    updateAvatarDisplay() {
+        const avatar = document.getElementById('accountAvatar');
+        const dropdownAvatar = document.getElementById('dropdownUserAvatar');
+        
+        const avatars = [avatar, dropdownAvatar].filter(el => el);
+        
+        avatars.forEach(el => {
+            if (!el) return;
+
+            // Set background
+            if (this.currentAvatar.gradient) {
+                el.style.background = this.currentAvatar.gradient;
+            } else {
+                el.style.background = this.currentAvatar.color;
+            }
+            
+            // Set emoji
+            const displayEmoji = this.currentAvatar.customEmoji || this.currentAvatar.emoji;
+            el.innerHTML = `<span style="font-size: 24px;">${displayEmoji}</span>`;
+            
+            // Set border
+            if (this.currentAvatar.border && this.currentAvatar.border !== 'none') {
+                if (this.currentAvatar.border.includes('glow')) {
+                    el.style.border = 'none';
+                    el.style.boxShadow = this.currentAvatar.border.replace('0 0', '0 0');
+                } else {
+                    el.style.border = this.currentAvatar.border;
+                    el.style.boxShadow = 'none';
+                }
+            } else {
+                el.style.border = 'none';
+                el.style.boxShadow = 'none';
+            }
+            
+            // Set animation
+            if (this.currentAvatar.animation && this.currentAvatar.animation !== 'none') {
+                el.style.animation = this.currentAvatar.animation;
+            } else {
+                el.style.animation = 'none';
+            }
+            
+            el.style.display = 'flex';
+            el.style.alignItems = 'center';
+            el.style.justifyContent = 'center';
+        });
+    },
+
+    addClickListener() {
+        const avatar = document.getElementById('accountAvatar');
+        console.log('🔍 addClickListener - avatar element:', avatar);
+        if (avatar) {
+            avatar.style.cursor = 'pointer';
+            avatar.addEventListener('click', () => {
+                console.log('🖱️ Avatar clicked! Opening modal...');
+                this.openModal();
+            });
+            console.log('✓ Click listener attached to avatar');
+        } else {
+            console.error('❌ Avatar element not found!');
+        }
+    },
+
+    checkUnlocks() {
+        const stats = this.getUserStats();
+        const newUnlocks = [];
+
+        this.avatars.unlockable.forEach(avatar => {
+            const wasUnlocked = this.isUnlocked(avatar.id);
+            const nowUnlocked = this.checkRequirement(avatar, stats);
+
+            if (nowUnlocked && !wasUnlocked) {
+                this.unlockAvatar(avatar.id);
+                newUnlocks.push(avatar);
+            }
+        });
+
+        newUnlocks.forEach(avatar => {
+            if (window.Celebrations) {
+                window.Celebrations.showBadge(
+                    `New Avatar Unlocked!`,
+                    avatar.emoji,
+                    avatar.name
+                );
+            }
+        });
+    },
+
+    checkRequirement(avatar, stats) {
+        if (avatar.requiredQuizzes && stats.totalQuizzes >= avatar.requiredQuizzes) return true;
+        if (avatar.requiredStreak && stats.currentStreak >= avatar.requiredStreak) return true;
+        if (avatar.requiredAverage && stats.averageScore >= avatar.requiredAverage) return true;
+        if (avatar.requiredPerfect && stats.perfectScores >= avatar.requiredPerfect) return true;
+        if (avatar.requiredSubjects && stats.completedSubjects >= avatar.requiredSubjects) return true;
+        return false;
+    },
+
+    getUserStats() {
+        return {
+            totalQuizzes: parseInt(localStorage.getItem('adaptohub_total_quizzes') || '0'),
+            currentStreak: parseInt(localStorage.getItem('adaptohub_streak') || '0'),
+            averageScore: parseInt(localStorage.getItem('adaptohub_avg_score') || '0'),
+            perfectScores: parseInt(localStorage.getItem('adaptohub_perfect_scores') || '0'),
+            completedSubjects: parseInt(localStorage.getItem('adaptohub_completed_subjects') || '0')
+        };
+    },
+
+    isUnlocked(avatarId) {
+        const unlocked = JSON.parse(localStorage.getItem('adaptohub_unlocked_avatars') || '[]');
+        return unlocked.includes(avatarId);
+    },
+
+    unlockAvatar(avatarId) {
+        const unlocked = JSON.parse(localStorage.getItem('adaptohub_unlocked_avatars') || '[]');
+        if (!unlocked.includes(avatarId)) {
+            unlocked.push(avatarId);
+            localStorage.setItem('adaptohub_unlocked_avatars', JSON.stringify(unlocked));
+        }
+    },
+
+    openModal() {
+        console.log('🎨 openModal() called!');
+        const modal = this.createModal();
+        console.log('✓ Modal created:', modal);
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('show'), 10);
+        
+        // Setup tab switching
+        const tabs = modal.querySelectorAll('.avatar-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const category = tab.dataset.category;
+                modal.querySelector('#avatarGrid').innerHTML = this.renderAvatarGrid(category);
+            });
+        });
+        
+        // Setup custom emoji
+        const customInput = modal.querySelector('#customEmojiInput');
+        const customApply = modal.querySelector('#customEmojiApply');
+        if (customInput && customApply) {
+            customApply.addEventListener('click', () => {
+                const emoji = customInput.value.trim();
+                if (emoji) {
+                    this.currentAvatar.customEmoji = emoji;
+                    this.updatePreview();
+                }
+            });
+        }
+        
+        // Setup save button
+        const saveBtn = modal.querySelector('.save-avatar-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                this.saveAvatar();
+                modal.remove();
+            });
+        }
+        
+        this.updatePreview();
+    },
+
+    createModal() {
+        const modal = document.createElement('div');
+        modal.className = 'avatar-modal';
+        modal.innerHTML = `
+            <div class="avatar-modal-content">
+                <div class="avatar-modal-header">
+                    <h2>🎨 Customize Your Avatar</h2>
+                    <button class="modal-close" onclick="this.closest('.avatar-modal').remove()">✕</button>
+                </div>
+                <div class="avatar-modal-body">
+                    <!-- Category Tabs -->
+                    <div class="avatar-tabs">
+                        <button class="avatar-tab active" data-category="basic">✨ Basic</button>
+                        <button class="avatar-tab" data-category="animals">🐾 Animals</button>
+                        <button class="avatar-tab" data-category="fantasy">🦄 Fantasy</button>
+                        <button class="avatar-tab" data-category="tech">💻 Tech</button>
+                        <button class="avatar-tab" data-category="symbols">⚡ Symbols</button>
+                        <button class="avatar-tab" data-category="unlockable">🔒 Special</button>
+                    </div>
+                    
+                    ${this.renderAvatarOptions()}
+                    ${this.renderCustomEmojiInput()}
+                    ${this.renderColorOptions()}
+                    ${this.renderGradientOptions()}
+                    ${this.renderBorderOptions()}
+                    ${this.renderAnimationOptions()}
+                    ${this.renderPreview()}
+                    
+                    <button class="save-avatar-btn">💾 Save Avatar</button>
+                </div>
+            </div>
+        `;
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+
+        return modal;
+    },
+
+    renderAvatarOptions() {
+        return `
+            <div class="avatar-section">
+                <h3>Choose Avatar</h3>
+                <div class="avatar-grid" id="avatarGrid">
+                    ${this.renderAvatarGrid('basic')}
+                </div>
+            </div>
+        `;
+    },
+    
+    renderAvatarGrid(category) {
+        const avatars = this.avatars[category] || [];
+        const unlockedIds = JSON.parse(localStorage.getItem('adaptohub_unlocked_avatars') || '[]');
+        
+        return avatars.map(avatar => {
+            const isUnlockable = category === 'unlockable';
+            const isLocked = isUnlockable && !unlockedIds.includes(avatar.id);
+            const isSelected = this.currentAvatar.type === avatar.id && !this.currentAvatar.customEmoji;
+            
+            return `
+                <div class="avatar-option ${isLocked ? 'locked' : ''} ${isSelected ? 'selected' : ''}"
+                     onclick="${!isLocked ? `AvatarSystem.selectAvatar('${avatar.id}', '${avatar.emoji}', '${avatar.name}')` : ''}"
+                     title="${!isLocked ? avatar.name : avatar.requirement}">
+                    <div class="avatar-emoji">${avatar.emoji}</div>
+                    <div class="avatar-name">${avatar.name}</div>
+                    ${isLocked ? '<div class="lock-icon">🔒</div>' : ''}
+                </div>
+            `;
+        }).join('');
+    },
+    
+    renderCustomEmojiInput() {
+        return `
+            <div class="avatar-section custom-emoji-section">
+                <h3>✏️ Custom Emoji</h3>
+                <div class="custom-emoji-input-group">
+                    <input type="text" id="customEmojiInput" placeholder="Type any emoji (e.g., 🌟, 🎯, 💡, 🚀)" maxlength="4">
+                    <button id="customEmojiApply">Apply</button>
+                    ${this.currentAvatar.customEmoji ? `<button id="clearCustomEmoji" onclick="AvatarSystem.clearCustomEmoji()">Clear</button>` : ''}
+                </div>
+                ${this.currentAvatar.customEmoji ? `<div class="custom-emoji-display">Current: ${this.currentAvatar.customEmoji}</div>` : ''}
+            </div>
+        `;
+    },
+
+    renderColorOptions() {
+        return `
+            <div class="avatar-section">
+                <h3>🎨 Background Color</h3>
+                <div class="color-grid">
+                    ${this.avatars.colors.map(color => `
+                        <div class="color-option ${this.currentAvatar.color === color.color && !this.currentAvatar.gradient ? 'selected' : ''}"
+                             onclick="AvatarSystem.selectColor('${color.color}')"
+                             title="${color.name}">
+                            <div class="color-swatch" style="background: ${color.color}"></div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    },
+    
+    renderGradientOptions() {
+        return `
+            <div class="avatar-section">
+                <h3>🌈 Background Gradient</h3>
+                <div class="gradient-grid">
+                    <div class="gradient-option ${!this.currentAvatar.gradient ? 'selected' : ''}"
+                         onclick="AvatarSystem.selectGradient(null)"
+                         title="None">
+                        <div class="gradient-swatch" style="background: #ffffff; border: 2px dashed #ccc;">None</div>
+                    </div>
+                    ${this.avatars.gradients.map(gradient => `
+                        <div class="gradient-option ${this.currentAvatar.gradient === gradient.value ? 'selected' : ''}"
+                             onclick="AvatarSystem.selectGradient('${gradient.value.replace(/'/g, '\\\'')}')"
+                             title="${gradient.name}">
+                            <div class="gradient-swatch" style="background: ${gradient.value}"></div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    },
+    
+    renderBorderOptions() {
+        return `
+            <div class="avatar-section">
+                <h3>🖼️ Border Style</h3>
+                <div class="border-grid">
+                    <div class="border-option ${this.currentAvatar.border === 'none' ? 'selected' : ''}"
+                         onclick="AvatarSystem.selectBorder('none')"
+                         title="None">
+                        <div class="border-preview" style="border: 2px dashed #ccc;">None</div>
+                    </div>
+                    ${this.avatars.borders.map(border => `
+                        <div class="border-option ${this.currentAvatar.border === border.value ? 'selected' : ''}"
+                             onclick="AvatarSystem.selectBorder('${border.value.replace(/'/g, '\\\'')}')"
+                             title="${border.name}">
+                            <div class="border-preview" style="${border.value.includes('glow') ? 'box-shadow: ' + border.value : 'border: ' + border.value}">${border.name}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    },
+    
+    renderAnimationOptions() {
+        return `
+            <div class="avatar-section">
+                <h3>✨ Animation Effect</h3>
+                <div class="animation-grid">
+                    <div class="animation-option ${this.currentAvatar.animation === 'none' ? 'selected' : ''}"
+                         onclick="AvatarSystem.selectAnimation('none')"
+                         title="None">
+                        <div class="animation-preview">None</div>
+                    </div>
+                    ${this.avatars.animations.map(animation => `
+                        <div class="animation-option ${this.currentAvatar.animation === animation.value ? 'selected' : ''}"
+                             onclick="AvatarSystem.selectAnimation('${animation.value}')"
+                             title="${animation.name}">
+                            <div class="animation-preview" style="animation: ${animation.value}">${animation.name}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    },
+    
+    renderPreview() {
+        return `
+            <div class="avatar-section preview-section">
+                <h3>👁️ Preview</h3>
+                <div class="avatar-preview" id="avatarPreview"></div>
+            </div>
+        `;
+    },
+
+    selectAvatar(id, emoji, name) {
+        this.currentAvatar.type = id;
+        this.currentAvatar.emoji = emoji;
+        this.currentAvatar.name = name;
+        this.currentAvatar.customEmoji = null; // Clear custom emoji when selecting preset
+        this.updatePreview();
+        
+        document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+        event.target.closest('.avatar-option').classList.add('selected');
+    },
+
+    selectColor(color) {
+        this.currentAvatar.color = color;
+        this.currentAvatar.gradient = null; // Clear gradient when selecting color
+        this.updatePreview();
+        
+        document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+        event.target.closest('.color-option').classList.add('selected');
+        document.querySelectorAll('.gradient-option').forEach(el => el.classList.remove('selected'));
+    },
+    
+    selectGradient(gradient) {
+        this.currentAvatar.gradient = gradient;
+        this.updatePreview();
+        
+        document.querySelectorAll('.gradient-option').forEach(el => el.classList.remove('selected'));
+        event.target.closest('.gradient-option').classList.add('selected');
+        if (gradient) {
+            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+        }
+    },
+    
+    selectBorder(border) {
+        this.currentAvatar.border = border;
+        this.updatePreview();
+        
+        document.querySelectorAll('.border-option').forEach(el => el.classList.remove('selected'));
+        event.target.closest('.border-option').classList.add('selected');
+    },
+    
+    selectAnimation(animation) {
+        this.currentAvatar.animation = animation;
+        this.updatePreview();
+        
+        document.querySelectorAll('.animation-option').forEach(el => el.classList.remove('selected'));
+        event.target.closest('.animation-option').classList.add('selected');
+    },
+    
+    clearCustomEmoji() {
+        this.currentAvatar.customEmoji = null;
+        this.updatePreview();
+        const modal = document.querySelector('.avatar-modal');
+        if (modal) {
+            const customSection = modal.querySelector('.custom-emoji-section');
+            if (customSection) {
+                customSection.outerHTML = this.renderCustomEmojiInput();
+            }
+        }
+    },
+    
+    updatePreview() {
+        const preview = document.getElementById('avatarPreview');
+        if (!preview) return;
+        
+        // Set background
+        if (this.currentAvatar.gradient) {
+            preview.style.background = this.currentAvatar.gradient;
+        } else {
+            preview.style.background = this.currentAvatar.color;
+        }
+        
+        // Set emoji
+        const displayEmoji = this.currentAvatar.customEmoji || this.currentAvatar.emoji;
+        preview.innerHTML = `<span style="font-size: 48px;">${displayEmoji}</span>`;
+        
+        // Set border
+        if (this.currentAvatar.border && this.currentAvatar.border !== 'none') {
+            if (this.currentAvatar.border.includes('glow')) {
+                preview.style.border = 'none';
+                preview.style.boxShadow = this.currentAvatar.border;
+            } else {
+                preview.style.border = this.currentAvatar.border;
+                preview.style.boxShadow = 'none';
+            }
+        } else {
+            preview.style.border = 'none';
+            preview.style.boxShadow = 'none';
+        }
+        
+        // Set animation
+        if (this.currentAvatar.animation && this.currentAvatar.animation !== 'none') {
+            preview.style.animation = this.currentAvatar.animation;
+        } else {
+            preview.style.animation = 'none';
+        }
+    },
+
+    saveAvatar() {
+        localStorage.setItem('adaptohub_avatar', JSON.stringify(this.currentAvatar));
+    },
+
+    currentAvatar: null
+};
+
+const style = document.createElement('style');
+style.textContent = `
+    .avatar-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10001;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .avatar-modal.show {
+        opacity: 1;
+    }
+
+    .avatar-modal-content {
+        background: var(--card-bg, white);
+        border-radius: 16px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: modalSlideUp 0.3s ease;
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .avatar-modal-header {
+        padding: 24px;
+        border-bottom: 1px solid var(--border-color, #e4e7eb);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .avatar-modal-header h2 {
+        margin: 0;
+        color: var(--text-primary, #1f2933);
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--text-secondary, #636d79);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+        background: var(--bg-secondary, #f5f6f8);
+    }
+
+    .avatar-modal-body {
+        padding: 24px;
+    }
+
+    .avatar-section {
+        margin-bottom: 32px;
+    }
+
+    .avatar-section h3 {
+        margin: 0 0 16px;
+        color: var(--text-primary, #1f2933);
+        font-size: 1.1rem;
+    }
+
+    .avatar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+
+    .avatar-option {
+        background: var(--bg-secondary, #f5f6f8);
+        border: 2px solid transparent;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+    }
+
+    .avatar-option:hover:not(.locked) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar-option.selected {
+        border-color: #6366f1;
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .avatar-option.locked {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .avatar-emoji {
+        font-size: 2.5rem;
+        margin-bottom: 8px;
+    }
+
+    .avatar-name {
+        font-size: 0.85rem;
+        color: var(--text-secondary, #636d79);
+        font-weight: 500;
+    }
+
+    .lock-icon {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 1.2rem;
+    }
+
+    .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 12px;
+    }
+
+    .color-option {
+        aspect-ratio: 1;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .color-option:hover {
+        transform: scale(1.1);
+    }
+
+    .color-option.selected {
+        border-color: var(--text-primary, #1f2933);
+        transform: scale(1.1);
+    }
+
+    .color-swatch {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+    }
+    
+    /* Avatar Tabs */
+    .avatar-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+    
+    .avatar-tab {
+        flex: 1;
+        min-width: 80px;
+        padding: 10px 16px;
+        border: 2px solid var(--border-color, #e4e7eb);
+        background: var(--bg-secondary, #f5f6f8);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    
+    .avatar-tab:hover {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: #6366f1;
+    }
+    
+    .avatar-tab.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+    }
+    
+    /* Custom Emoji Section */
+    .custom-emoji-section {
+        border: 2px dashed var(--border-color, #e4e7eb);
+        border-radius: 12px;
+        padding: 20px;
+        background: rgba(99, 102, 241, 0.05);
+    }
+    
+    .custom-emoji-input-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    #customEmojiInput {
+        flex: 1;
+        min-width: 200px;
+        padding: 12px 16px;
+        border: 2px solid var(--border-color, #e4e7eb);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+    
+    #customEmojiInput:focus {
+        outline: none;
+        border-color: #6366f1;
+    }
+    
+    #customEmojiApply, #clearCustomEmoji {
+        padding: 12px 20px;
+        background: #6366f1;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+    
+    #customEmojiApply:hover, #clearCustomEmoji:hover {
+        background: #4f46e5;
+    }
+    
+    #clearCustomEmoji {
+        background: #ef4444;
+    }
+    
+    #clearCustomEmoji:hover {
+        background: #dc2626;
+    }
+    
+    .custom-emoji-display {
+        margin-top: 12px;
+        padding: 8px 12px;
+        background: white;
+        border-radius: 8px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    /* Gradient Grid */
+    .gradient-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 12px;
+    }
+    
+    .gradient-option {
+        aspect-ratio: 1;
+        border: 3px solid transparent;
+        border-radius: 12px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .gradient-option:hover {
+        transform: scale(1.1);
+    }
+    
+    .gradient-option.selected {
+        border-color: var(--text-primary, #1f2933);
+        transform: scale(1.1);
+    }
+    
+    .gradient-swatch {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Border Grid */
+    .border-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+    
+    .border-option {
+        border: 3px solid transparent;
+        border-radius: 12px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .border-option:hover {
+        transform: scale(1.05);
+    }
+    
+    .border-option.selected {
+        background: rgba(99, 102, 241, 0.1);
+    }
+    
+    .border-preview {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: var(--bg-secondary, #f5f6f8);
+    }
+    
+    /* Animation Grid */
+    .animation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+    }
+    
+    .animation-option {
+        border: 3px solid transparent;
+        border-radius: 12px;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .animation-option:hover {
+        transform: scale(1.05);
+    }
+    
+    .animation-option.selected {
+        background: rgba(99, 102, 241, 0.1);
+    }
+    
+    .animation-preview {
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: var(--bg-secondary, #f5f6f8);
+    }
+    
+    /* Preview Section */
+    .preview-section {
+        text-align: center;
+        background: var(--bg-secondary, #f5f6f8);
+        border-radius: 12px;
+        padding: 24px;
+    }
+    
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Save Button */
+    .save-avatar-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .save-avatar-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Animation Keyframes */
+    @keyframes avatarPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    @keyframes avatarBounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes avatarSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @keyframes avatarShake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    @keyframes avatarGlow {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.2); }
+    }
+    
+    @keyframes avatarFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(5deg); }
+    }
+
+    @media (max-width: 640px) {
+        .avatar-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .color-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        
+        .gradient-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .border-grid, .animation-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .avatar-tabs {
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+        }
+        
+        .avatar-tab {
+            font-size: 0.85rem;
+            padding: 8px 12px;
+        }
+    }
+`;
+document.head.appendChild(style);
+console.log('✓ Avatar system styles added');
+
+// Assign to window immediately so other scripts can reference it
+if (typeof window !== 'undefined') {
+    window.AvatarSystem = AvatarSystem;
+    console.log('✓ window.AvatarSystem is now available');
+    console.log('✓ AvatarSystem.openModal is a function?', typeof AvatarSystem.openModal === 'function');
+    console.log('✓ All AvatarSystem methods:', Object.keys(AvatarSystem).filter(k => typeof AvatarSystem[k] === 'function'));
+    
+    // Add a global test function for debugging
+    window.testAvatarModal = function() {
+        console.log('🧪 Testing avatar modal...');
+        if (window.AvatarSystem && typeof window.AvatarSystem.openModal === 'function') {
+            console.log('✓ Calling AvatarSystem.openModal()...');
+            window.AvatarSystem.openModal();
+        } else {
+            console.error('❌ AvatarSystem.openModal not available!');
+        }
+    };
+    console.log('✓ Test function available: window.testAvatarModal()');
+} else {
+    console.error('❌ window object not available!');
+}
+
+// Then initialize
+if (document.readyState === 'loading') {
+    console.log('📄 DOM still loading, waiting for DOMContentLoaded');
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('✓ DOMContentLoaded fired, initializing AvatarSystem');
+        AvatarSystem.init();
+    });
+} else {
+    console.log('✓ DOM already loaded, initializing AvatarSystem immediately');
+    AvatarSystem.init();
+}

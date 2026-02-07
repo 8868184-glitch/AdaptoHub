@@ -1,0 +1,1204 @@
+﻿<!DOCTYPE html>
+<html lang="th-TH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Feedback & Discussion - AdaptoHub</title>
+  <link rel="stylesheet" href="styles.css">  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <script defer src="app.js"></script>`n    <script defer src="time-tracker.js"></script>`n    <script defer src="proficiency-tracker.js"></script>
+  <script defer src="dark-mode.js"></script>
+  <script defer src="celebrations.js"></script>
+  <script defer src="avatar-system.js"></script>
+  <script defer src="quiz-animations.js"></script>
+  <script defer src="smooth-animations.js"></script>
+  <script defer src="loading-tips.js"></script>
+  <script defer src="loading-tips-integration.js"></script>
+  <script defer src="feature-integration.js"></script>
+  <style>
+    .feedback-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header-section {
+      background-color: #ffffff;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .header-section h1 {
+      font-size: 2rem;
+      color: #0097b2;
+      margin-bottom: 12px;
+    }
+
+    .header-section p {
+      color: #636d79;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .guidelines {
+      background-color: #e8f5f7;
+      border-left: 4px solid #0097b2;
+      padding: 16px;
+      border-radius: 4px;
+      margin-top: 16px;
+    }
+
+    .guidelines-title {
+      font-weight: 600;
+      color: #0097b2;
+      margin-bottom: 8px;
+    }
+
+    .guidelines-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .guidelines-list li {
+      color: #636d79;
+      font-size: 0.9rem;
+    }
+
+    .guidelines-list li:before {
+      content: "✓ ";
+      color: #0097b2;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .project-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .project-header {
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      padding: 20px;
+      color: #ffffff;
+    }
+
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .project-author {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .project-body {
+      padding: 16px;
+    }
+
+    .project-description {
+      color: #636d79;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-stats {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-top: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #636d79;
+    }
+
+    .project-action {
+      text-align: center;
+    }
+
+    .view-feedback-btn {
+      background-color: #0097b2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .view-feedback-btn:hover {
+      background-color: #0088a0;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      margin: 40px auto;
+      padding: 0;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #0097b2 0%, #00bcd4 100%);
+      color: #ffffff;
+      padding: 24px;
+      border-bottom: 2px solid #0097b2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .modal-body {
+      padding: 24px;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .feedback-section {
+      margin-bottom: 24px;
+    }
+
+    .feedback-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0097b2;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #0097b2;
+      padding-bottom: 8px;
+    }
+
+    .rating-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .rating-emoji {
+      font-size: 2.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: #f5f6f8;
+      flex: 1;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .rating-emoji:hover {
+      background-color: #e0e0e0;
+      transform: scale(1.1);
+    }
+
+    .rating-emoji.selected {
+      background-color: #d4f1f4;
+      border: 2px solid #0097b2;
+      transform: scale(1.15);
+    }
+
+    .rating-label {
+      font-size: 0.8rem;
+      color: #636d79;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .comment-form {
+      background-color: #f5f6f8;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #1f2933;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d0d5db;
+      border-radius: 4px;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      color: #1f2933;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #0097b2;
+      box-shadow: 0 0 0 3px rgba(0, 151, 178, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .tone-selector {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tone-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 10px;
+      border: 2px solid #d0d5db;
+      background-color: #ffffff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      color: #636d79;
+    }
+
+    .tone-btn:hover {
+      border-color: #0097b2;
+      color: #0097b2;
+    }
+
+    .tone-btn.selected {
+      background-color: #0097b2;
+      border-color: #0097b2;
+      color: white;
+    }
+
+    .submit-comment-btn {
+      background-color: #0097b2;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .submit-comment-btn:hover {
+      background-color: #0088a0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 151, 178, 0.2);
+    }
+
+    .submit-comment-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .comment-item {
+      background-color: #f5f6f8;
+      padding: 16px;
+      border-radius: 6px;
+      border-left: 4px solid #0097b2;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .comment-author {
+      font-weight: 600;
+      color: #1f2933;
+    }
+
+    .comment-date {
+      font-size: 0.8rem;
+      color: #636d79;
+    }
+
+    .comment-tone {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      background-color: #e8f5f7;
+      color: #0097b2;
+      border-radius: 3px;
+      margin-bottom: 8px;
+    }
+
+    .comment-text {
+      color: #636d79;
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+
+    .helpful-btn {
+      background-color: transparent;
+      border: 1px solid #d0d5db;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #636d79;
+      transition: all 0.2s ease;
+      font-family: "Bai Jamjuree", sans-serif;
+      margin-top: 12px;
+    }
+
+    .helpful-btn:hover {
+      border-color: #0097b2;
+      color: #0097b2;
+    }
+
+    .helpful-btn.liked {
+      background-color: #d4f1f4;
+      border-color: #0097b2;
+      color: #0097b2;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #636d79;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .empty-state-text {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      color: #155724;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0097b2;
+    }
+
+    .filters-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filter-input,
+    .filter-select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d0d5db;
+      font-family: "Bai Jamjuree", sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+      outline: none;
+      border-color: #0097b2;
+      box-shadow: 0 0 0 3px rgba(0, 151, 178, 0.12);
+    }
+
+    .safety-status {
+      background: #f0f9fc;
+      border-left: 4px solid #0097b2;
+      padding: 12px 14px;
+      border-radius: 8px;
+      color: #475569;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #e8f5f7;
+      color: #0097b2;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .content-main {
+      padding: 80px 20px 20px;
+      overflow-y: auto;
+      height: calc(100vh - 80px);
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        margin: 20px auto;
+      }
+
+      .rating-emoji {
+        min-width: 50px;
+        font-size: 2rem;
+      }
+
+      .tone-selector {
+        gap: 6px;
+      }
+
+      .tone-btn {
+        min-width: 80px;
+        padding: 8px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+  <script src="app.js"></script>
+  <script defer src="background-customizer.js"></script>
+</head>
+<body>
+  <header class="top-banner">
+    <div class="logo">
+      <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+      <a class="site-title" href="index.html">AdaptoHub</a>
+    </div>
+    <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+    </header>
+
+  <div class="content-main">
+    <div class="feedback-container">
+      <div class="header-section">
+        <h1>💬 Safe Feedback & Discussion</h1>
+        <p>พื้นที่แลกเปลี่ยนความคิดเห็นเชิงสร้างสรรค์</p>
+        <p style="font-size: 0.9rem;">ให้คำติชมเชิงบวกและเสนอแนะแนวคิดระหว่างเพื่อน</p>
+        
+        <div class="guidelines">
+          <div class="guidelines-title">📋 หลักการให้คำติชม</div>
+          <ul class="guidelines-list">
+            <li>เน้นจุดดีและความสร้างสรรค์ในผลงาน</li>
+            <li>ให้คำแนะนำอย่างสุภาพและเป็นมิตร</li>
+            <li>มุ่งเน้นการปรับปรุงและการเรียนรู้ร่วมกัน</li>
+            <li>หลีกเลี่ยงการวิจารณ์เชิงลบหรือไม่เป็นสัน</li>
+            <li>เคารพความคิดและความพยายามของผู้อื่น</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="feedbackStats"></div>
+
+      <div class="filters-bar">
+        <input class="filter-input" id="projectSearch" type="text" placeholder="ค้นหาโครงการหรือผู้สร้าง" />
+        <select class="filter-select" id="toneFilter">
+          <option value="all">ประเภทข้อเสนอแนะทั้งหมด</option>
+          <option value="encouragement">ชื่นชม</option>
+          <option value="suggestion">แนะนำ</option>
+          <option value="question">คำถาม</option>
+          <option value="improvement">การปรับปรุง</option>
+        </select>
+        <select class="filter-select" id="sortFilter">
+          <option value="discussed">เรียงตาม: ข้อเสนอแนะมากสุด</option>
+          <option value="rated">เรียงตาม: คะแนนสูงสุด</option>
+          <option value="newest">เรียงตาม: ล่าสุด</option>
+        </select>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid">
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="feedbackModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalProjectTitle">โครงการ</h2>
+          <p style="margin: 0; font-size: 0.95rem; opacity: 0.9;" id="modalProjectAuthor">โดย ...</p>
+        </div>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="success-message" id="successMessage">✓ บันทึกข้อเสนอแนะสำเร็จ!</div>
+
+        <div class="feedback-section">
+          <div class="feedback-title">📝 คำอธิบายโครงการ</div>
+          <p id="modalProjectDescription" style="color: #636d79; line-height: 1.6;"></p>
+        </div>
+
+        <div class="feedback-section">
+          <div class="feedback-title">🛡️ Safety & Tone Monitor</div>
+          <div class="safety-status" id="safetyStatus">🟢 AI moderation is active. Keep feedback constructive and supportive.</div>
+        </div>
+
+        <div class="feedback-section">
+          <div class="feedback-title">⭐ ให้คะแนนโครงการ</div>
+          <div class="rating-buttons" id="ratingButtons">
+            <div style="flex: 1;">
+              <div class="rating-emoji" data-rating="1">😕</div>
+              <div class="rating-label">ต้องปรับปรุง</div>
+            </div>
+            <div style="flex: 1;">
+              <div class="rating-emoji" data-rating="2">😐</div>
+              <div class="rating-label">พอสมควร</div>
+            </div>
+            <div style="flex: 1;">
+              <div class="rating-emoji" data-rating="3">🙂</div>
+              <div class="rating-label">ดี</div>
+            </div>
+            <div style="flex: 1;">
+              <div class="rating-emoji" data-rating="4">😊</div>
+              <div class="rating-label">ดีมาก</div>
+            </div>
+            <div style="flex: 1;">
+              <div class="rating-emoji" data-rating="5">😍</div>
+              <div class="rating-label">ยอดเยี่ยม!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <div class="feedback-title">💭 เพิ่มข้อเสนอแนะ</div>
+          
+          <div class="comment-form">
+            <div class="form-group">
+              <label class="form-label">ชื่อของคุณ</label>
+              <input type="text" class="form-input" id="commenterName" placeholder="กรุณากรอกชื่อของคุณ">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ประเภทข้อเสนอแนะ</label>
+              <div class="tone-selector" id="toneSelector">
+                <button class="tone-btn" data-tone="encouragement">💪 ชื่นชม</button>
+                <button class="tone-btn" data-tone="suggestion">💡 แนะนำ</button>
+                <button class="tone-btn" data-tone="question">❓ คำถาม</button>
+                <button class="tone-btn" data-tone="improvement">✨ การปรับปรุง</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">ข้อเสนอแนะของคุณ</label>
+              <textarea class="form-textarea" id="feedbackText" placeholder="แบ่งปันความคิดของคุณ (อย่างน้อย 10 ตัวอักษร)..."></textarea>
+            </div>
+
+            <button class="submit-comment-btn" id="submitFeedbackBtn">ส่งข้อเสนอแนะ</button>
+          </div>
+        </div>
+
+        <div class="feedback-section">
+          <div class="feedback-title">💬 ข้อเสนอแนะจากผู้อื่น</div>
+          <div class="comments-list" id="commentsList">
+            <div class="empty-state">
+              <div class="empty-state-icon">🗣️</div>
+              <div class="empty-state-text">ยังไม่มีข้อเสนอแนะ</div>
+              <p style="font-size: 0.9rem;">เป็นคนแรกที่แบ่งปันข้อเสนอแนะเชิงสร้างสรรค์</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const projects = [
+      {
+        id: 1,
+        title: "AI-Powered Study Assistant",
+        author: "น้องดำ",
+        description: "แอปพลิเคชันที่ใช้ AI เพื่อช่วยในการเรียนรู้และจัดการเวลาการเรียน ผ่านการวิเคราะห์ระยะการเรียนและการแนะนำเนื้อหา",
+        tags: ["AI", "Productivity", "Learning"],
+        createdAt: "2026-01-12",
+        comments: [
+          {
+            id: 1,
+            author: "น้องแดง",
+            tone: "encouragement",
+            text: "ดีจริงๆ! ความคิดในการใช้ AI เพื่อประเมินความก้าวหน้าของนักเรียนนั้นสร้างสรรค์มาก",
+            date: "2026-01-15",
+            helpful: 5,
+            rating: 5
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "Social Learning Platform",
+        author: "น้องเขียว",
+        description: "แพลตฟอร์มที่เชื่อมต่อนักเรียนเข้าด้วยกันเพื่อแลกเปลี่ยนประสบการณ์ การเรียนรู้และความคิดเห็น ผ่านระบบกลุ่มสนใจและฟอรัม",
+        tags: ["Community", "Collaboration", "Social"],
+        createdAt: "2026-01-18",
+        comments: []
+      },
+      {
+        id: 3,
+        title: "Personalized Learning Path",
+        author: "น้องเหลือง",
+        description: "ระบบการเรียนรู้ที่ปรับเปลี่ยนตามความเร็วและสไตล์การเรียนรู้ของแต่ละคน พร้อมการติดตามความก้าวหน้าแบบรีเอลไทม์",
+        tags: ["Adaptive", "Analytics", "Personalization"],
+        createdAt: "2026-01-20",
+        comments: []
+      },
+      {
+        id: 4,
+        title: "Gamified Coding Challenge",
+        author: "น้องสีม่วง",
+        description: "เกมที่สอนการเขียนโค้ดผ่านการท้าทายตามลำดับความยากที่เพิ่มขึ้นทีละน้อย และมีระบบคะแนนเพื่อสร้างแรงจูงใจ",
+        tags: ["Gamification", "Coding", "Engagement"],
+        createdAt: "2026-01-22",
+        comments: []
+      }
+    ];
+
+    let currentProjectId = null;
+    let selectedRating = null;
+    let selectedTone = null;
+    const projectSearch = document.getElementById('projectSearch');
+    const toneFilter = document.getElementById('toneFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const feedbackStats = document.getElementById('feedbackStats');
+    const safetyStatus = document.getElementById('safetyStatus');
+
+    function init() {
+      renderStats();
+      renderProjects();
+      setupEventListeners();
+    }
+
+    function getFilteredProjects() {
+      const query = projectSearch.value.trim().toLowerCase();
+      const tone = toneFilter.value;
+      let list = [...projects];
+
+      if (query) {
+        list = list.filter(p =>
+          p.title.toLowerCase().includes(query) ||
+          p.author.toLowerCase().includes(query) ||
+          p.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+      }
+
+      if (tone !== 'all') {
+        list = list.filter(p => p.comments.some(c => c.tone === tone));
+      }
+
+      if (sortFilter.value === 'rated') {
+        list.sort((a, b) => calculateAvgRatingValue(b.id) - calculateAvgRatingValue(a.id));
+      } else if (sortFilter.value === 'newest') {
+        list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      } else {
+        list.sort((a, b) => b.comments.length - a.comments.length);
+      }
+
+      return list;
+    }
+
+    function renderStats() {
+      const totalComments = projects.reduce((sum, p) => sum + p.comments.length, 0);
+      const activeProjects = projects.length;
+      const avgRating = (projects.reduce((sum, p) => sum + calculateAvgRatingValue(p.id), 0) / projects.length).toFixed(1);
+      feedbackStats.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">Active Projects</div>
+          <div class="stat-value">${activeProjects}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Feedback</div>
+          <div class="stat-value">${totalComments}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Rating</div>
+          <div class="stat-value">${isNaN(avgRating) ? '0.0' : avgRating}</div>
+        </div>
+      `;
+    }
+
+    function renderProjects() {
+      const projectsGrid = document.getElementById('projectsGrid');
+      const list = getFilteredProjects();
+      projectsGrid.innerHTML = list.map(project => `
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-title">${project.title}</div>
+            <div class="project-author">โดย ${project.author}</div>
+          </div>
+          <div class="project-body">
+            <p class="project-description">${project.description}</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+              ${project.tags.map(tag => `<span class="badge">${tag}</span>`).join('')}
+            </div>
+            <div class="project-stats">
+              <div class="stat-item">💬 ${project.comments.length} ข้อเสนอแนะ</div>
+              <div class="stat-item">⭐ ${formatAvgRating(project.id)}</div>
+            </div>
+            <div class="project-action">
+              <button class="view-feedback-btn" onclick="openFeedbackModal(${project.id})">
+                ดูและให้ข้อเสนอแนะ
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function calculateAvgRatingValue(projectId) {
+      const project = projects.find(p => p.id === projectId);
+      if (!project.comments.length) return 0;
+      const avgRating = project.comments.reduce((sum, c) => sum + (c.rating || 0), 0) / project.comments.length;
+      return avgRating > 0 ? avgRating : 0;
+    }
+
+    function formatAvgRating(projectId) {
+      const avgRating = calculateAvgRatingValue(projectId);
+      return avgRating > 0 ? avgRating.toFixed(1) : "ยังไม่มีคะแนน";
+    }
+
+    function openFeedbackModal(projectId) {
+      currentProjectId = projectId;
+      const project = projects.find(p => p.id === projectId);
+      
+      document.getElementById('modalProjectTitle').textContent = project.title;
+      document.getElementById('modalProjectAuthor').textContent = `โดย ${project.author}`;
+      document.getElementById('modalProjectDescription').textContent = project.description;
+      safetyStatus.textContent = '🟢 AI moderation is active. Keep feedback constructive and supportive.';
+      
+      selectedRating = null;
+      selectedTone = null;
+      document.getElementById('commenterName').value = '';
+      document.getElementById('feedbackText').value = '';
+      
+      document.querySelectorAll('.rating-emoji').forEach(btn => btn.classList.remove('selected'));
+      document.querySelectorAll('.tone-btn').forEach(btn => btn.classList.remove('selected'));
+      
+      renderComments(projectId);
+      document.getElementById('feedbackModal').style.display = 'block';
+    }
+
+    function renderComments(projectId) {
+      const project = projects.find(p => p.id === projectId);
+      const commentsList = document.getElementById('commentsList');
+      
+      if (project.comments.length === 0) {
+        commentsList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🗣️</div>
+            <div class="empty-state-text">ยังไม่มีข้อเสนอแนะ</div>
+            <p style="font-size: 0.9rem;">เป็นคนแรกที่แบ่งปันข้อเสนอแนะเชิงสร้างสรรค์</p>
+          </div>
+        `;
+      } else {
+        commentsList.innerHTML = project.comments.map(comment => `
+          <div class="comment-item">
+            <div class="comment-header">
+              <div>
+                <div class="comment-author">${comment.author}</div>
+                <div class="comment-date">${new Date(comment.date).toLocaleDateString('th-TH')}</div>
+              </div>
+            </div>
+            <div class="comment-tone">
+              ${getToneEmoji(comment.tone)} ${getToneName(comment.tone)}
+            </div>
+            <p class="comment-text">${comment.text}</p>
+            <button class="helpful-btn" onclick="toggleHelpful(${comment.id})">👍 ช่วยประโยชน์ (${comment.helpful || 0})</button>
+          </div>
+        `).join('');
+      }
+    }
+
+    function getToneEmoji(tone) {
+      const tones = {
+        encouragement: '💪',
+        suggestion: '💡',
+        question: '❓',
+        improvement: '✨'
+      };
+      return tones[tone] || '💭';
+    }
+
+    function getToneName(tone) {
+      const names = {
+        encouragement: 'ชื่นชม',
+        suggestion: 'แนะนำ',
+        question: 'คำถาม',
+        improvement: 'การปรับปรุง'
+      };
+      return names[tone] || 'ข้อเสนอแนะ';
+    }
+
+    function containsUnsafeLanguage(text) {
+      const blocked = ['stupid', 'dumb', 'hate', 'idiot', 'ugly'];
+      return blocked.some(word => new RegExp(`\\b${word}\\b`, 'i').test(text));
+    }
+
+    function updateSafetyStatus(level, message) {
+      const icon = level === 'warning' ? '🟠' : '🟢';
+      safetyStatus.textContent = `${icon} ${message}`;
+    }
+
+    function setupEventListeners() {
+      document.querySelectorAll('.rating-emoji').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.rating-emoji').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedRating = parseInt(btn.getAttribute('data-rating'));
+        });
+      });
+
+      document.querySelectorAll('.tone-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedTone = btn.getAttribute('data-tone');
+        });
+      });
+
+      document.getElementById('submitFeedbackBtn').addEventListener('click', submitFeedback);
+      projectSearch.addEventListener('input', renderProjects);
+      toneFilter.addEventListener('change', renderProjects);
+      sortFilter.addEventListener('change', renderProjects);
+
+      document.getElementById('closeModal').addEventListener('click', closeModal);
+      window.addEventListener('click', (e) => {
+        if (e.target.id === 'feedbackModal') {
+          closeModal();
+        }
+      });
+    }
+
+    function submitFeedback() {
+      const name = document.getElementById('commenterName').value.trim();
+      const text = document.getElementById('feedbackText').value.trim();
+
+      if (!name) {
+        alert('กรุณากรอกชื่อของคุณ');
+        return;
+      }
+
+      if (!selectedTone) {
+        alert('กรุณาเลือกประเภทข้อเสนอแนะ');
+        return;
+      }
+
+      if (!text || text.length < 10) {
+        alert('กรุณากรอกข้อเสนอแนะอย่างน้อย 10 ตัวอักษร');
+        return;
+      }
+
+      if (containsUnsafeLanguage(text)) {
+        updateSafetyStatus('warning', 'ข้อความควรสุภาพและสร้างสรรค์มากกว่านี้');
+        alert('กรุณาปรับคำแนะนำให้สุภาพและสร้างสรรค์');
+        return;
+      }
+
+      if (!selectedRating) {
+        alert('กรุณาให้คะแนนโครงการ');
+        return;
+      }
+
+      const project = projects.find(p => p.id === currentProjectId);
+      const newComment = {
+        id: project.comments.length + 1,
+        author: name,
+        tone: selectedTone,
+        text: text,
+        rating: selectedRating,
+        date: new Date().toISOString().split('T')[0],
+        helpful: 0
+      };
+
+      project.comments.push(newComment);
+
+      document.getElementById('successMessage').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('successMessage').style.display = 'none';
+      }, 3000);
+
+      document.getElementById('commenterName').value = '';
+      document.getElementById('feedbackText').value = '';
+      selectedRating = null;
+      selectedTone = null;
+      document.querySelectorAll('.rating-emoji').forEach(btn => btn.classList.remove('selected'));
+      document.querySelectorAll('.tone-btn').forEach(btn => btn.classList.remove('selected'));
+
+      renderComments(currentProjectId);
+      renderProjects();
+      renderStats();
+    }
+
+    function closeModal() {
+      document.getElementById('feedbackModal').style.display = 'none';
+    }
+
+    function toggleHelpful(commentId) {
+      const project = projects.find(p => p.id === currentProjectId);
+      const comment = project.comments.find(c => c.id === commentId);
+      if (comment) {
+        comment.helpful = (comment.helpful || 0) + 1;
+        renderComments(currentProjectId);
+      }
+    }
+
+    window.openFeedbackModal = openFeedbackModal;
+    window.toggleHelpful = toggleHelpful;
+
+    init();
+  </script>
+</body>
+</html>

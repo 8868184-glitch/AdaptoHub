@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genetics - AdaptoHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        html, body { overflow: auto !important; height: auto !important; }
+        .lesson-container { max-width: 900px; margin: 80px auto 40px; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .lesson-header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #4caf50; }
+        .lesson-header h1 { color: #4caf50; font-size: 2.5rem; margin-bottom: 10px; }
+        .lesson-header .level-badge { display: inline-block; background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%); color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
+        .lesson-content { margin-bottom: 40px; }
+        .lesson-section { margin-bottom: 35px; }
+        .lesson-section h2 { color: #4caf50; font-size: 1.8rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .lesson-section h3 { color: #333; font-size: 1.3rem; margin: 20px 0 10px; }
+        .lesson-section p { color: #444; line-height: 1.8; margin-bottom: 15px; font-size: 1.05rem; }
+        .concept-box { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .concept-box h4 { color: #4caf50; margin-bottom: 10px; font-size: 1.2rem; }
+        .formula-box { background: #fff3e0; border: 2px solid #ff9800; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 600; }
+        .example-box { background: #f1f8f4; border-left: 4px solid #2e7d32; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .example-box h4 { color: #2e7d32; margin-bottom: 10px; }
+        .quiz-section { background: #f9f9f9; padding: 30px; border-radius: 12px; margin-top: 40px; border: 2px solid #4caf50; }
+        .quiz-section h2 { color: #4caf50; text-align: center; margin-bottom: 25px; }
+        .question { background: white; padding: 25px; border-radius: 10px; margin-bottom: 25px; border: 2px solid #e0e0e0; }
+        .question.correct { border-color: #4caf50; background: #f1f8f4; }
+        .question.incorrect { border-color: #f44336; background: #ffebee; }
+        .question h3 { color: #333; margin-bottom: 15px; font-size: 1.2rem; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { padding: 15px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; background: white; }
+        .option:hover { border-color: #4caf50; background: #e8f5e9; }
+        .option.selected { border-color: #4caf50; background: #e8f5e9; }
+        .option.correct { border-color: #4caf50; background: #f1f8f4; }
+        .option.incorrect { border-color: #f44336; background: #ffebee; }
+        .feedback { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #f1f8f4; color: #2e7d32; border: 1px solid #4caf50; }
+        .feedback.incorrect { background: #ffebee; color: #c62828; border: 1px solid #f44336; }
+        .submit-quiz-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: all 0.3s ease; }
+        .submit-quiz-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4); }
+        .submit-quiz-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .quiz-result { text-align: center; padding: 30px; background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%); color: white; border-radius: 12px; margin-top: 20px; display: none; }
+        .quiz-result.show { display: block; }
+        .quiz-result h3 { font-size: 2rem; margin-bottom: 15px; }
+        .quiz-result p { font-size: 1.2rem; margin-bottom: 20px; }
+        .next-lesson-btn { padding: 12px 30px; background: white; color: #4caf50; border: none; border-radius: 8px; font-weight: 600; font-size: 1.1rem; cursor: pointer; margin-top: 15px; }
+        .next-lesson-btn:hover { background: #f0f0f0; }
+    </style>
+    <script defer src="background-customizer.js"></script>
+</head>
+<body>
+    <header class="top-banner">
+        <div class="logo">
+            <img height="45px" src="assets/AdaptoHub.png" alt="Site Logo" />
+            <a class="site-title" href="index.html">AdaptoHub</a>
+        </div>
+        <div class="header-controls">
+            <div id="realTimeClock" style="font-weight: 500; color: #fff; margin-right: 15px; font-size: 0.9rem;"></div>
+            <button id="darkModeToggle" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; margin-right: 15px; padding: 5px;" title="Toggle dark mode">🌙</button>
+        </div>
+        <div class="account-display" id="accountDisplayBtn" style="cursor: pointer; position: relative;">
+      <span class="account-name" id="accountName">ชญฏ ชลประเสริฐสุข</span>
+      <div class="account-avatar" id="accountAvatar"></div>
+      
+      <div id="accountDetailsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Account Information</h3>
+          <button onclick="document.getElementById('accountDetailsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Full Name</div>
+            <div id="detailsDropdownName" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">ชญฏ ชลประเสริฐสุข</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Email Address</div>
+            <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Student ID</div>
+            <div id="detailsDropdownStudentId" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">รหัสนักเรียน: 68184 | ห้อง: 665 | เลขที่: 23 | ระดับชั้น: ม.4 | โรงเรียนเตรียมอุดมศึกษา</div>
+          </div>
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Authentication Provider</div>
+            <div id="detailsDropdownProvider" style="color: #1f2933; font-weight: 500; font-size: 0.95rem;">magic-link</div>
+          </div>
+          <div style="margin-bottom: 0;">
+            <div style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px;">Login Date & Time</div>
+            $17/2/2569 17:27:10</div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="profileSettingsDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Profile Settings</h3>
+          <button onclick="document.getElementById('profileSettingsDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px;">
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Display Name</label>
+            <input type="text" id="settingsDisplayName" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933;" placeholder="Your display name">
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Email Notifications</label>
+            <label style="display: flex; align-items: center; cursor: pointer;">
+              <input type="checkbox" id="settingsEmailNotif" style="margin-right: 8px; cursor: pointer;">
+              <span style="font-size: 0.9rem; color: #1f2933;">Receive email notifications</span>
+            </label>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Theme Preference</label>
+            <select id="settingsTheme" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.75rem; color: #8b92a9; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block;">Language</label>
+            <select id="settingsLanguage" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 0.95rem; color: #1f2933; cursor: pointer;">
+              <option value="en">English</option>
+              <option value="es">EspaÃ±ol</option>
+              <option value="fr">FranÃ§ais</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 0;">
+            <button onclick="saveProfileSettings()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #0097b2 0%, #00b8d4 100%); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Save Settings</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="learningHistoryDropdown" class="account-details-dropdown" style="display: none;">
+        <div style="padding: 16px; border-bottom: 1px solid #e4e7eb; display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0; color: #1f2933; font-size: 1rem;">Learning History</h3>
+          <button onclick="document.getElementById('learningHistoryDropdown').style.display = 'none'; return false;" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #636d79; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#1f2933'" onmouseout="this.style.color='#636d79'">âœ•</button>
+        </div>
+        <div style="padding: 16px; max-height: 400px; overflow-y: auto;">
+          <div style="margin-bottom: 12px; padding: 12px; background: #f5f6f8; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div style="font-weight: 600; color: #1f2933; font-size: 0.9rem;" id="learningHistoryStats">No activity recorded</div>
+            </div>
+            <div id="learningHistoryList" style="font-size: 0.85rem; color: #636d79;">
+              <p style="margin: 0; text-align: center; padding: 20px 0; color: #8b92a9;">Start taking quizzes and challenges to build your learning history</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="accountDropdownMenu" class="account-dropdown-menu" style="display: none;">
+      <div class="account-dropdown-header">
+        <div class="user-avatar-large" id="dropdownUserAvatar"></div>
+        <div class="user-info">
+          <div class="user-name" id="dropdownUserName">ชญฏ ชลประเสริฐสุข</div>
+          <div class="user-email" id="dropdownUserEmail">8868184@student.triamudom.ac.th</div>
+          <div class="user-id" id="dropdownStudentId">รหัสนักเรียน: 68184</div>
+        </div>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-body">
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showProfileSettings(), 0); return false;">âš™ï¸ Profile Settings</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showAccountDetailsPanel(), 0); return false;">ðŸ“‹ Account Details</a>
+        <a href="javascript:void(0);" class="dropdown-item" onclick="event.preventDefault(); event.stopPropagation(); setTimeout(() => showLearningHistory(), 0); return false;">ðŸ“š Learning History</a>
+      </div>
+      <div class="account-dropdown-divider"></div>
+      <div class="account-dropdown-footer">
+        <button class="logout-btn" onclick="logout()">🚪 ออกจากระบบทั้งหมด</button>
+      </div>
+    </div>
+        </header>
+
+    <div class="lesson-container">
+        <div class="lesson-header">
+            <h1>🧬 Genetics</h1>
+            <span class="level-badge">Level 2 • Biology</span>
+        </div>
+
+        <div class="lesson-content">
+            <div class="lesson-section">
+                <h2>📖 Introduction to Genetics</h2>
+                <p>Genetics is the study of heredity and variation in living organisms. It explains how traits are passed from parents to offspring and how genetic information creates diversity.</p>
+                <div class="concept-box">
+                    <h4>What You'll Learn:</h4>
+                    <p>✓ DNA structure and function<br>✓ Genes and chromosomes<br>✓ Mendelian inheritance<br>✓ Genetic variation and mutations</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🎯 DNA Structure</h2>
+                <p>DNA (Deoxyribonucleic Acid) is the molecule that carries genetic information in all living organisms.</p>
+                <div class="concept-box">
+                    <h4>DNA Double Helix:</h4>
+                    <p>• Two strands twisted in a spiral<br>• Made of nucleotides<br>• Four bases: Adenine (A), Thymine (T), Guanine (G), Cytosine (C)<br>• Base pairing rules: A pairs with T, G pairs with C</p>
+                </div>
+                <div class="example-box">
+                    <h4>DNA Base Pairing</h4>
+                    <p>If one strand is: A-T-G-C-G-A<br>Complementary strand: T-A-C-G-C-T</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>⚡ Genes and Chromosomes</h2>
+                
+                <h3>Genes</h3>
+                <div class="concept-box">
+                    <p>• Segments of DNA that code for proteins<br>• Determine specific traits<br>• Humans have ~20,000-25,000 genes<br>• Can have different versions (alleles)</p>
+                </div>
+
+                <h3>Chromosomes</h3>
+                <div class="concept-box">
+                    <p>• Condensed DNA structures<br>• Humans have 23 pairs (46 total)<br>• 22 pairs of autosomes + 1 pair of sex chromosomes<br>• XX = female, XY = male</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🔬 Mendelian Inheritance</h2>
+                <p>Gregor Mendel discovered the basic principles of heredity through pea plant experiments.</p>
+                
+                <h3>Key Concepts</h3>
+                <div class="concept-box">
+                    <p><strong>Dominant vs. Recessive:</strong><br>• Dominant alleles (uppercase): Show their trait even with one copy<br>• Recessive alleles (lowercase): Need two copies to show trait</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example: Pea Plant Height</h4>
+                    <p>T = tall (dominant), t = short (recessive)<br>• TT or Tt = Tall plant<br>• tt = Short plant</p>
+                </div>
+
+                <h3>Punnett Squares</h3>
+                <p>Visual tool to predict offspring genotypes and phenotypes.</p>
+                <div class="example-box">
+                    <h4>Cross: Tt × Tt</h4>
+                    <p>Offspring ratios:<br>• 1 TT : 2 Tt : 1 tt (genotypes)<br>• 3 Tall : 1 Short (phenotypes)<br>• 75% tall, 25% short</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🧪 Mutations and Variation</h2>
+                <div class="concept-box">
+                    <h4>Types of Mutations:</h4>
+                    <p>• <strong>Point Mutation:</strong> Single base change<br>• <strong>Insertion:</strong> Extra bases added<br>• <strong>Deletion:</strong> Bases removed<br>• Can be harmful, beneficial, or neutral</p>
+                </div>
+                <div class="example-box">
+                    <h4>Genetic Variation Sources</h4>
+                    <p>• Mutations<br>• Sexual reproduction (meiosis)<br>• Crossing over during meiosis<br>• Independent assortment of chromosomes</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>🌍 Real-World Applications</h2>
+                <ul style="color: #444; line-height: 1.8; font-size: 1.05rem;">
+                    <li>Genetic testing and disease screening</li>
+                    <li>Personalized medicine</li>
+                    <li>Gene therapy for genetic disorders</li>
+                    <li>Agricultural crop improvement</li>
+                    <li>Forensic DNA analysis</li>
+                    <li>Paternity testing</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quiz-section">
+            <h2>✏️ Test Your Knowledge</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">Answer these questions to demonstrate your mastery of Genetics</p>
+            <div id="quizContainer"></div>
+            <button class="submit-quiz-btn" id="submitQuiz">Submit Answers</button>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="simple-avatar.js"></script>
+    <script src="learning-path.js"></script>
+    <script src="analytics.js"></script>
+    <script src="gamification.js"></script>
+    <script>
+        function updateClock(){const now=new Date();const options={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'};const clockEl=document.getElementById('realTimeClock');if(clockEl)clockEl.textContent=now.toLocaleString('en-US',options);}updateClock();setInterval(updateClock,1000);const darkModeToggle=document.getElementById('darkModeToggle');const isDark=localStorage.getItem('darkMode')==='true';if(isDark){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.textContent='☀️';}darkModeToggle.addEventListener('click',()=>{const currentTheme=document.documentElement.getAttribute('data-theme');if(currentTheme==='dark'){document.documentElement.setAttribute('data-theme','light');localStorage.setItem('darkMode','false');darkModeToggle.textContent='🌙';}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('darkMode','true');darkModeToggle.textContent='☀️';}});
+    </script>
+    <script>
+        const questions = [
+            {id: 1, question: "Which base pairs with Adenine (A) in DNA?", options: ["Guanine", "Cytosine", "Thymine", "Uracil"], correct: 2, explanation: "In DNA, Adenine always pairs with Thymine through hydrogen bonds."},
+            {id: 2, question: "How many chromosomes do humans have in total?", options: ["23", "46", "92", "100"], correct: 1, explanation: "Humans have 46 chromosomes in 23 pairs - 22 pairs of autosomes and 1 pair of sex chromosomes."},
+            {id: 3, question: "If both parents are Tt (heterozygous tall), what percentage of offspring will be short (tt)?", options: ["0%", "25%", "50%", "75%"], correct: 1, explanation: "Using a Punnett square for Tt × Tt, 25% of offspring will be tt (short)."},
+            {id: 4, question: "What is a gene?", options: ["A type of cell", "A segment of DNA that codes for a trait", "A chromosome", "An organism"], correct: 1, explanation: "A gene is a segment of DNA that contains instructions for making proteins and determining traits."},
+            {id: 5, question: "Which sex chromosomes does a human male have?", options: ["XX", "XY", "YY", "XO"], correct: 1, explanation: "Males have one X and one Y chromosome (XY), while females have two X chromosomes (XX)."}
+        ];
+
+        let userAnswers = {}, quizSubmitted = false;
+
+        function renderQuiz() {
+            document.getElementById('quizContainer').innerHTML = questions.map((q, i) => `
+                <div class="question" id="question${q.id}">
+                    <h3>Question ${i + 1}</h3>
+                    <p style="color: #333; margin-bottom: 15px; font-size: 1.05rem;">${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="selectOption(${q.id}, ${idx})">
+                                <input type="radio" name="q${q.id}" id="q${q.id}_${idx}" style="margin-right: 10px;">
+                                <label for="q${q.id}_${idx}" style="cursor: pointer;">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback${q.id}"></div>
+                </div>
+            `).join('');
+        }
+
+        function selectOption(qId, optIdx) {
+            if (quizSubmitted) return;
+            userAnswers[qId] = optIdx;
+            const question = document.getElementById(`question${qId}`);
+            question.querySelectorAll('.option').forEach((opt, idx) => {
+                opt.classList.toggle('selected', idx === optIdx);
+                opt.querySelector('input').checked = idx === optIdx;
+            });
+        }
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < questions.length) { alert('Please answer all questions!'); return; }
+            quizSubmitted = true;
+            let correctCount = 0;
+            questions.forEach(q => {
+                const correct = userAnswers[q.id] === q.correct;
+                if (correct) correctCount++;
+                const questionEl = document.getElementById(`question${q.id}`);
+                questionEl.classList.add(correct ? 'correct' : 'incorrect');
+                questionEl.querySelectorAll('.option').forEach((opt, idx) => {
+                    if (idx === q.correct) opt.classList.add('correct');
+                    else if (idx === userAnswers[q.id]) opt.classList.add('incorrect');
+                });
+                document.getElementById(`feedback${q.id}`).className = `feedback show ${correct ? 'correct' : 'incorrect'}`;
+                document.getElementById(`feedback${q.id}`).innerHTML = `${correct ? '✓ Correct!' : '✗ Incorrect.'} ${q.explanation}`;
+            });
+            const pct = Math.round((correctCount / questions.length) * 100);
+            document.getElementById('quizResult').className = 'quiz-result show';
+            document.getElementById('quizResult').innerHTML = `<h3>${pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : '💪 Keep Practicing!'}</h3><p>You scored ${correctCount}/${questions.length} (${pct}%)</p>${pct >= 60 ? '<button class="next-lesson-btn" onclick="completeLesson(' + pct + ')">Complete & Continue</button>' : '<button class="next-lesson-btn" onclick="location.reload()">Try Again</button>'}`;
+            document.getElementById('submitQuiz').disabled = true;
+        }
+
+        function completeLesson(score) {
+            if (typeof recordLearningActivity === 'function') {
+                recordLearningActivity('lesson', 'Genetics', score, 100);
+            }
+            skillTreeSystem.unlockUnit('science', 'biology', 'b2', score);
+            if (window.analyticsSystem) analyticsSystem.recordQuizCompletion({subject: 'Biology', topic: 'Genetics', score, maxScore: 100, questionsAnswered: questions.length});
+            if (window.gamificationSystem) gamificationSystem.addPoints(Math.floor(score / 10) * 10 + 50, 'Completed Genetics');
+            window.dispatchEvent(new CustomEvent('unitCompleted', {detail: {unitId: 'b2', subject: 'science', module: 'biology', score}}));
+            alert(`Congratulations! You've completed Genetics with ${score}% mastery!\n\nPoints earned: ${Math.floor(score / 10) * 10 + 50}`);
+            window.location.href = 'analytics-dashboard.html';
+        }
+
+        document.getElementById('submitQuiz').addEventListener('click', submitQuiz);
+        renderQuiz();
+    </script>
+</body>
+</html>
